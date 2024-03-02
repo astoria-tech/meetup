@@ -5,3 +5,6 @@ export type HydratedEvent = CollectionEntry<'events'> & {
     speaker: CollectionEntry<'speakers'>
   })[]
 }
+
+export const POST_EVENT = 'post-event'
+export const EVENT = 'event'

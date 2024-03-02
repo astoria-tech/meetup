@@ -1,47 +1,11 @@
 ---
 import '../style.css'
-import { getCollection, getEntry } from 'astro:content';
+import { POST_EVENT } from '../types'
 import Event from '../components/Event.astro'
 import PostEvent from '../components/PostEvent.astro'
+import { getFeed } from '../data/feed'
 
-const POST_EVENT = 'post-event'
-const EVENT = 'event'
-
-const events = await getCollection('events')
-const feed = await getCollection('feed')
-const presentations = await getCollection('presentations')
-const speakers = await getCollection('speakers')
-
-const presentationsWithSpeakers = presentations.map(presentation => {
-	const speaker = speakers.find(s => s.slug === presentation.data.speaker.slug)
-	return {
-		...presentation,
-		speaker
-	}
-})
-
-const eventsWithPresentations = events.map(event => {
-	const presentations = event.data.presentations.map(presentationId => {
-		return presentationsWithSpeakers.find(p => p.slug === presentationId.slug)
-	})
-	return {
-		...event,
-		presentations
-	}
-})
-
-const feedWithEvents = feed.map(feedItem => {
-	const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
-	const feedEntryType = feedItem.slug.endsWith(POST_EVENT) ? POST_EVENT : EVENT
-	return {
-		...feedItem,
-		event,
-		feedEntryType
-	}
-}).sort((a, b) => {
-	return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
-})
-
+const feed = await getFeed()
 ---
 
 <html lang="en">
@@ -55,7 +19,7 @@ const feedWithEvents = feed.map(feedItem => {
 	<body>
 		<!-- <h1>Astoria Tech Meetup</h1> -->
 		<div class="pb-4">
-			{feedWithEvents.map(p => (
+			{feed.map(p => (
 				<div class="mb-5">
 					{p.feedEntryType === POST_EVENT ? (
 						<PostEvent event={p.event}></PostEvent>
@@ -66,3 +30,4 @@ const feedWithEvents = feed.map(feedItem => {
 			))}
 	</body>
 </html>
+../data/feed
