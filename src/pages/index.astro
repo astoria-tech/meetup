@@ -1,0 +1,59 @@
+---
+import '../style.css'
+import { getCollection, getEntry } from 'astro:content';
+import Event from '../components/Event.astro'
+import PostEvent from '../components/PostEvent.astro'
+
+const allPresntations = await getCollection('presentations')
+const allEvents = await getCollection('events')
+const feed = await getCollection('feed')
+
+const eventsWithPresentations = allEvents.map(event => {
+	const presentations = event.data.presentations.map(presentationId => {
+		return allPresntations.find(p => p.slug === presentationId.slug)
+	})
+	return {
+		...event,
+		presentations
+	}
+})
+
+const POST_EVENT = 'post-event'
+const EVENT = 'event'
+
+const feedWithEvents = feed.map(feedItem => {
+	const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
+	const feedEntryType = feedItem.slug.endsWith(POST_EVENT) ? POST_EVENT : EVENT
+	return {
+		...feedItem,
+		event,
+		feedEntryType
+	}
+}).sort((a, b) => {
+	return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+})
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+		<!-- <h1>Astoria Tech Meetup</h1> -->
+		<div class="pb-4">
+			{feedWithEvents.map(p => (
+				<div class="mb-5">
+					{p.feedEntryType === POST_EVENT ? (
+						<PostEvent event={p.event}></PostEvent>
+					) : (
+						<Event event={p.event}></Event>
+					)}
+				</div>
+			))}
+	</body>
+</html>
