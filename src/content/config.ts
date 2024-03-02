@@ -23,18 +23,25 @@ const presentationsCollection = defineCollection({
   type: "content",
   schema: z.object({
     date: z.date(),
-    linkedin: z.string().optional(),
     slides: z.string().optional(),
     slidesSource: z.string().optional(),
-    speaker: z.string(),
+    speaker: reference("speakers"),
     title: z.string(),
-    website: z.string().optional(),
   }),
 });
 
+const speakersCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    linkedin: z.string().optional(),
+    name: z.string(),
+    website: z.string().optional(),
+  }),
+});
 
 export const collections = {
   "events": eventsCollection,
   "feed": feedCollection,
   "presentations": presentationsCollection,
+  "speakers": speakersCollection,
 };

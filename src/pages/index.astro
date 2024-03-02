@@ -4,22 +4,31 @@ import { getCollection, getEntry } from 'astro:content';
 import Event from '../components/Event.astro'
 import PostEvent from '../components/PostEvent.astro'
 
-const allPresntations = await getCollection('presentations')
-const allEvents = await getCollection('events')
-const feed = await getCollection('feed')
+const POST_EVENT = 'post-event'
+const EVENT = 'event'
 
-const eventsWithPresentations = allEvents.map(event => {
+const events = await getCollection('events')
+const feed = await getCollection('feed')
+const presentations = await getCollection('presentations')
+const speakers = await getCollection('speakers')
+
+const presentationsWithSpeakers = presentations.map(presentation => {
+	const speaker = speakers.find(s => s.slug === presentation.data.speaker.slug)
+	return {
+		...presentation,
+		speaker
+	}
+})
+
+const eventsWithPresentations = events.map(event => {
 	const presentations = event.data.presentations.map(presentationId => {
-		return allPresntations.find(p => p.slug === presentationId.slug)
+		return presentationsWithSpeakers.find(p => p.slug === presentationId.slug)
 	})
 	return {
 		...event,
 		presentations
 	}
 })
-
-const POST_EVENT = 'post-event'
-const EVENT = 'event'
 
 const feedWithEvents = feed.map(feedItem => {
 	const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
