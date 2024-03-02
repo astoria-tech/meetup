@@ -1,6 +1,11 @@
-title: "[Proposal] "
+title: ""
 labels: ["Proposal"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        We're collecting proposals for 3-5 min presentations for the next Astoria Tech Meetup!
+        Please keep your talk short, either ~10 slides at a fast-talking pace or ~5 at a slower pace.
   - type: textarea
     id: who
     attributes:
