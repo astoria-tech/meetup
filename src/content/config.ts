@@ -1,41 +1,40 @@
-// 1. Import utilities from `astro:content`
-import { z, defineCollection, reference } from 'astro:content';
-
-// 2. Define a `type` and `schema` for each collection
-const presentationsCollection = defineCollection({
-  type: 'content', // v2.5.0 and later
-  schema: z.object({
-    date: z.date(),
-    speaker: z.string(),
-    linkedin: z.string().optional(),
-    website: z.string().optional(),
-    slides: z.string().optional(),
-    slidesSource: z.string().optional(),
-  }),
-});
+import { defineCollection, reference, z } from "astro:content";
 
 const eventsCollection = defineCollection({
-  type: 'content', // v2.5.0 and later
+  type: "content",
   schema: z.object({
+    banner: z.string().optional(),
     date: z.date(),
-    banner: z.string(),
+    meetup: z.string(),
+    presentations: z.array(reference("presentations")),
     title: z.string(),
-    presentations: z.array(reference('presentations')),
-    meetup: z.string()
   }),
 });
 
 const feedCollection = defineCollection({
-  type: 'content', // v2.5.0 and later
+  type: "content",
   schema: z.object({
+    event: reference("events"),
     publishedAt: z.date(),
-    event: reference('events'),
   }),
 });
 
-// 3. Export a single `collections` object to register your collection(s)
+const presentationsCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    date: z.date(),
+    linkedin: z.string().optional(),
+    slides: z.string().optional(),
+    slidesSource: z.string().optional(),
+    speaker: z.string(),
+    title: z.string(),
+    website: z.string().optional(),
+  }),
+});
+
+
 export const collections = {
-  'presentations': presentationsCollection,
-  'events': eventsCollection,
-  "feed": feedCollection
+  "events": eventsCollection,
+  "feed": feedCollection,
+  "presentations": presentationsCollection,
 };

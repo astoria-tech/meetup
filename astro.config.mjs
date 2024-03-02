@@ -5,6 +5,8 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
-  site: 'https://reggi.github.io',
-  base: '/astoria-tech-meetup-feed',
+  ...(process.env.NODE_ENV !== 'development' ? {
+    site: 'https://reggi.github.io',
+    base: '/astoria-tech-meetup-feed'
+  }: {})
 })

@@ -1,24 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-
 type Props = {
   event: CollectionEntry<'events'> & { presentations: CollectionEntry<'presentations'>[] };
 }
-
 const { event } = Astro.props
-
 ---
 
 <div class="bg-slate-300 w-1/3 p-5">
-  <h1 class="text-xl">Slides for - {event.data.title}</h1>
-
-  <img src={event.data.banner} style={{width:"500px"}}/>
-
+  <h1>Slides for - {event.data.title}</h1>
+  { event.data.banner && <img src={event.data.banner} style={{width:"500px"}}/>}
   <p>Special thanks to our presenters {event.presentations.map(p => p.data.speaker).join(', ')} for sharing their knowledge with us.</p>
-
   <ul>
   {event.presentations.map(p => (
-    <li>{p.data.speaker} - <a href={p.data.slides}>Slides</a></li>
+    <li>{p.data.speaker} - {p.data.title} - <a href={p.data.slides}>Slides</a></li>
   ))}
   </ul>
 </div>
