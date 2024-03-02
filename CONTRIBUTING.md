@@ -2,15 +2,7 @@
 
 ## 📢 Meetup Call For Proposals (CFP)
 
-Are you thinking about doing a talk or presentation at an upcoming [Astoria Tech Meetup](https://www.meetup.com/astoria-tech-meetup/)?
-
-Then you've come to the right place!
-
-Make an issue on this repo with the following:
-
-1. Who - Who are you? A little Bio 💞
-2. What - What do you want to talk about? 🗣️
-2. Where / When - What's your availability? 📆
+Are you thinking about doing a talk or presentation at an upcoming [Astoria Tech Meetup](https://www.meetup.com/astoria-tech-meetup/)? Then you've come to the right place! You can create a call for proposal [here](./discussions/new?category=call-for-proposals), or message [@reggi](https://github.com/reggi/) directly if you'd like to submit a talk.
 
 ## 🛝 Submitting your slides
 
