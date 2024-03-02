@@ -8,5 +8,7 @@ export default defineConfig({
   ...(process.env.NODE_ENV !== 'development' ? {
     site: 'https://reggi.github.io',
     base: '/astoria-tech-meetup-feed'
-  }: {})
+  }: {
+    site: 'http://localhost:4321'
+  })
 })
