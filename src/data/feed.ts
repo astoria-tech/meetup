@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
-import { EVENT, POST_EVENT } from '../types';
+import { type HydratedFeedItem, FeedItemType } from '../types';
 
-export async function getFeed () {
+export async function getFeed (): Promise<HydratedFeedItem[]> {
   const [events, feed, presentations, speakers] = await Promise.all([
     getCollection('events'),
     getCollection('feed'),
@@ -29,11 +29,11 @@ export async function getFeed () {
   
   const feedWithEvents = feed.map(feedItem => {
     const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
-    const feedEntryType = feedItem.slug.endsWith(POST_EVENT) ? POST_EVENT : EVENT
+    const type = feedItem.slug.endsWith(FeedItemType.POST_EVENT) ? FeedItemType.POST_EVENT : FeedItemType.EVENT
     return {
       ...feedItem,
       event,
-      feedEntryType
+      type
     }
   }).sort((a, b) => {
     return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()

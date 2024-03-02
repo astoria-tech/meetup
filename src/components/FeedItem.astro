@@ -1,0 +1,15 @@
+---
+import type { HydratedFeedItem } from '../types';
+import { FeedItemType } from '../types';
+import PostEvent from './PostEvent.astro';
+import Event from './Event.astro';
+type Props = HydratedFeedItem
+const { type, event } = Astro.props
+---
+<div class="mb-5">
+  {type === FeedItemType.POST_EVENT ? (
+    <PostEvent {...event}/>
+  ) : (
+    <Event {...event}/>
+  )}
+</div>

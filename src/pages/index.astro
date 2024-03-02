@@ -1,9 +1,7 @@
 ---
 import '../style.css'
-import { POST_EVENT } from '../types'
-import Event from '../components/Event.astro'
-import PostEvent from '../components/PostEvent.astro'
 import { getFeed } from '../data/feed'
+import FeedItem from '../components/FeedItem.astro'
 
 const feed = await getFeed()
 ---
@@ -19,15 +17,8 @@ const feed = await getFeed()
 	<body>
 		<!-- <h1>Astoria Tech Meetup</h1> -->
 		<div class="pb-4">
-			{feed.map(p => (
-				<div class="mb-5">
-					{p.feedEntryType === POST_EVENT ? (
-						<PostEvent event={p.event}></PostEvent>
-					) : (
-						<Event event={p.event}></Event>
-					)}
-				</div>
+			{feed.map(feedItem => (
+				<FeedItem {...feedItem}></FeedItem>
 			))}
 	</body>
 </html>
-../data/feed

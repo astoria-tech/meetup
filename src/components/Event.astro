@@ -1,11 +1,7 @@
 ---
 import type { HydratedEvent } from '../types';
-
-type Props = {
-  event: HydratedEvent
-}
-
-const { event } = Astro.props
+type Props = HydratedEvent
+const event = Astro.props
 ---
 
 <div class="bg-slate-300 w-1/3 p-5">
