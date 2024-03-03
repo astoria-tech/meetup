@@ -13,5 +13,9 @@ export type HydratedEvent = CollectionEntry<'events'> & {
 
 export type HydratedFeedItem = CollectionEntry<'feed'> & {
   event: HydratedEvent
-  type: FeedItemType
+  type: FeedItemType,
+  permalink: string,
+  html: string
 }
+
+export type HydratedFeedItemPreHtml = Omit<HydratedFeedItem, 'html'>

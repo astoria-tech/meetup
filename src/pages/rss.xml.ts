@@ -1,30 +1,23 @@
 import type { APIRoute } from 'astro';
 import rss from '@astrojs/rss';
-import { FeedItemType} from '../types'
 import { getFeed } from '../data/feed';
-import eventMarkdown from '../markdown/event-markdown';
-import postEventMarkdown from '../markdown/post-event-markdown';
 import { load as cheerio} from 'cheerio'
-import { initializeLink, render } from '../markdown/render';
 
-const markdownMap = {
-  [FeedItemType.EVENT]: eventMarkdown,
-  [FeedItemType.POST_EVENT]: postEventMarkdown
+const forRss = (html: string) => {
+  const $ = cheerio(html)
+  const title = $('h1').text()
+  $('h1').remove()
+  const content = $('body').html()
+  return {title, content}
 }
 
 export const GET: APIRoute = async (context) => {
   const site = context.site
-  const feed = await getFeed();
+  const feed = await getFeed({ site: context.site });
   const items = await Promise.all(feed.map(async (feedItem) => {
-    const permalink = `/feed/${feedItem.slug}`
-    const markdown = markdownMap[feedItem.type]({event: feedItem.event, site, permalink})
-    const rawContent = render(markdown)
-    const $ = cheerio(rawContent)
-    const title = $('h1').text()
-    $('h1').remove()
-    const content = $('body').html()
+    const {title, content } = forRss(feedItem.html)
     return {
-      link: initializeLink(site)(permalink),
+      link: feedItem.permalink,
       pubDate: feedItem.data.publishedAt,
       content,
       title,

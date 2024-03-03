@@ -9,7 +9,7 @@ type Props = {
 }
 
 export async function getStaticPaths() {
-  const feed = await getFeed()
+  const feed = await getFeed({ site: Astro.site })
   return feed.map((item: HydratedFeedItem) => {
     return { params: { item: item.slug }, props: {feedItem: item} }
   })

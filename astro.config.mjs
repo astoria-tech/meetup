@@ -2,13 +2,13 @@ import { defineConfig } from 'astro/config';
 
 import tailwind from "@astrojs/tailwind";
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
   ...(process.env.NODE_ENV !== 'development' ? {
     site: 'https://astoria-tech.github.io',
     base: '/meetup'
   }: {
-    site: 'http://localhost:4321'
+    site: 'http://localhost:4321',
+    // base: '/dolphin'
   })
 })
