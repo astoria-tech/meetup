@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import rss from '@astrojs/rss';
 import { getFeed } from '../data/feed';
 import { load as cheerio} from 'cheerio'
+import copy from '../copy';
 
 const forRss = (html: string) => {
   const $ = cheerio(html)
@@ -25,8 +26,8 @@ export const GET: APIRoute = async (context) => {
     }
   })
   return rss({
-    title: 'Astoria Tech Meetup',
-    description: 'A feed of upcomming meetups and presentations.',
+    title: copy.rssTitle,
+    description: copy.rssDescription,
     site,
     items,
   });

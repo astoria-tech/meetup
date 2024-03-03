@@ -3,6 +3,7 @@ import '../../style.css'
 import { getFeed } from '../../data/feed'
 import FeedItem from '../../components/FeedItem.astro'
 import type {HydratedFeedItem} from '../../types'
+import MainLayout from '../../layouts/MainLayout.astro'
 
 type Props = {
   feedItem: HydratedFeedItem
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { feedItem } = Astro.props;
-
 ---
-
-<FeedItem {...feedItem} ></FeedItem>
+<MainLayout title={feedItem.title}>
+	<FeedItem {...feedItem} ></FeedItem>
+</MainLayout>
