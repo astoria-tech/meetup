@@ -1,19 +1,18 @@
 import { getCollection } from 'astro:content';
 import eventMarkdown from '../markdown/event-markdown';
 import postEventMarkdown from '../markdown/post-event-markdown';
-import { FeedItemType, type HydratedFeedItem, type HydratedFeedItemPreHtml} from '../types'
+import { FeedItemType, type HydratedFeedItem} from '../types'
 import MarkdownIt from "markdown-it"
 import nodePath from 'path'
 
-export const render = (markdown: string) => {
+const render = (markdown: string) => {
   const parser = new MarkdownIt({
     html: true,
   });
   return parser.render(markdown)
 }
 
-export const initializeLink = (site: URL) => (path: string) => {
-  if (!import.meta.env.BASE_URL) throw new Error('import.meta.env.BASE_URL is not defined')
+const initializeLink = (site: URL) => (path: string) => {
   const pathname = nodePath.join(import.meta.env.BASE_URL, path)
   return new URL(pathname, site).toString()
 }
@@ -21,16 +20,6 @@ export const initializeLink = (site: URL) => (path: string) => {
 const markdownMap = {
   [FeedItemType.EVENT]: eventMarkdown,
   [FeedItemType.POST_EVENT]: postEventMarkdown
-}
-
-const getMarkdown = (props: { feedItem: HydratedFeedItemPreHtml, site: URL }) => {
-  const { feedItem, site } = props
-  return markdownMap[feedItem.type](feedItem)
-}
-
-const getHtml = (props: { feedItem: HydratedFeedItemPreHtml, site: URL }) => {
-  const markdown = getMarkdown(props)
-  return render(markdown)
 }
 
 export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]> {
@@ -80,11 +69,9 @@ export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]>
       type,
       permalink: link(`/feed/${feedItem.slug}`),
     }
-    const html = getHtml({feedItem: hydrated, site})
-    return {
-      ...hydrated,
-      html
-    }
+    const markdown = markdownMap[type](hydrated)
+    const html = render(markdown)
+    return { ...hydrated, html }
   }).sort((a, b) => {
     return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
   })
