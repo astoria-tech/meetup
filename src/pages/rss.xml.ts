@@ -1,17 +1,18 @@
+import type { APIRoute } from 'astro';
 import rss from '@astrojs/rss';
 import { FeedItemType} from '../types'
 import { getFeed } from '../data/feed';
 import eventMarkdown from '../markdown/event-markdown';
 import postEventMarkdown from '../markdown/post-event-markdown';
 import { load as cheerio} from 'cheerio'
-import { render } from '../markdown/render';
+import { initializeLink, render } from '../markdown/render';
 
 const markdownMap = {
   [FeedItemType.EVENT]: eventMarkdown,
   [FeedItemType.POST_EVENT]: postEventMarkdown
 }
 
-export async function GET(context) {
+export const GET: APIRoute = async (context) => {
   const site = context.site
   const feed = await getFeed();
   const items = await Promise.all(feed.map(async (feedItem) => {
@@ -22,7 +23,7 @@ export async function GET(context) {
     $('h1').remove()
     const content = $('body').html()
     return {
-      link: `${site}feed/${feedItem.slug}`,
+      link: initializeLink(site)(`/feed/${feedItem.slug}`),
       pubDate: feedItem.data.publishedAt,
       content,
       title,
