@@ -1,16 +1,10 @@
 ---
 import type { HydratedEvent } from '../types';
+import postEventMarkdown from '../markdown/post-event-markdown';
+import { render } from '../markdown/render';
 type Props = HydratedEvent
 const event = Astro.props
+const site = Astro.site.toString()
 ---
 
-<div class="bg-slate-300 w-1/3 p-5">
-  <h1>Slides for - {event.data.title}</h1>
-  { event.data.banner && <img src={event.data.banner} style={{width:"500px"}}/>}
-  <p>Special thanks to our presenters {event.presentations.map(p => p.speaker.data.name).join(', ')} for sharing their knowledge with us.</p>
-  <ul>
-  {event.presentations.map(p => (
-    <li>{p.speaker.data.name} - {p.data.title} - <a href={p.data.slides}>Slides</a></li>
-  ))}
-  </ul>
-</div>
+<div class="bg-slate-300 w-1/3 p-5" set:html={await render(postEventMarkdown(event, site))}></div>

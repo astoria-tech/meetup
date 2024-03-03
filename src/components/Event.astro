@@ -1,11 +1,9 @@
 ---
 import type { HydratedEvent } from '../types';
+import eventMarkdown from '../markdown/event-markdown';
+import { render } from '../markdown/render';
 type Props = HydratedEvent
 const event = Astro.props
 ---
 
-<div class="bg-slate-300 w-1/3 p-5">
-  <h1 class="text-xl">Save the date - {event.data.title}</h1>
-
-  <p>Be sure to RSVP on meetup <a href={event.data.meetup}>Event Link on Meetup</a>.</p>
-</div>
+<div class="bg-slate-300 w-1/3 p-5" set:html={await render(eventMarkdown(event))}></div>

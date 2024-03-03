@@ -1,0 +1,23 @@
+---
+import '../../style.css'
+import { getFeed } from '../../data/feed'
+import FeedItem from '../../components/FeedItem.astro'
+import {HydratedFeedItem} from '../../types'
+
+type Props = {
+  feedItem: HydratedFeedItem
+}
+
+export async function getStaticPaths() {
+  const feed = await getFeed()
+  return feed.map((item: HydratedFeedItem) => {
+    console.log(item.slug)
+    return { params: { item: item.slug }, props: {feedItem: item} }
+  })
+}
+
+const { feedItem } = Astro.props;
+
+---
+
+<FeedItem {...feedItem} ></FeedItem>
