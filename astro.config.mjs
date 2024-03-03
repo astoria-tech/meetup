@@ -6,8 +6,8 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   integrations: [tailwind()],
   ...(process.env.NODE_ENV !== 'development' ? {
-    site: 'https://reggi.github.io',
-    base: '/astoria-tech-meetup-feed'
+    site: 'https://astoria-tech.github.io',
+    base: '/meetup'
   }: {
     site: 'http://localhost:4321'
   })
