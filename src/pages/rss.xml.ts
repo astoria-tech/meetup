@@ -4,7 +4,6 @@ import { getFeed } from '../data/feed';
 import eventMarkdown from '../markdown/event-markdown';
 import postEventMarkdown from '../markdown/post-event-markdown';
 import { load as cheerio} from 'cheerio'
-import MarkdownIt from "markdown-it"
 import { render } from '../markdown/render';
 
 const markdownMap = {
@@ -17,7 +16,7 @@ export async function GET(context) {
   const feed = await getFeed();
   const items = await Promise.all(feed.map(async (feedItem) => {
     const markdown = markdownMap[feedItem.type](feedItem.event, site)
-    const rawContent = await render(markdown)
+    const rawContent = render(markdown)
     const $ = cheerio(rawContent)
     const title = $('h1').text()
     $('h1').remove()

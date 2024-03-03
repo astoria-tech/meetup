@@ -7,4 +7,4 @@ const event = Astro.props
 const site = Astro.site.toString()
 ---
 
-<div class="bg-slate-300 w-1/3 p-5" set:html={await render(postEventMarkdown(event, site))}></div>
+<div class="bg-slate-300 w-1/3 p-5" set:html={render(postEventMarkdown(event, site))}></div>
