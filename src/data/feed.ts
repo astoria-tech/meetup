@@ -4,6 +4,7 @@ import postEventMarkdown from '../markdown/post-event-markdown';
 import { FeedItemType, type HydratedFeedItem} from '../types'
 import MarkdownIt from "markdown-it"
 import nodePath from 'path'
+import { load as cheerio} from 'cheerio'
 
 const render = (markdown: string) => {
   const parser = new MarkdownIt({
@@ -20,6 +21,16 @@ const initializeLink = (site: URL) => (path: string) => {
 const markdownMap = {
   [FeedItemType.EVENT]: eventMarkdown,
   [FeedItemType.POST_EVENT]: postEventMarkdown
+}
+
+// this is to get the H1 tag from the markdown for the "title" of a feed post
+// also content is the html without the H1 for RSS
+const forRss = (html: string) => {
+  const $ = cheerio(html)
+  const title = $('h1').text()
+  $('h1').remove()
+  const content = $('body').html()
+  return {title, content}
 }
 
 export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]> {
@@ -71,7 +82,8 @@ export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]>
     }
     const markdown = markdownMap[type](hydrated)
     const html = render(markdown)
-    return { ...hydrated, html }
+    const { title, content } = forRss(html)
+    return { ...hydrated, html, title, content }
   }).sort((a, b) => {
     return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
   })

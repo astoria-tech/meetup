@@ -15,7 +15,11 @@ export type HydratedFeedItem = CollectionEntry<'feed'> & {
   event: HydratedEvent
   type: FeedItemType,
   permalink: string,
-  html: string
+  html: string,
+  /**  the extracted h1 from the html */
+  title: string,
+  /** the html without the h1 */
+  content: string,
 }
 
-export type HydratedFeedItemPreHtml = Omit<HydratedFeedItem, 'html'>
+export type HydratedFeedItemPreHtml = Omit<HydratedFeedItem, 'html' | 'title' | 'content'>
