@@ -1,8 +1,6 @@
-
-import type { HydratedEvent } from "../types";
-
-export default (event: HydratedEvent) => `
-# Save the date - ${event.data.title}
+import { FeedItemType, type HydratedEvent } from "../types";
+export default ({event, permalink}: {event: HydratedEvent, permalink: string}) => `
+# [Save the date - ${event.data.title}](${permalink})
 
 Our next Event will be on ${event.data.date}
 

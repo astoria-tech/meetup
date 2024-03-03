@@ -1,10 +1,10 @@
 import type { HydratedEvent } from "../types";
 import { initializeLink } from "./render";
 
-export default (event: HydratedEvent, site: URL) => {
+export default ({event, permalink, site}: {event: HydratedEvent, permalink: string, site: URL}) => {
   const link = initializeLink(site)
   return `
-# Slides for - ${event.data.title}
+# [Slides for - ${event.data.title}](${permalink})
 
 ${ event.data.banner && `<img src="${link(event.data.banner)}" style="width:500px"/>`}
 

@@ -1,15 +1,18 @@
 ---
 import type { HydratedFeedItem } from '../types';
 import { FeedItemType } from '../types';
-import PostEvent from './PostEvent.astro';
-import Event from './Event.astro';
+import postEventMarkdown from '../markdown/post-event-markdown';
+import eventMarkdown from '../markdown/event-markdown';
+import { render } from '../markdown/render';
 type Props = HydratedFeedItem
-const { type, event } = Astro.props
+const site = Astro.site
+const { type, event, slug } = Astro.props
+const markdownProps = { event, site, permalink: `/feed/${slug}`}
 ---
 <div class="mb-5">
   {type === FeedItemType.POST_EVENT ? (
-    <PostEvent {...event}/>
+    <div class="bg-slate-300 w-1/3 p-5" set:html={render(eventMarkdown(markdownProps))}></div>
   ) : (
-    <Event {...event}/>
+    <div class="bg-slate-300 w-1/3 p-5" set:html={render(postEventMarkdown(markdownProps))}></div>
   )}
 </div>

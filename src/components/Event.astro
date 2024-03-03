@@ -1,9 +1,0 @@
----
-import type { HydratedEvent } from '../types';
-import eventMarkdown from '../markdown/event-markdown';
-import { render } from '../markdown/render';
-type Props = HydratedEvent
-const event = Astro.props
----
-
-<div class="bg-slate-300 w-1/3 p-5" set:html={render(eventMarkdown(event))}></div>

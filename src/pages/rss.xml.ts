@@ -16,14 +16,15 @@ export const GET: APIRoute = async (context) => {
   const site = context.site
   const feed = await getFeed();
   const items = await Promise.all(feed.map(async (feedItem) => {
-    const markdown = markdownMap[feedItem.type](feedItem.event, site)
+    const permalink = `/feed/${feedItem.slug}`
+    const markdown = markdownMap[feedItem.type]({event: feedItem.event, site, permalink})
     const rawContent = render(markdown)
     const $ = cheerio(rawContent)
     const title = $('h1').text()
     $('h1').remove()
     const content = $('body').html()
     return {
-      link: initializeLink(site)(`/feed/${feedItem.slug}`),
+      link: initializeLink(site)(permalink),
       pubDate: feedItem.data.publishedAt,
       content,
       title,
