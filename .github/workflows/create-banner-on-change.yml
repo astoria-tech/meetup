@@ -37,7 +37,8 @@ jobs:
         fi
         FILENAME=$(basename -- "${fileArray[0]}")
         BASENAME="${FILENAME%.*}"
-        echo "::set-output name=date::$BASENAME"
+        echo "$BASENAME"
+        echo "date=$BASENAME" >> $GITHUB_OUTPUT
 
   create-banner:
     needs: get-date-from-changed-file
