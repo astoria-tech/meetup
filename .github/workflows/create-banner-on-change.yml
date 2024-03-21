@@ -21,8 +21,14 @@ jobs:
         echo "Files found:"
         echo "$FILES"
 
-        # Convert string to array based on newlines
-        IFS=$'\n' read -rd '' -a fileArray <<< "$FILES"
+        # Initialize an empty array
+        fileArray=()
+
+        # Read each line from $FILES and append to fileArray
+        while IFS= read -r line; do
+          fileArray+=("$line")
+        done <<< "$FILES"
+
         echo "Number of files in array: ${#fileArray[@]}"
         
         if [ "${#fileArray[@]}" -ne 1 ]; then
