@@ -16,6 +16,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Create Banner
-      uses: ./.github/workflows/_create-banner.yml@main
+      uses: ./.github/workflows/_create-banner.yml
       with:
         date: ${{ github.event.inputs.date }}
