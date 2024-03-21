@@ -1,0 +1,7 @@
+{
+  "defaultProfilePath": "default.png",
+  "templatePath": "template.png",
+  "speakerImageYPctOffset": 52,
+  "speakerImagePctGapWidth": 15,
+  "speakerImagePctMaxWidth": 25
+}

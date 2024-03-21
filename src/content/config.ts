@@ -38,6 +38,8 @@ const speakersCollection = defineCollection({
     linkedin: z.string().optional(),
     name: z.string(),
     website: z.string().optional(),
+    githubUsername: z.string().optional(),
+    profileImage: z.string().optional(),
   }),
 });
 
