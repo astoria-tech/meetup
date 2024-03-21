@@ -18,6 +18,7 @@ jobs:
       id: check-file
       run: |
         FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.sha }} -- 'src/content/events/')
+        echo "$FILES"
         IFS=$'\n' read -rd '' -a fileArray <<< "$FILES"
         if [ "${#fileArray[@]}" -ne 1 ]; then
           echo "Error: More than one file has been changed."
