@@ -61,10 +61,21 @@ jobs:
       run: git push origin event-${{ github.event.inputs.date }}
 
     - name: Create PR
-      id: create_pr
-      uses: repo-sync/pull-request@v2
+      uses: actions/github-script@v6
       with:
-        destination_branch: "main"
-        pr_title: "New event on ${{ github.event.inputs.date }}: ${{ github.event.inputs.title }}"
-        pr_body: "This PR adds new event content."
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const date = `${{ github.event.inputs.date }}`;
+          const title = `${{ github.event.inputs.title }}`;
+          const githubToken = ${{ secrets.GITHUB_TOKEN }};
+          const octokit = github.getOctokit(githubToken);
+          
+          octokit.rest.pulls.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `New event on ${date}: ${title}`,
+            head: `event-${date}`,
+            base: 'main',
+            body: 'This PR adds new event content.',
+            draft: false,
+          })
+
