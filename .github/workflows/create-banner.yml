@@ -28,7 +28,7 @@ jobs:
         cd ./packages/image-generator
         npm i
         cd ../..
-        tsx ./packages/image-generator/cli.ts --image event --date ${{ github.event.inputs.date }} > ./public/banners/${{ github.event.inputs.date }}.png
+        tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image event --date ${{ github.event.inputs.date }} > ./public/banners/${{ github.event.inputs.date }}.png
 
     - name: Commit files
       run: |
