@@ -1,4 +1,4 @@
-name: Create Banner PR
+name: Create Banner on Dispatch
 
 on:
   workflow_dispatch:
@@ -8,50 +8,10 @@ on:
         required: true
 
 jobs:
-  create-pr:
+  create-banner-on-dispatch:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Configure git
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-
-    - name: Create new branch
-      run: git checkout -b banner-${{ github.event.inputs.date }}
-
-    - name: Create banner
-      run: |
-        npm i tsx -g
-        cd ./packages/image-generator
-        npm i
-        cd ../..
-        tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image event --date ${{ github.event.inputs.date }} > ./public/banners/${{ github.event.inputs.date }}.png
-
-    - name: Commit files
-      run: |
-        git add .
-        git commit -m "Add event banner for ${{ github.event.inputs.date }}"
-
-    - name: Push changes
-      run: git push origin banner-${{ github.event.inputs.date }}
-
-    - name: Create PR
-      uses: actions/github-script@v6
+    - name: Create Banner
+      uses: ./.github/workflows/_create-banner.yml@main
       with:
-        script: |
-          const date = "${{ github.event.inputs.date }}";
-          const headBranch = `banner-${date}`;
-          const baseBranch = 'main'; // Ensure this matches your repo's default branch
-          
-          github.rest.pulls.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `Generated event banner for ${date}`,
-            head: headBranch,
-            base: baseBranch,
-            body: 'This PR adds new event banner.',
-          });
-
+        date: ${{ github.event.inputs.date }}

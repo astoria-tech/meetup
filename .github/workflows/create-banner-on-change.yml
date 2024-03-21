@@ -1,0 +1,31 @@
+name: Create Banner on Change
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/content/events/**'
+
+jobs:
+  create-banner-on-change:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check and get changed file
+      id: check-file
+      run: |
+        FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.sha }} -- 'src/content/events/')
+        IFS=$'\n' read -rd '' -a fileArray <<< "$FILES"
+        if [ "${#fileArray[@]}" -ne 1 ]; then
+          echo "Error: More than one file has been changed."
+          exit 1
+        fi
+        FILENAME=$(basename -- "${fileArray[0]}")
+        BASENAME="${FILENAME%.*}"
+        echo "::set-output name=date::$BASENAME"
+
+    - name: Create Banner
+      uses: ./.github/workflows/_create-banner.yml@main
+      with:
+        date: ${{ steps.check-file.outputs.date }}

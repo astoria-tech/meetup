@@ -9,7 +9,6 @@ on:
       meetup_link:
         description: 'Meetup Link'
         required: true
-        default: 'http://example.com'
       title:
         description: 'Event Title'
         required: true
