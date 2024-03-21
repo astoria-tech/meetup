@@ -8,7 +8,7 @@ export interface Options extends _Options {
   speakers: Speaker[]
 }
 
-async function fetchImage(url): Promise<Buffer> {
+async function fetchImage(url: string): Promise<Buffer> {
   const response = await fetch(url);
   const buffer = await response.arrayBuffer();
   return Buffer.from(buffer);

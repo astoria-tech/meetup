@@ -1,5 +1,4 @@
 import { Command } from "commander";
-import fs from "fs";
 import { buildRelative } from "./index";
 
 const program = new Command();
