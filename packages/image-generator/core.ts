@@ -16,10 +16,18 @@ function readTemplateFile(templatePath: string): Buffer {
 }
 
 // Generates SVG for speaker names
-function generateSpeakerNameSvg(name: string, width: number, yOffset: number): string {
+function generateSpeakerNameSvg(name: string, width: number, yOffset: number, fontSize: string): string {
   const fontColor = 'white';
-  const fontSize = '30px';
-  return `<svg width="${width}" height="40"><text x="50%" y="${yOffset}" alignment-baseline="middle" text-anchor="middle" font-size="${fontSize}" font-family="Helvetica" fill="${fontColor}" font-weight="bold">${name}</text></svg>`;
+  const nameParts = name.split(' '); // Split the name into parts based on spaces
+  const lineHeight = parseInt(fontSize) + 5; // Adjust the line height based on the font size
+
+  // Generate the SVG for each name part on a new line
+  const nameSvg = nameParts.map((part, index) => {
+    const y = yOffset + (lineHeight * index); // Calculate the y position for each line
+    return `<text x="50%" y="${y}" alignment-baseline="middle" text-anchor="middle" font-size="${fontSize}" font-family="Helvetica" fill="${fontColor}" font-weight="bold">${part}</text>`;
+  }).join('');
+
+  return `<svg width="${width}" height="${lineHeight * nameParts.length + 10}">${nameSvg}</svg>`;
 }
 
 // Resizes and masks speaker images into circles
@@ -107,14 +115,15 @@ export async function generateEventImage(options: Options) {
     // Calculate the starting left position to center the block
     const startLeft = Math.floor((templateWidth - totalSpeakersWidth) / 2)
     
-
     const defaultSpeakerImageBuffer = fs.readFileSync(defaultProfilePath);
 
     const speakerImages = await Promise.all(speakers.map((speaker, index) =>
       processSpeakerImage(defaultSpeakerImageBuffer, speaker, speakerWidth, speakerImageYOffset, speakerImageGapWidth,  startLeft, index)));
 
+    const maxNameLength = Math.max(...speakers.map(speaker => speaker.name.length))
+  
     const nameOverlays = speakers.map((speaker, index) => ({
-      input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25)),
+      input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25, `30px`)),
       top: speakerImageYOffset + speakerWidth + 5,
       left: startLeft + (index * (speakerWidth + speakerImageGapWidth)),
     }));
