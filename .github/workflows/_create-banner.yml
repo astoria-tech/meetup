@@ -18,9 +18,6 @@ jobs:
         # Using a combination of the event date and a unique suffix (UUID)
         echo "BRANCH_NAME=banner-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_ENV
 
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
     - name: Configure git
       run: |
         git config user.name "github-actions"
