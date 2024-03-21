@@ -10,6 +10,8 @@ on:
 jobs:
   get-date-from-changed-file:
     runs-on: ubuntu-latest
+    outputs:  # Declare the outputs for this job
+      date: ${{ steps.check-file.outputs.date }}  # Specify the output variable
     steps:
     - uses: actions/checkout@v2
       with:
