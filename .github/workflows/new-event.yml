@@ -1,0 +1,70 @@
+name: Create Event PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Event Date (YYYY-MM-DD)'
+        required: true
+      meetup_link:
+        description: 'Meetup Link'
+        required: true
+        default: 'http://example.com'
+      title:
+        description: 'Event Title'
+        required: true
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Configure git
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+
+    - name: Create new branch
+      run: git checkout -b event-${{ github.event.inputs.date }}
+
+    - name: Create event content file
+      run: |
+        mkdir -p src/content/events
+        cat << EOF > src/content/events/${{ github.event.inputs.date }}.md
+        ---
+        date: ${{ github.event.inputs.date }}
+        meetup: ${{ github.event.inputs.meetup_link }}
+        presentations: []
+        title: "${{ github.event.inputs.title }}"
+        ---
+        EOF
+
+    - name: Create feed content file
+      run: |
+        mkdir -p src/content/feed
+        today=$(date +%Y-%m-%d)
+        cat << EOF > src/content/feed/${{ github.event.inputs.date }}-event.md
+        ---
+        event: '${{ github.event.inputs.date }}'
+        publishedAt: $today
+        ---
+        EOF
+
+    - name: Commit files
+      run: |
+        git add .
+        git commit -m "Add event content for ${{ github.event.inputs.date }}"
+
+    - name: Push changes
+      run: git push origin event-${{ github.event.inputs.date }}
+
+    - name: Create PR
+      id: create_pr
+      uses: repo-sync/pull-request@v2
+      with:
+        destination_branch: "main"
+        pr_title: "New event on ${{ github.event.inputs.date }}: ${{ github.event.inputs.title }}"
+        pr_body: "This PR adds new event content."
+        github_token: ${{ secrets.GITHUB_TOKEN }}
