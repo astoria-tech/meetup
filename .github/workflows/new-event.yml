@@ -64,18 +64,17 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          const date = `${{ github.event.inputs.date }}`;
-          const title = `${{ github.event.inputs.title }}`;
-          const githubToken = ${{ secrets.GITHUB_TOKEN }};
-          const octokit = github.getOctokit(githubToken);
+          const date = "${{ github.event.inputs.date }}";
+          const title = "${{ github.event.inputs.title }}";
+          const headBranch = `event-${date}`;
+          const baseBranch = 'main'; // Ensure this matches your repo's default branch
           
-          octokit.rest.pulls.create({
+          github.rest.pulls.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
             title: `New event on ${date}: ${title}`,
-            head: `event-${date}`,
-            base: 'main',
+            head: headBranch,
+            base: baseBranch,
             body: 'This PR adds new event content.',
-            draft: false,
-          })
+          });
 
