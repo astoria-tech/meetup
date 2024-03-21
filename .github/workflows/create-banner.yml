@@ -9,13 +9,6 @@ on:
 
 jobs:
   create-banner-on-dispatch:
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Create Banner
-      uses: ./.github/workflows/create-banner-shared.yml
-      with:
-        date: ${{ github.event.inputs.date }}
+    uses: ./.github/workflows/create-banner-shared.yml
+    with:
+      date: ${{ github.event.inputs.date }}

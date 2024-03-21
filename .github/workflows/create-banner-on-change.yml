@@ -8,7 +8,7 @@ on:
       - 'src/content/events/**'
 
 jobs:
-  create-banner-on-change:
+  get-date-from-changed-file:
     runs-on: ubuntu-latest
     steps:
 
@@ -28,7 +28,7 @@ jobs:
         BASENAME="${FILENAME%.*}"
         echo "::set-output name=date::$BASENAME"
 
-    - name: Create Banner
-      uses: ./.github/workflows/create-banner-shared.yml
-      with:
-        date: ${{ steps.check-file.outputs.date }}
+  create-banner:
+    needs: get-date-from-changed-file
+    uses: ./.github/workflows/create-banner-shared.yml
+      with: ${{ needs.get-date-from-changed-file.outputs.date }}

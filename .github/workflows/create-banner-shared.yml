@@ -12,6 +12,9 @@ jobs:
   create-banner:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Generate unique branch name
       id: generate-branch-name
       run: |
