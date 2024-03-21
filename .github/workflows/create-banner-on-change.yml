@@ -31,4 +31,5 @@ jobs:
   create-banner:
     needs: get-date-from-changed-file
     uses: ./.github/workflows/create-banner-shared.yml
-      with: ${{ needs.get-date-from-changed-file.outputs.date }}
+    with:
+      date: ${{ needs.get-date-from-changed-file.outputs.date }}
