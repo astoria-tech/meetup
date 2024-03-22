@@ -3,9 +3,7 @@ name: Create Fix Style PR
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: write-all
 
 jobs:
   create-pr:
