@@ -78,7 +78,11 @@ export type Options = {
   speakerImagePctGapWidth: number,
   speakerImagePctMaxWidth: number,
   dateDay: string,
-  dateMonth: string
+  dateMonth: string,
+  dateDayX: number,
+  dateDayY: number,
+  dateMonthX: number,
+  dateMonthY: number,
 }
 
 export async function generateEventImage(options: Options) {
@@ -91,7 +95,13 @@ export async function generateEventImage(options: Options) {
     speakerImagePctGapWidth,
     speakerImagePctMaxWidth,
     dateDay,
-    dateMonth
+    dateMonth,
+    dateDayTop,
+    dateDayLeft,
+    dateMonthTop,
+    dateMonthLeft,
+    timeTop,
+    timeLeft,
   } = options;
   try {
     const templateBuffer = readTemplateFile(templatePath);
@@ -120,8 +130,6 @@ export async function generateEventImage(options: Options) {
     const speakerImages = await Promise.all(speakers.map((speaker, index) =>
       processSpeakerImage(defaultSpeakerImageBuffer, speaker, speakerWidth, speakerImageYOffset, speakerImageGapWidth,  startLeft, index)));
 
-    const maxNameLength = Math.max(...speakers.map(speaker => speaker.name.length))
-  
     const nameOverlays = speakers.map((speaker, index) => ({
       input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25, `30px`)),
       top: speakerImageYOffset + speakerWidth + 5,
@@ -130,20 +138,20 @@ export async function generateEventImage(options: Options) {
 
     const dateOverlay = {
       input: createDateSvg(dateDay, "250px", "300px", 'white', '80px'),
-      top: 110,
-      left: 806,
+      top: dateDayTop,
+      left: dateDayLeft,
     };
 
     const dateMonthOverlay = {
       input: createDateSvg(dateMonth, "250px", "300px", 'white', '60px'),
-      top: 175,
-      left: 806,
+      top: dateMonthTop,
+      left: dateMonthLeft,
     };
 
     const time = {
       input: createDateSvg('7pm', "250px", "300px", 'black', '60px'),
-      top: 300,
-      left: 896,
+      top: timeTop,
+      left: timeLeft,
     };
 
     if (outputPath) {

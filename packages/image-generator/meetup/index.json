@@ -1,0 +1,13 @@
+{
+  "defaultProfilePath": "default.png",
+  "templatePath": "template.png",
+  "speakerImageYPctOffset": 58,
+  "speakerImagePctGapWidth": 35,
+  "speakerImagePctMaxWidth": 13,
+  "dateDayTop": 40,
+  "dateDayLeft": 806,
+  "dateMonthTop": 105,
+  "dateMonthLeft": 806,
+  "timeTop": 230,
+  "timeLeft": 896
+}

@@ -7,7 +7,11 @@ on:
         description: 'Event Date (YYYY-MM-DD)'
         required: true
         type: string
-
+      image:
+        description: 'Image Type (event, meetup)'
+        default: event
+        type: string
+        
 jobs:
   create-banner:
     runs-on: ubuntu-latest
@@ -35,7 +39,7 @@ jobs:
         cd ./packages/image-generator
         npm i
         cd ../..
-        tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image event --date ${{ inputs.date }} > ./public/banners/${{ inputs.date }}.png
+        tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/banners/${{ inputs.date }}.png
 
     - name: Commit files
       run: |

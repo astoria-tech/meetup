@@ -18,6 +18,7 @@
     "astro": "^4.4.8",
     "cheerio": "^1.0.0-rc.12",
     "markdown-it": "^14.0.0",
+    "mime-types": "^2.1.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }

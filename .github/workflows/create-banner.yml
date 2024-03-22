@@ -6,9 +6,14 @@ on:
       date:
         description: 'Event Date (YYYY-MM-DD)'
         required: true
+      image:
+        description: 'Image Type (event, meetup)'
+        default: event
+        type: string
 
 jobs:
   create-banner-on-dispatch:
     uses: ./.github/workflows/create-banner-shared.yml
     with:
       date: ${{ github.event.inputs.date }}
+      image: ${{ github.event.inputs.image }}
