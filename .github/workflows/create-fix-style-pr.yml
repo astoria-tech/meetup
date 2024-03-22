@@ -3,11 +3,12 @@ name: Create Fix Style PR
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   create-pr:
-    permissions:
-      contents: write
-      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
