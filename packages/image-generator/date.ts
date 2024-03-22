@@ -1,6 +1,4 @@
-
-
-export function convertDateToObject (date: string) {
+export function convertDateToObject(date: string) {
   // validate date is YYYY-MM-DD format
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/
   if (!dateRegex.test(date)) {
@@ -15,6 +13,6 @@ export function convertDateToObject (date: string) {
 
   return {
     dateDay: day,
-    dateMonth
+    dateMonth,
   }
 }

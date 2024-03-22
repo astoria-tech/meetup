@@ -1,15 +1,15 @@
-import { getCollection } from 'astro:content';
-import eventMarkdown from '../markdown/event-markdown';
-import postEventMarkdown from '../markdown/post-event-markdown';
-import { FeedItemType, type HydratedFeedItem} from '../types'
-import MarkdownIt from "markdown-it"
+import {getCollection} from 'astro:content'
+import eventMarkdown from '../markdown/event-markdown'
+import postEventMarkdown from '../markdown/post-event-markdown'
+import {FeedItemType, type HydratedFeedItem} from '../types'
+import MarkdownIt from 'markdown-it'
 import nodePath from 'path'
-import { load as cheerio} from 'cheerio'
+import {load as cheerio} from 'cheerio'
 
 const render = (markdown: string) => {
   const parser = new MarkdownIt({
     html: true,
-  });
+  })
   return parser.render(markdown)
 }
 
@@ -20,7 +20,7 @@ const initializeLink = (site: URL) => (path: string) => {
 
 const markdownMap = {
   [FeedItemType.EVENT]: eventMarkdown,
-  [FeedItemType.POST_EVENT]: postEventMarkdown
+  [FeedItemType.POST_EVENT]: postEventMarkdown,
 }
 
 // this is to get the H1 tag from the markdown for the "title" of a feed post
@@ -33,7 +33,7 @@ const forRss = (html: string) => {
   return {title, content}
 }
 
-export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]> {
+export async function getFeed(props: {site?: URL}): Promise<HydratedFeedItem[]> {
   const {site} = props
   const link = initializeLink(site || new URL('http://localhost:4321'))
 
@@ -53,10 +53,10 @@ export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]>
         slides: presentation.data.slides && link(presentation.data.slides),
         slidesSource: presentation.data.slides && link(presentation.data.slides),
       },
-      speaker
+      speaker,
     }
   })
-  
+
   const eventsWithPresentations = events.map(event => {
     const presentations = event.data.presentations.map(presentationId => {
       return presentationsWithSpeakers.find(p => p.slug === presentationId.slug)
@@ -67,26 +67,28 @@ export async function getFeed (props: {site?: URL}): Promise<HydratedFeedItem[]>
         ...event.data,
         banner: event.data.banner && link(event.data.banner),
       },
-      presentations
+      presentations,
     }
   })
-  
-  const feedWithEvents = feed.map(feedItem => {
-    const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
-    const type = feedItem.slug.endsWith(FeedItemType.POST_EVENT) ? FeedItemType.POST_EVENT : FeedItemType.EVENT
-    const hydrated = {
-      ...feedItem,
-      event,
-      type,
-      permalink: link(`/feed/${feedItem.slug}`),
-    }
-    const markdown = markdownMap[type](hydrated)
-    const html = render(markdown)
-    const { title, content } = forRss(html)
-    return { ...hydrated, html, title, content }
-  }).sort((a, b) => {
-    return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
-  })
+
+  const feedWithEvents = feed
+    .map(feedItem => {
+      const event = eventsWithPresentations.find(e => feedItem.data.event.slug === e.slug)
+      const type = feedItem.slug.endsWith(FeedItemType.POST_EVENT) ? FeedItemType.POST_EVENT : FeedItemType.EVENT
+      const hydrated = {
+        ...feedItem,
+        event,
+        type,
+        permalink: link(`/feed/${feedItem.slug}`),
+      }
+      const markdown = markdownMap[type](hydrated)
+      const html = render(markdown)
+      const {title, content} = forRss(html)
+      return {...hydrated, html, title, content}
+    })
+    .sort((a, b) => {
+      return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+    })
 
   return feedWithEvents
 }

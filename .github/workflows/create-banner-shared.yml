@@ -11,56 +11,56 @@ on:
         description: 'Image Type (event, meetup)'
         default: event
         type: string
-        
+
 jobs:
   create-banner:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Generate unique branch name
-      id: generate-branch-name
-      run: |
-        # Using a combination of the event date and a unique suffix (UUID)
-        echo "BRANCH_NAME=banner-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_ENV
+      - name: Generate unique branch name
+        id: generate-branch-name
+        run: |
+          # Using a combination of the event date and a unique suffix (UUID)
+          echo "BRANCH_NAME=banner-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_ENV
 
-    - name: Configure git
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-    - name: Create new branch
-      run: git checkout -b ${{ env.BRANCH_NAME }}
+      - name: Create new branch
+        run: git checkout -b ${{ env.BRANCH_NAME }}
 
-    - name: Create banner
-      run: |
-        npm i tsx -g
-        cd ./packages/image-generator
-        npm i
-        cd ../..
-        tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/banners/${{ inputs.date }}.png
+      - name: Create banner
+        run: |
+          npm i tsx -g
+          cd ./packages/image-generator
+          npm i
+          cd ../..
+          tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/banners/${{ inputs.date }}.png
 
-    - name: Commit files
-      run: |
-        git add .
-        git commit -m "Add event banner for ${{ inputs.date }}"
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Add event banner for ${{ inputs.date }}"
 
-    - name: Push changes
-      run: git push origin ${{ env.BRANCH_NAME }}
+      - name: Push changes
+        run: git push origin ${{ env.BRANCH_NAME }}
 
-    - name: Create PR
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const headBranch = process.env.BRANCH_NAME;
-          const baseBranch = 'main'; // Ensure this matches your repo's default branch
-          
-          github.rest.pulls.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `Generated event banner for ${{ inputs.date }}`,
-            head: headBranch,
-            base: baseBranch,
-            body: 'This PR adds a new event banner.',
-          });
+      - name: Create PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const headBranch = process.env.BRANCH_NAME;
+            const baseBranch = 'main'; // Ensure this matches your repo's default branch
+
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Generated event banner for ${{ inputs.date }}`,
+              head: headBranch,
+              base: baseBranch,
+              body: 'This PR adds a new event banner.',
+            });

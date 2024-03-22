@@ -17,63 +17,62 @@ jobs:
   create-pr:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Configure git
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-    - name: Create new branch
-      run: git checkout -b event-${{ github.event.inputs.date }}
+      - name: Create new branch
+        run: git checkout -b event-${{ github.event.inputs.date }}
 
-    - name: Create event content file
-      run: |
-        mkdir -p src/content/events
-        cat << EOF > src/content/events/${{ github.event.inputs.date }}.md
-        ---
-        date: ${{ github.event.inputs.date }}
-        meetup: ${{ github.event.inputs.meetup_link }}
-        presentations: []
-        title: "${{ github.event.inputs.title }}"
-        ---
-        EOF
+      - name: Create event content file
+        run: |
+          mkdir -p src/content/events
+          cat << EOF > src/content/events/${{ github.event.inputs.date }}.md
+          ---
+          date: ${{ github.event.inputs.date }}
+          meetup: ${{ github.event.inputs.meetup_link }}
+          presentations: []
+          title: "${{ github.event.inputs.title }}"
+          ---
+          EOF
 
-    - name: Create feed content file
-      run: |
-        mkdir -p src/content/feed
-        today=$(date +%Y-%m-%d)
-        cat << EOF > src/content/feed/${{ github.event.inputs.date }}-event.md
-        ---
-        event: '${{ github.event.inputs.date }}'
-        publishedAt: $today
-        ---
-        EOF
+      - name: Create feed content file
+        run: |
+          mkdir -p src/content/feed
+          today=$(date +%Y-%m-%d)
+          cat << EOF > src/content/feed/${{ github.event.inputs.date }}-event.md
+          ---
+          event: '${{ github.event.inputs.date }}'
+          publishedAt: $today
+          ---
+          EOF
 
-    - name: Commit files
-      run: |
-        git add .
-        git commit -m "Add event content for ${{ github.event.inputs.date }}"
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Add event content for ${{ github.event.inputs.date }}"
 
-    - name: Push changes
-      run: git push origin event-${{ github.event.inputs.date }}
+      - name: Push changes
+        run: git push origin event-${{ github.event.inputs.date }}
 
-    - name: Create PR
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const date = "${{ github.event.inputs.date }}";
-          const title = "${{ github.event.inputs.title }}";
-          const headBranch = `event-${date}`;
-          const baseBranch = 'main'; // Ensure this matches your repo's default branch
-          
-          github.rest.pulls.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `New event on ${date}: ${title}`,
-            head: headBranch,
-            base: baseBranch,
-            body: 'This PR adds new event content.',
-          });
+      - name: Create PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const date = "${{ github.event.inputs.date }}";
+            const title = "${{ github.event.inputs.title }}";
+            const headBranch = `event-${date}`;
+            const baseBranch = 'main'; // Ensure this matches your repo's default branch
 
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `New event on ${date}: ${title}`,
+              head: headBranch,
+              base: baseBranch,
+              body: 'This PR adds new event content.',
+            });

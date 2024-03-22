@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 a {
-  @apply underline text-blue-600
+  @apply underline text-blue-600;
 }
 a:hover {
-  @apply text-blue-800
+  @apply text-blue-800;
 }
 a:visited {
-  @apply text-purple-600
+  @apply text-purple-600;
 }
 
 @layer base {
@@ -28,7 +28,8 @@ a:visited {
 }
 
 @layer base {
-  ul, ol {
+  ul,
+  ol {
     @apply list-none p-0 m-0;
   }
   ul li::before {
