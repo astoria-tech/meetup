@@ -1,7 +1,7 @@
-import * as fs from 'fs/promises'
+import fs from 'fs/promises'
 import mime from 'mime-types'
 import { generateEventImage as _generateEventImage, type Speaker as _Speaker, type Options as _Options } from './core'
-import * as path from 'path'
+import path from 'path'
 
 interface Speaker extends _Speaker {
   githubUsername?: string;

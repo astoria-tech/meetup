@@ -79,10 +79,12 @@ export type Options = {
   speakerImagePctMaxWidth: number,
   dateDay: string,
   dateMonth: string,
-  dateDayX: number,
-  dateDayY: number,
-  dateMonthX: number,
-  dateMonthY: number,
+  dateDayTop: number,
+  dateDayLeft: number,
+  dateMonthTop: number,
+  dateMonthLeft: number,
+  timeTop: number,
+  timeLeft: number,
 }
 
 export async function generateEventImage(options: Options) {
