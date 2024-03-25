@@ -39,6 +39,10 @@ jobs:
           cd ./packages/image-generator
           npm i
           cd ../..
+
+          # Create directory if it doesn't exist
+          mkdir -p ./public/${{inputs.image}}
+          
           tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/${{inputs.image}}/${{ inputs.date }}.png
 
       - name: Commit files

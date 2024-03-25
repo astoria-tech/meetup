@@ -7,8 +7,8 @@ on:
         description: 'Event Date (YYYY-MM-DD)'
         required: true
       image:
-        description: 'Image Type (event, meetup)'
-        default: event
+        description: 'Image Type (banner, meetup)'
+        default: banner
         type: string
 
 jobs:
