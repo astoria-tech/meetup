@@ -1,0 +1,74 @@
+name: Create Event Files
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Event Date (yyyy-mm-dd)'
+        required: true
+        type: string
+
+jobs:
+  prepare_event:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Find Banners
+        id: find_banners
+        run: |
+          echo "SEARCH_PATH=public/banners/${{ github.event.inputs.date }}" >> $GITHUB_ENV
+          files=$(find $SEARCH_PATH -type f)
+          if [ -z "$files" ]; then
+            echo "No banners found for the specified event date."
+            exit 1
+          fi
+          echo "::set-output name=banner_files::$files"
+
+      - name: Find Presentations
+        id: find_presentations
+        run: |
+          files=$(find public/presentations -type f -name "*-${{ github.event.inputs.date }}.pdf")
+          if [ -z "$files" ]; then
+            echo "No presentations found for the specified event date."
+            exit 1
+          fi
+          echo "::set-output name=presentation_files::$files"
+
+      - name: Archive Files
+        run: |
+          mkdir event_files
+          cp ${{ steps.find_banners.outputs.banner_files }} event_files/
+          cp ${{ steps.find_presentations.outputs.presentation_files }} event_files/
+          tar -czvf event-${{ github.event.inputs.date }}.tar.gz event_files
+          zip -r event-${{ github.event.inputs.date }}.zip event_files
+
+      - name: Upload Event Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: event-files-${{ github.event.inputs.date }}
+          path: |
+            event-${{ github.event.inputs.date }}.tar.gz
+            event-${{ github.event.inputs.date }}.zip
+
+  create_event:
+    needs: prepare_event
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: event-files-${{ github.event.inputs.date }}
+
+      - name: Create Event
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: event-${{ github.event.inputs.date }}
+          release_name: Event ${{ github.event.inputs.date }}
+          draft: false
+          prerelease: false
+          files: |
+            event-${{ github.event.inputs.date }}.tar.gz
+            event-${{ github.event.inputs.date }}.zip
