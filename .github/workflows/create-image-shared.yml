@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       image:
-        description: 'Image Type (banner, meetup)'
+        description: 'Image Type (banner, meetup-image)'
         default: banner
         type: string
 
@@ -38,18 +38,12 @@ jobs:
           npm i tsx -g
           cd ./packages/image-generator
           npm i
-          cd ../..
-
           IFS=',' read -ra ADDR <<< "${{ inputs.image }}"
           for i in "${ADDR[@]}"; do
             trimmed=$(echo "$i" | xargs) # Trim whitespace
-            # Create directory if it doesn't exist
-            
             echo "$trimmed"
-
-            mkdir -p "./public/${trimmed}"
-            
-            tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image "${trimmed}" --date ${{ inputs.date }} > "./public/${trimmed}/${{ inputs.date }}.png"
+            mkdir -p "../../public/${trimmed}s"
+            npm run --silent cli -- --image "${trimmed}" --date ${{ inputs.date }} > "../../public/${trimmed}s/${{ inputs.date }}.png"
           done
 
       - name: Generate unique branch name

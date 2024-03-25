@@ -7,7 +7,7 @@ on:
         description: 'Event Date (YYYY-MM-DD)'
         required: true
       image:
-        description: 'Image Type (banner, meetup)'
+        description: 'Image Type (banner, meetup-image)'
         default: banner
         type: string
 
