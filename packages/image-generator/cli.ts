@@ -4,9 +4,9 @@ import {buildRelative} from './index'
 const program = new Command()
 
 program
-.option('-i, --image <string>', 'Image path')
-.option('-d, --date <string>', 'Date string')
-.option('-o, --out <string>', 'Output Path string')
+  .option('-i, --image <string>', 'Image path')
+  .option('-d, --date <string>', 'Date string')
+  .option('-o, --out <string>', 'Output Path string')
 
 program.parse(process.argv)
 
