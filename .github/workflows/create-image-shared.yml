@@ -1,4 +1,4 @@
-name: Create Banner PR
+name: Create Image PR
 
 on:
   workflow_call:
@@ -8,8 +8,8 @@ on:
         required: true
         type: string
       image:
-        description: 'Image Type (event, meetup)'
-        default: event
+        description: 'Image Type (banner, meetup)'
+        default: banner
         type: string
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
         id: generate-branch-name
         run: |
           # Using a combination of the event date and a unique suffix (UUID)
-          echo "BRANCH_NAME=banner-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_ENV
+          echo "BRANCH_NAME=image-${{inputs.image}}-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_ENV
 
       - name: Configure git
         run: |
@@ -33,18 +33,18 @@ jobs:
       - name: Create new branch
         run: git checkout -b ${{ env.BRANCH_NAME }}
 
-      - name: Create banner
+      - name: Create Image
         run: |
           npm i tsx -g
           cd ./packages/image-generator
           npm i
           cd ../..
-          tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/banners/${{ inputs.date }}.png
+          tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/${{inputs.image}}/${{ inputs.date }}.png
 
       - name: Commit files
         run: |
           git add .
-          git commit -m "Add event banner for ${{ inputs.date }}"
+          git commit -m "Add image "${{ inputs.image }}" for ${{ inputs.date }}"
 
       - name: Push changes
         run: git push origin ${{ env.BRANCH_NAME }}
@@ -59,8 +59,8 @@ jobs:
             github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `Generated event banner for ${{ inputs.date }}`,
+              title: `Generated image "${{ inputs.image }}" for ${{ inputs.date }}`,
               head: headBranch,
               base: baseBranch,
-              body: 'This PR adds a new event banner.',
+              body: 'This PR adds a new image ${{ inputs.image }}.',
             });

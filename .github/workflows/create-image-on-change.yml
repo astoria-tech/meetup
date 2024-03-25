@@ -1,4 +1,4 @@
-name: Create Banner on Change
+name: Create Image on Event Change
 
 on:
   push:
@@ -42,8 +42,8 @@ jobs:
           echo "$BASENAME"
           echo "date=$BASENAME" >> $GITHUB_OUTPUT
 
-  create-banner:
+  create-image:
     needs: get-date-from-changed-file
-    uses: ./.github/workflows/create-banner-shared.yml
+    uses: ./.github/workflows/create-image-shared.yml
     with:
       date: ${{ needs.get-date-from-changed-file.outputs.date }}

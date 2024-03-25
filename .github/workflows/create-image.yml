@@ -1,4 +1,4 @@
-name: Create Banner on Dispatch
+name: Create Image on Dispatch
 
 on:
   workflow_dispatch:
@@ -12,8 +12,8 @@ on:
         type: string
 
 jobs:
-  create-banner-on-dispatch:
-    uses: ./.github/workflows/create-banner-shared.yml
+  create-image-on-dispatch:
+    uses: ./.github/workflows/create-image-shared.yml
     with:
       date: ${{ github.event.inputs.date }}
       image: ${{ github.event.inputs.image }}
