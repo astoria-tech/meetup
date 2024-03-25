@@ -39,11 +39,18 @@ jobs:
           cd ./packages/image-generator
           npm i
           cd ../..
+      
+          IFS=',' read -ra ADDR <<< "${{ inputs.image }}"
+          for i in "${ADDR[@]}"; do
+            trimmed=$(echo "$i" | xargs) # Trim whitespace
+            # Create directory if it doesn't exist
+            
+            echo "$trimmed"
 
-          # Create directory if it doesn't exist
-          mkdir -p ./public/${{inputs.image}}
-          
-          tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image ${{ inputs.image }} --date ${{ inputs.date }} > ./public/${{inputs.image}}/${{ inputs.date }}.png
+            mkdir -p "./public/${trimmed}"
+            
+            tsx --tsconfig ./packages/image-generator/tsconfig.json ./packages/image-generator/cli.ts --image "${trimmed}" --date ${{ inputs.date }} > "./public/${trimmed}/${{ inputs.date }}.png"
+          done
 
       - name: Commit files
         run: |
