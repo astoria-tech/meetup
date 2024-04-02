@@ -36,19 +36,19 @@ jobs:
           name=$(echo "$jsonData" | jq -r '.name.text')
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "$name"
-    
+
           gitHubUsername=$(echo "$jsonData" | jq -r '."git-hub-username".text')
           echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
           echo "$gitHubUsername"
-    
+
           linkedInProfileURL=$(echo "$jsonData" | jq -r '."linked-in-profile-url".text')
           echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
           echo "$linkedInProfileURL"
-    
+
           website=$(echo "$jsonData" | jq -r '.website.text')
           echo "website=$website" >> "$GITHUB_OUTPUT"
           echo "$website"
-    
+
           profileImage=$(echo "$jsonData" | jq -r '."profile-image".text')
           echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
           echo "$profileImage"
@@ -80,26 +80,27 @@ jobs:
               fi
             fi
           }
-          
+
           # Check if githubUsername is not empty
           if [ -n "${{ steps.define.outputs.githubUsername }}" ]; then
             githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
             echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
-          
+
           # Corrected function calls
           add_url "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
           add_url "profileImage" "${{ steps.define.outputs.profileImage }}"
-          
+
           # Check if name is not empty
           if [ -n "${{ steps.define.outputs.name }}" ]; then
             echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
-          
+
           add_url "website" "${{ steps.define.outputs.website }}"
-          
+
           echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-        
+          echo "" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
