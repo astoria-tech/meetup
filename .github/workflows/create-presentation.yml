@@ -19,6 +19,7 @@ jobs:
           else
             echo "::set-output name=should-run::false"
             echo "Issue does not start with [Presentation]."
+          fi
 
   create-pr-for-new-presentation:
     needs: check-issue-title

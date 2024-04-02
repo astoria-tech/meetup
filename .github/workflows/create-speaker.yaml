@@ -19,6 +19,7 @@ jobs:
           else
             echo "::set-output name=should-run::false"
             echo "Issue does not start with [Speaker]."
+          fi
 
   create-pr-for-new-speaker:
     needs: check-issue-title
