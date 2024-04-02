@@ -1,4 +1,4 @@
-name: Issue to PR
+name: Speaker Issue to PR
 
 on:
   issues:
@@ -26,26 +26,13 @@ jobs:
         id: define
         run: |
           jsonData='${{ steps.parse.outputs.data }}'
-          echo "$jsonData"
+          source shell/output-issue-key.sh
 
-          function makeoutput() {
-            local jsonKey=$1
-            local variableName=$2
-
-            # Use eval to handle dynamic variable names
-            local value=$(echo "$jsonData" | jq -r --arg key "$jsonKey" '.[$key].text')
-            eval $variableName="'$value'"
-            
-            # Output to GitHub and echo
-            echo "${variableName}=${value}" >> "$GITHUB_OUTPUT"
-            echo "$value"
-          }
-
-          makeoutput title title
-          makeoutput date date
-          makeoutput speaker speaker
-          makeoutput slides-optional slides
-          makeoutput slides-source-optional slidesSource
+          makeoutput "$jsonData" name name
+          makeoutput "$jsonData" git-hub-username gitHubUsername
+          makeoutput "$jsonData" linked-in-profile-url linkedInProfileURL
+          makeoutput "$jsonData" website website
+          makeoutput "$jsonData" profile-image profileImage
 
       - name: Log
         run: |
