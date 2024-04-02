@@ -32,7 +32,7 @@ jobs:
           makeoutput "$jsonData" title title string
           makeoutput "$jsonData" date date date
           makeoutput "$jsonData" speaker speaker string
-          makeoutput "$jsonData" slides-optional slides url
+          makeoutput "$jsonData" slides-optional slides string
           makeoutput "$jsonData" slides-source-optional slidesSource url
 
       - name: Log
