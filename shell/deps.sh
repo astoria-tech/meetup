@@ -46,3 +46,16 @@ function makeoutput() {
     echo "$value"
   fi
 }
+
+function appendcontent() {
+  local content_folder_file_name=$1
+  local property_name=$2
+  local property_value=$3
+  
+  if [ -n $property_value ]; then
+    echo "Appending $property_value"
+    echo "$property_name: $property_value" >> "./src/content/$content_folder_file_name.md"
+  else
+    echo "Not appending $property_value (no value)"
+  fi
+}

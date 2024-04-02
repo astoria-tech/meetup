@@ -1,14 +1,14 @@
 name: Presentation Submission
 description: Use this form to submit a new presentation.
 title: '[Presentation]: '
-labels: ["presentation"]
+labels: ['presentation']
 assignees: '@reggi'
 body:
   - type: input
     id: title
     attributes:
       label: Title
-      description: "The title of your presentation."
+      description: 'The title of your presentation.'
       placeholder:
     validations:
       required: true
@@ -17,7 +17,7 @@ body:
     id: speaker
     attributes:
       label: Speaker
-      description: "Your name as a slug from your markdown `speaker` profile."
+      description: 'Your name as a slug from your markdown `speaker` profile.'
       placeholder:
     validations:
       required: true
@@ -26,8 +26,8 @@ body:
     id: date
     attributes:
       label: Date
-      description: "The date of the presentation (YYYY-MM-DD)."
-      placeholder: "YYYY-MM-DD"
+      description: 'The date of the presentation (YYYY-MM-DD).'
+      placeholder: 'YYYY-MM-DD'
     validations:
       required: true
 
@@ -35,8 +35,8 @@ body:
     id: slides
     attributes:
       label: Slides (Optional)
-      description: "Link to the presentation slides, (if available)."
-      placeholder: "/presentations/YYYY-MM-DD-your-name-slug.pdf"
+      description: 'Link to the presentation slides, (if available).'
+      placeholder: '/presentations/YYYY-MM-DD-your-name-slug.pdf'
     validations:
       required: false
 
@@ -44,8 +44,7 @@ body:
     id: slidesSource
     attributes:
       label: Slides Source (Optional)
-      description: "Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website)."
+      description: 'Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website).'
       placeholder:
     validations:
       required: false
-

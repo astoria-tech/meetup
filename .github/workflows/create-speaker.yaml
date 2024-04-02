@@ -26,7 +26,7 @@ jobs:
         id: define
         run: |
           jsonData='${{ steps.parse.outputs.data }}'
-          source shell/output-issue-key.sh
+          source shell/deps.sh
 
           makeoutput "$jsonData" name name string
           makeoutput "$jsonData" git-hub-username gitHubUsername username
@@ -42,59 +42,25 @@ jobs:
           echo "Website: ${{ steps.define.outputs.website }}"
           echo "Profile Image: ${{ steps.define.outputs.profileImage }}"
 
-      # - name: Create Slug
-      #   id: slug
-      #   run: |
-      #     echo "slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
+      - name: Append
+        run: |
+          slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')
+          source shell/deps.sh
+          content_file="speakers/$slug.md"
+          echo "---" > "./src/content/$content_file"
+          append_content "$content_file" "githubUsername" "${{ steps.define.outputs.githubUsername }}"
+          append_content "$content_file" "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
+          append_content "$content_file" "profileImage" "${{ steps.define.outputs.profileImage }}"
+          append_content "$content_file" "name" "${{ steps.define.outputs.name }}"
+          append_content "$content_file" "website" "${{ steps.define.outputs.website }}"
+          echo "---" > "./src/content/$content_file"
+          echo "" > "./src/content/$content_file"
 
-      # - name: Create new speaker file
-      #   run: |
-      #     echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-
-      #     add_url() {
-      #       property_name=$1
-      #       property_value=$2
-      #       # Enhanced URL pattern for validation
-      #       url_pattern="^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[-a-zA-Z0-9:%_+.~#?&//=]*)?$"
-            
-      #       if [[ -n "$property_value" ]]; then
-      #         # Remove any < or > characters
-      #         property_value=$(echo "$property_value" | sed 's/[<>]//g')
-              
-      #         # Check if the property_value matches the URL pattern
-      #         if [[ $property_value =~ $url_pattern ]]; then
-      #           echo "$property_name: $property_value" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-      #         else
-      #           echo "Invalid URL: $property_value"
-      #         fi
-      #       fi
-      #     }
-
-      #     # Check if githubUsername is not empty
-      #     if [ -n "${{ steps.define.outputs.githubUsername }}" ]; then
-      #       githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
-      #       echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-      #     fi
-
-      #     # Corrected function calls
-      #     add_url "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
-      #     add_url "profileImage" "${{ steps.define.outputs.profileImage }}"
-
-      #     # Check if name is not empty
-      #     if [ -n "${{ steps.define.outputs.name }}" ]; then
-      #       echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-      #     fi
-
-      #     add_url "website" "${{ steps.define.outputs.website }}"
-
-      #     echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-      #     echo "" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-
-      # - name: Create Pull Request
-      #   uses: peter-evans/create-pull-request@v3
-      #   with:
-      #     commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
-      #     title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
-      #     body: |
-      #       Adds a new speaker based on issue #${{ github.event.issue.number }}.
-      #     branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
+          title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
+          body: |
+            Adds a new speaker based on issue #${{ github.event.issue.number }}.
+          branch: 'new-speaker-${{ github.run_id }}'
