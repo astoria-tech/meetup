@@ -13,8 +13,8 @@ jobs:
 
       - name: Check Issue Title
         run: |
-          if [[ "${{ github.event.issue.title }}" != "[Speaker]*" ]]; then
-            echo "Issue does not start with [Speaker]. Exiting..."
+          if [[ "${{ github.event.issue.title }}" != "[Presentation]*" ]]; then
+            echo "Issue does not start with [Presentation]. Exiting..."
             exit 0
           fi
 
@@ -69,7 +69,7 @@ jobs:
               
               # Check if the property_value matches the URL pattern
               if [[ $property_value =~ $url_pattern ]]; then
-                echo "$property_name: $property_value" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+                echo "$property_name: $property_value" >> ./src/content/presentations/${{ steps.slug.outputs.slug }}.md
               else
                 echo "Invalid URL: $property_value"
               fi
@@ -79,7 +79,7 @@ jobs:
           # Check if githubUsername is not empty
           if [ -n "${{ steps.define.outputs.githubUsername }}" ]; then
             githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
-            echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+            echo "githubUsername: $githubUsername" >> ./src/content/presentations/${{ steps.slug.outputs.slug }}.md
           fi
 
           # Corrected function calls
@@ -88,19 +88,19 @@ jobs:
 
           # Check if name is not empty
           if [ -n "${{ steps.define.outputs.name }}" ]; then
-            echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+            echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/presentations/${{ steps.slug.outputs.slug }}.md
           fi
 
           add_url "website" "${{ steps.define.outputs.website }}"
 
-          echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          echo "" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          echo "---" >> ./src/content/presentations/${{ steps.slug.outputs.slug }}.md
+          echo "" >> ./src/content/presentations/${{ steps.slug.outputs.slug }}.md
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
-          title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
+          commit-message: 'New Presentation Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
+          title: 'New Presentation Submission: ${{  steps.define.outputs.name }}'
           body: |
-            Adds a new speaker based on issue #${{ github.event.issue.number }}.
-          branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
+            Adds a new presentation based on issue #${{ github.event.issue.number }}.
+          branch: 'new-presentation-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
