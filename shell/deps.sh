@@ -52,7 +52,7 @@ function appendcontent() {
   local property_name=$2
   local property_value=$3
   
-  if [ -n $property_value ]; then
+  if [ -n "$property_value" ]; then
     echo "Appending $property_value"
     echo "$property_name: $property_value" >> "./src/content/$content_folder_file_name.md"
   else
