@@ -1,0 +1,44 @@
+name: Speaker Submission
+description: Submit a new speaker.
+title: '[Speaker] '
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Please enter the name of the speaker.
+      placeholder:
+    validations:
+      required: true
+  - type: input
+    id: githubUsername
+    attributes:
+      label: GitHub Username
+      description: Please enter the GitHub username.
+      placeholder:
+    validations:
+      required: false
+  - type: input
+    id: linkedin
+    attributes:
+      label: LinkedIn Profile URL
+      description: Please enter the LinkedIn profile URL.
+      placeholder:
+    validations:
+      required: false
+  - type: input
+    id: website
+    attributes:
+      label: Website
+      description: Please enter the personal or professional website URL.
+      placeholder:
+    validations:
+      required: false
+  - type: input
+    id: profileImage
+    attributes:
+      label: Profile Image
+      description: Please profile a profile image URL. (If none is provided we use the GitHub profile image, or [the default image](https://github.com/astoria-tech/meetup/blob/main/packages/image-generator/banner/default.png))
+      placeholder:
+    validations:
+      required: false

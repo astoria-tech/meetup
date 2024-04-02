@@ -1,0 +1,52 @@
+name: Issue to PR
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  createPR:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Create Slug
+        id: slug
+        run: |
+          echo "slug=$(echo '${{ github.event.issue.title }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
+
+      - name: Create new speaker file
+        run: |
+          echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+
+          # Check if githubUsername is not empty
+          if [ -n "${{ github.event.issue.body.githubUsername }}" ]; then
+            echo "githubUsername: ${{ github.event.issue.body.githubUsername }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          fi
+
+          # Check if linkedin is not empty
+          if [ -n "${{ github.event.issue.body.linkedin }}" ]; then
+            echo "linkedin: ${{ github.event.issue.body.linkedin }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          fi
+
+          # Check if name is not empty
+          if [ -n "${{ github.event.issue.body.name }}" ]; then
+            echo "name: ${{ github.event.issue.body.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          fi
+
+          # Check if website is not empty
+          if [ -n "${{ github.event.issue.body.website }}" ]; then
+            echo "website: ${{ github.event.issue.body.website }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          fi
+
+          echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'New Speaker Submission: ${{ github.event.issue.body.name }} (#${{ github.event.issue.number }})'
+          title: 'New Speaker Submission: ${{ github.event.issue.body.name }}'
+          body: |
+            Adds a new speaker based on issue #${{ github.event.issue.number }}.
+          branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
