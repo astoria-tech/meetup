@@ -5,18 +5,28 @@ on:
     types: [opened, reopened]
 
 jobs:
-  createPR:
+  check-issue-title:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check-title.outputs.should-run }}
+    steps:
+      - name: Check Issue Title
+        id: check-title
+        run: |
+          echo "Checking issue title..."
+          if [[ "${{ github.event.issue.title }}" =~ ^\[Presentation\].* ]]; then
+            echo "::set-output name=should-run::true"
+          else
+            echo "::set-output name=should-run::false"
+            echo "Issue does not start with [Presentation]."
+
+  create-pr-for-new-presentation:
+    needs: check-issue-title
+    if: needs.check-issue-title.outputs.should-run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-
-      - name: Check Issue Title
-        run: |
-          if [[ ! "${{ github.event.issue.title }}" =~ ^\[Presentation\].* ]]; then
-            echo "Issue does not start with [Presentation]. Exiting..."
-            exit 0
-          fi
 
       - name: Issue Forms Body Parser
         id: parse
@@ -52,8 +62,8 @@ jobs:
           appendcontent "$content_file" "speaker" "${{ steps.define.outputs.speaker }}"
           appendcontent "$content_file" "slides" "${{ steps.define.outputs.slides }}"
           appendcontent "$content_file" "slidesSource" "${{ steps.define.outputs.slidesSource }}"
-          echo "---" > "./src/content/$content_file"
-          echo "" > "./src/content/$content_file"
+          echo "---" >> "./src/content/$content_file"
+          echo "" >> "./src/content/$content_file"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3

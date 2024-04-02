@@ -5,18 +5,28 @@ on:
     types: [opened, reopened]
 
 jobs:
-  createPR:
+  check-issue-title:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check-title.outputs.should-run }}
+    steps:
+      - name: Check Issue Title
+        id: check-title
+        run: |
+          echo "Checking issue title..."
+          if [[ "${{ github.event.issue.title }}" =~ ^\[Speaker\].* ]]; then
+            echo "::set-output name=should-run::true"
+          else
+            echo "::set-output name=should-run::false"
+            echo "Issue does not start with [Speaker]."
+
+  create-pr-for-new-speaker:
+    needs: check-issue-title
+    if: needs.check-issue-title.outputs.should-run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-
-      - name: Check Issue Title
-        run: |
-          if [[ ! "${{ github.event.issue.title }}" =~ ^\[Speaker\].* ]]; then
-            echo "Issue does not start with [Speaker]. Exiting..."
-            exit 0
-          fi
 
       - name: Issue Forms Body Parser
         id: parse
