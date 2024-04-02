@@ -48,11 +48,11 @@ jobs:
           source shell/deps.sh
           content_file="speakers/$slug.md"
           echo "---" > "./src/content/$content_file"
-          append_content "$content_file" "githubUsername" "${{ steps.define.outputs.githubUsername }}"
-          append_content "$content_file" "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
-          append_content "$content_file" "profileImage" "${{ steps.define.outputs.profileImage }}"
-          append_content "$content_file" "name" "${{ steps.define.outputs.name }}"
-          append_content "$content_file" "website" "${{ steps.define.outputs.website }}"
+          appendcontent "$content_file" "githubUsername" "${{ steps.define.outputs.githubUsername }}"
+          appendcontent "$content_file" "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
+          appendcontent "$content_file" "profileImage" "${{ steps.define.outputs.profileImage }}"
+          appendcontent "$content_file" "name" "${{ steps.define.outputs.name }}"
+          appendcontent "$content_file" "website" "${{ steps.define.outputs.website }}"
           echo "---" > "./src/content/$content_file"
           echo "" > "./src/content/$content_file"
 

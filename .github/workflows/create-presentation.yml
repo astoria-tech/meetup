@@ -47,11 +47,11 @@ jobs:
           source shell/deps.sh
           content_file="presentations/${{ steps.define.outputs.date }}-${{ steps.define.outputs.speaker }}.md"
           echo "---" > "./src/content/$content_file"
-          append_content "$content_file" "title" "${{ steps.define.outputs.title }}"
-          append_content "$content_file" "date" "${{ steps.define.outputs.date }}"
-          append_content "$content_file" "speaker" "${{ steps.define.outputs.speaker }}"
-          append_content "$content_file" "slides" "${{ steps.define.outputs.slides }}"
-          append_content "$content_file" "slidesSource" "${{ steps.define.outputs.slidesSource }}"
+          appendcontent "$content_file" "title" "${{ steps.define.outputs.title }}"
+          appendcontent "$content_file" "date" "${{ steps.define.outputs.date }}"
+          appendcontent "$content_file" "speaker" "${{ steps.define.outputs.speaker }}"
+          appendcontent "$content_file" "slides" "${{ steps.define.outputs.slides }}"
+          appendcontent "$content_file" "slidesSource" "${{ steps.define.outputs.slidesSource }}"
           echo "---" > "./src/content/$content_file"
           echo "" > "./src/content/$content_file"
 
