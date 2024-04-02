@@ -1,6 +1,6 @@
 name: Presentation Submission
 description: Use this form to submit a new presentation.
-title: "[Presentation]: "
+title: '[Presentation]: '
 labels: ["presentation"]
 assignees: '@reggi'
 body:
@@ -9,6 +9,7 @@ body:
     attributes:
       label: Title
       description: "The title of your presentation."
+      placeholder:
     validations:
       required: true
 
@@ -17,6 +18,7 @@ body:
     attributes:
       label: Speaker
       description: "Your name as a slug from your markdown "speaker" profile."
+      placeholder:
     validations:
       required: true
 
@@ -43,6 +45,7 @@ body:
     attributes:
       label: Slides Source (Optional)
       description: "Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website)."
+      placeholder:
     validations:
       required: false
 
