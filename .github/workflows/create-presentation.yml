@@ -29,11 +29,11 @@ jobs:
           echo "$jsonData"
           source shell/output-issue-key.sh
 
-          makeoutput "$jsonData" title title
-          makeoutput "$jsonData" date date
-          makeoutput "$jsonData" speaker speaker
-          makeoutput "$jsonData" slides-optional slides
-          makeoutput "$jsonData" slides-source-optional slidesSource
+          makeoutput "$jsonData" title title string
+          makeoutput "$jsonData" date date date
+          makeoutput "$jsonData" speaker speaker string
+          makeoutput "$jsonData" slides-optional slides url
+          makeoutput "$jsonData" slides-source-optional slidesSource url
 
       - name: Log
         run: |

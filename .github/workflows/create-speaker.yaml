@@ -28,11 +28,11 @@ jobs:
           jsonData='${{ steps.parse.outputs.data }}'
           source shell/output-issue-key.sh
 
-          makeoutput "$jsonData" name name
-          makeoutput "$jsonData" git-hub-username gitHubUsername
-          makeoutput "$jsonData" linked-in-profile-url linkedInProfileURL
-          makeoutput "$jsonData" website website
-          makeoutput "$jsonData" profile-image profileImage
+          makeoutput "$jsonData" name name string
+          makeoutput "$jsonData" git-hub-username gitHubUsername username
+          makeoutput "$jsonData" linked-in-profile-url linkedInProfileURL url
+          makeoutput "$jsonData" website website url
+          makeoutput "$jsonData" profile-image profileImage url
 
       - name: Log
         run: |
