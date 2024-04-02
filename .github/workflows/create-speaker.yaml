@@ -15,7 +15,7 @@ jobs:
         run: |
           if [[ "${{ github.event.issue.title }}" != "[Speaker]*" ]]; then
             echo "Issue does not start with [Speaker]. Exiting..."
-            exit 0
+            exit 1
           fi
 
       - name: Issue Forms Body Parser
