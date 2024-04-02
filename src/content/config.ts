@@ -35,11 +35,11 @@ const presentationsCollection = defineCollection({
 const speakersCollection = defineCollection({
   type: 'content',
   schema: z.object({
+    githubUsername: z.string().optional(),
     linkedin: z.string().optional(),
     name: z.string(),
-    website: z.string().optional(),
-    githubUsername: z.string().optional(),
     profileImage: z.string().optional(),
+    website: z.string().optional(),
   }),
 })
 

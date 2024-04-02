@@ -28,79 +28,82 @@ jobs:
           jsonData='${{ steps.parse.outputs.data }}'
           echo "$jsonData"
 
-          name=$(echo "$jsonData" | jq -r '.name.text')
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "$name"
+          function makeoutput() {
+            local jsonKey=$1
+            local variableName=$2
 
-          gitHubUsername=$(echo "$jsonData" | jq -r '."git-hub-username".text')
-          echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
-          echo "$gitHubUsername"
-
-          linkedInProfileURL=$(echo "$jsonData" | jq -r '."linked-in-profile-url".text')
-          echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
-          echo "$linkedInProfileURL"
-
-          website=$(echo "$jsonData" | jq -r '.website.text')
-          echo "website=$website" >> "$GITHUB_OUTPUT"
-          echo "$website"
-
-          profileImage=$(echo "$jsonData" | jq -r '."profile-image".text')
-          echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
-          echo "$profileImage"
-
-      - name: Create Slug
-        id: slug
-        run: |
-          echo "slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
-
-      - name: Create new speaker file
-        run: |
-          echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-
-          add_url() {
-            property_name=$1
-            property_value=$2
-            # Enhanced URL pattern for validation
-            url_pattern="^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[-a-zA-Z0-9:%_+.~#?&//=]*)?$"
+            # Use eval to handle dynamic variable names
+            local value=$(echo "$jsonData" | jq -r --arg key "$jsonKey" '.[$key].text')
+            eval $variableName="'$value'"
             
-            if [[ -n "$property_value" ]]; then
-              # Remove any < or > characters
-              property_value=$(echo "$property_value" | sed 's/[<>]//g')
-              
-              # Check if the property_value matches the URL pattern
-              if [[ $property_value =~ $url_pattern ]]; then
-                echo "$property_name: $property_value" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-              else
-                echo "Invalid URL: $property_value"
-              fi
-            fi
+            # Output to GitHub and echo
+            echo "${variableName}=${value}" >> "$GITHUB_OUTPUT"
+            echo "$value"
           }
 
-          # Check if githubUsername is not empty
-          if [ -n "${{ steps.define.outputs.githubUsername }}" ]; then
-            githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
-            echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          fi
+          makeoutput title title
+          makeoutput date date
+          makeoutput speaker speaker
+          makeoutput slides-optional slides
+          makeoutput slides-source-optional slidesSource
 
-          # Corrected function calls
-          add_url "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
-          add_url "profileImage" "${{ steps.define.outputs.profileImage }}"
+      - name: Log
+        run: |
+          echo "${{ steps.define.outputs }}"
 
-          # Check if name is not empty
-          if [ -n "${{ steps.define.outputs.name }}" ]; then
-            echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          fi
+      # - name: Create Slug
+      #   id: slug
+      #   run: |
+      #     echo "slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
 
-          add_url "website" "${{ steps.define.outputs.website }}"
+      # - name: Create new speaker file
+      #   run: |
+      #     echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
 
-          echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          echo "" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+      #     add_url() {
+      #       property_name=$1
+      #       property_value=$2
+      #       # Enhanced URL pattern for validation
+      #       url_pattern="^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[-a-zA-Z0-9:%_+.~#?&//=]*)?$"
+            
+      #       if [[ -n "$property_value" ]]; then
+      #         # Remove any < or > characters
+      #         property_value=$(echo "$property_value" | sed 's/[<>]//g')
+              
+      #         # Check if the property_value matches the URL pattern
+      #         if [[ $property_value =~ $url_pattern ]]; then
+      #           echo "$property_name: $property_value" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+      #         else
+      #           echo "Invalid URL: $property_value"
+      #         fi
+      #       fi
+      #     }
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
-          title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
-          body: |
-            Adds a new speaker based on issue #${{ github.event.issue.number }}.
-          branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
+      #     # Check if githubUsername is not empty
+      #     if [ -n "${{ steps.define.outputs.githubUsername }}" ]; then
+      #       githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
+      #       echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+      #     fi
+
+      #     # Corrected function calls
+      #     add_url "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
+      #     add_url "profileImage" "${{ steps.define.outputs.profileImage }}"
+
+      #     # Check if name is not empty
+      #     if [ -n "${{ steps.define.outputs.name }}" ]; then
+      #       echo "name: ${{ steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+      #     fi
+
+      #     add_url "website" "${{ steps.define.outputs.website }}"
+
+      #     echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+      #     echo "" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v3
+      #   with:
+      #     commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
+      #     title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
+      #     body: |
+      #       Adds a new speaker based on issue #${{ github.event.issue.number }}.
+      #     branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'
