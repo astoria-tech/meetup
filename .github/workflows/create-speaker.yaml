@@ -2,7 +2,7 @@ name: Issue to PR
 
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   createPR:
