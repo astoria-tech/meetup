@@ -9,7 +9,7 @@ on:
         type: string
       image:
         description: 'Image Type (banner, meetup-image)'
-        default: banner
+        default: banner, meetup-image
         type: string
 
 jobs:
