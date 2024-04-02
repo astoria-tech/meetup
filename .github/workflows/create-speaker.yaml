@@ -41,7 +41,7 @@ jobs:
           echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
           echo "$gitHubUsername"
     
-          linkedInProfileURL=$(echo "$jsonData" | jq -r '".linked-in-profile-url".text')
+          linkedInProfileURL=$(echo "$jsonData" | jq -r '."linked-in-profile-url".text')
           echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
           echo "$linkedInProfileURL"
     
