@@ -54,7 +54,7 @@ function appendcontent() {
   
   if [ -n "$property_value" ]; then
     echo "Appending $property_value"
-    echo "$property_name: $property_value" >> "./src/content/$content_folder_file_name.md"
+    echo "$property_name: $property_value" >> "./src/content/$content_folder_file_name"
   else
     echo "Not appending $property_value (no value)"
   fi
