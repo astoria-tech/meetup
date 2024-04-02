@@ -8,6 +8,7 @@ function makeoutput() {
 
   # Use eval to handle dynamic variable names
   local value=$(echo "$jsonData" | jq -r --arg key "$jsonKey" '.[$key].text')
+  local url_pattern="^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[-a-zA-Z0-9:%_+.~#?&//=]*)?$"
 
   case $type in
     "string")
@@ -19,8 +20,11 @@ function makeoutput() {
       ;;
     "url")
       # Validate URL against regex
-      if [[ ! $value =~ ^(https?|ftp)://[^\s/$.?#].[^\s]*$ ]]; then
+      if [[ ! $value =~ $url_pattern ]]; then
         value=""
+      else
+        value=${value#<}
+        value=${value%>}
       fi
       ;;
     "date")
