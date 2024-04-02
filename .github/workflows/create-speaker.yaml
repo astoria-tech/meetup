@@ -36,7 +36,7 @@ jobs:
 
       - name: Log
         run: |
-          echo "${{ steps.define.outputs }}"
+          echo "${{ toJson(steps.define.outputs) }}"
 
       # - name: Create Slug
       #   id: slug
