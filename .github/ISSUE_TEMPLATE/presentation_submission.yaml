@@ -1,0 +1,48 @@
+name: Presentation Submission
+description: Use this form to submit a new presentation.
+title: "[Presentation]: "
+labels: ["presentation"]
+assignees: '@reggi'
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: "The title of your presentation."
+    validations:
+      required: true
+
+  - type: input
+    id: speaker
+    attributes:
+      label: Speaker
+      description: "Your name as a slug from your markdown "speaker" profile."
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      description: "The date of the presentation (YYYY-MM-DD)."
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: true
+
+  - type: input
+    id: slides
+    attributes:
+      label: Slides (Optional)
+      description: "Link to the presentation slides, (if available)."
+      placeholder: "/presentations/YYYY-MM-DD-your-name-slug.pdf"
+    validations:
+      required: false
+
+  - type: input
+    id: slidesSource
+    attributes:
+      label: Slides Source (Optional)
+      description: "Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website)."
+    validations:
+      required: false
+

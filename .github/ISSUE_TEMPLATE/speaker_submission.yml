@@ -1,6 +1,8 @@
 name: Speaker Submission
 description: Submit a new speaker.
 title: '[Speaker] '
+labels: ['speaker']
+assignees: '@reggi'
 body:
   - type: input
     id: name
@@ -10,6 +12,7 @@ body:
       placeholder:
     validations:
       required: true
+
   - type: input
     id: githubUsername
     attributes:
@@ -18,6 +21,7 @@ body:
       placeholder:
     validations:
       required: false
+
   - type: input
     id: linkedin
     attributes:
@@ -26,6 +30,7 @@ body:
       placeholder:
     validations:
       required: false
+
   - type: input
     id: website
     attributes:
@@ -34,6 +39,7 @@ body:
       placeholder:
     validations:
       required: false
+
   - type: input
     id: profileImage
     attributes:
