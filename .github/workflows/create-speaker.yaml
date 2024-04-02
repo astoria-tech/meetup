@@ -19,10 +19,10 @@ jobs:
         id: define
         run: |
             name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
-            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.git-hub-username.text')
-            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.linked-in-profile-url.text')
+            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."git-hub-username".text')
+            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '".linked-in-profile-url".text')
             website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
-            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.profile-image.text')
+            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."profile-image".text')
 
             echo "name=$name" >> "$GITHUB_OUTPUT"
             echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
