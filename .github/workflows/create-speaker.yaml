@@ -11,6 +11,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Check Issue Title
+        run: |
+          if [[ "${{ github.event.issue.title }}" != "[Speaker]*" ]]; then
+            echo "Issue does not start with [Speaker]. Exiting..."
+            exit 0
+          fi
+
       - name: Issue Forms Body Parser
         id: parse
         uses: zentered/issue-forms-body-parser@v2.0.0
@@ -18,17 +25,17 @@ jobs:
       - name: Issue Definitions
         id: define
         run: |
-            name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
-            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."git-hub-username".text')
-            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '".linked-in-profile-url".text')
-            website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
-            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."profile-image".text')
+          name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
+          gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."git-hub-username".text')
+          linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '".linked-in-profile-url".text')
+          website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
+          profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."profile-image".text')
 
-            echo "name=$name" >> "$GITHUB_OUTPUT"
-            echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
-            echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
-            echo "website=$website" >> "$GITHUB_OUTPUT"
-            echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
+          echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
+          echo "website=$website" >> "$GITHUB_OUTPUT"
+          echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
 
       - name: Create Slug
         id: slug
@@ -56,7 +63,7 @@ jobs:
 
           add_url("linkedInProfileURL", "${{ steps.define.outputs.linkedInProfileURL }}")
           add_url("profileImage", "${{ steps.define.outputs.profileImage }}")
-          
+
           # Check if name is not empty
           if [ -n "${{  steps.define.outputs.name }}" ]; then
             echo "name: ${{  steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
