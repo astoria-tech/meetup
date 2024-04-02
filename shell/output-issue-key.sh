@@ -19,7 +19,10 @@ function makeoutput() {
       value=${value#@}
       ;;
     "url")
-      # Validate URL against regex
+      # Remove the leading and trailing < and > if they exist
+      value=${value#<}
+      value=${value%>}
+      # Validate URL against regex pattern
       if [[ ! $value =~ $url_pattern ]]; then
         value=""
       fi
