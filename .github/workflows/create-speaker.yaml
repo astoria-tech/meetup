@@ -11,33 +11,52 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Issue Forms Body Parser
+        id: parse
+        uses: zentered/issue-forms-body-parser@v2.0.0
+
+      - name: Issue Definitions
+        id: define
+        run: |
+            name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
+            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.gitHubUsername.text')
+            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.linkedInProfileURL.text')
+            website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
+            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.profileImage.text')
+
+            echo "name=$name" >> "$GITHUB_OUTPUT"
+            echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
+            echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
+            echo "website=$website" >> "$GITHUB_OUTPUT"
+            echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
+
       - name: Create Slug
         id: slug
         run: |
-          echo "slug=$(echo '${{ github.event.issue.title }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
+          echo "slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')" >> $GITHUB_OUTPUT
 
       - name: Create new speaker file
         run: |
           echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
 
           # Check if githubUsername is not empty
-          if [ -n "${{ github.event.issue.body.githubUsername }}" ]; then
-            echo "githubUsername: ${{ github.event.issue.body.githubUsername }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          if [ -n "${{  steps.define.outputs.githubUsername }}" ]; then
+            echo "githubUsername: ${{  steps.define.outputs.githubUsername }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
           # Check if linkedin is not empty
-          if [ -n "${{ github.event.issue.body.linkedin }}" ]; then
-            echo "linkedin: ${{ github.event.issue.body.linkedin }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          if [ -n "${{  steps.define.outputs.linkedin }}" ]; then
+            echo "linkedin: ${{  steps.define.outputs.linkedin }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
           # Check if name is not empty
-          if [ -n "${{ github.event.issue.body.name }}" ]; then
-            echo "name: ${{ github.event.issue.body.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          if [ -n "${{  steps.define.outputs.name }}" ]; then
+            echo "name: ${{  steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
           # Check if website is not empty
-          if [ -n "${{ github.event.issue.body.website }}" ]; then
-            echo "website: ${{ github.event.issue.body.website }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+          if [ -n "${{  steps.define.outputs.website }}" ]; then
+            echo "website: ${{  steps.define.outputs.website }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
           echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
@@ -45,8 +64,8 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: 'New Speaker Submission: ${{ github.event.issue.body.name }} (#${{ github.event.issue.number }})'
-          title: 'New Speaker Submission: ${{ github.event.issue.body.name }}'
+          commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
+          title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
           body: |
             Adds a new speaker based on issue #${{ github.event.issue.number }}.
           branch: 'new-speaker-${{ steps.slug.outputs.slug }}-${{ github.run_id }}'

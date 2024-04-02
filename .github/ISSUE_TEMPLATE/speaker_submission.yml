@@ -14,10 +14,12 @@ body:
     id: githubUsername
     attributes:
       label: GitHub Username
-      description: Please enter the GitHub username.
+      description: Please enter the GitHub username. (No @ symbol needed.)
       placeholder:
     validations:
       required: false
+      pattern: "^[^@]*$"
+      patternErrorMessage: "GitHub username should not contain the '@' symbol."
   - type: input
     id: linkedin
     attributes:
