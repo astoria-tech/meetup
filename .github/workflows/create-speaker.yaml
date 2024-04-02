@@ -36,7 +36,11 @@ jobs:
 
       - name: Log
         run: |
-          echo "${{ toJson(steps.define.outputs) }}"
+          echo "Name: ${{ steps.define.outputs.name }}"
+          echo "GitHub Username: ${{ steps.define.outputs.gitHubUsername }}"
+          echo "LinkedIn Profile URL: ${{ steps.define.outputs.linkedInProfileURL }}"
+          echo "Website: ${{ steps.define.outputs.website }}"
+          echo "Profile Image: ${{ steps.define.outputs.profileImage }}"
 
       # - name: Create Slug
       #   id: slug

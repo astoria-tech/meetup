@@ -37,7 +37,11 @@ jobs:
 
       - name: Log
         run: |
-          echo "${{ steps.define.outputs }}"
+          echo "Title: ${{ steps.define.outputs.title }}"
+          echo "Date: ${{ steps.define.outputs.date }}"
+          echo "Speaker: ${{ steps.define.outputs.speaker }}"
+          echo "Slides: ${{ steps.define.outputs.slides }}"
+          echo "Slides Source: ${{ steps.define.outputs.slidesSource }}"
 
       # - name: Create Slug
       #   id: slug
