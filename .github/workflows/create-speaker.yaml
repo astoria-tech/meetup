@@ -65,8 +65,8 @@ jobs:
           add_url() {
             property_name=$1
             property_value=$2
-            # Basic URL pattern for validation
-            url_pattern="^(http|https)://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(/S*)?$"
+            # Enhanced URL pattern for validation
+            url_pattern="^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[-a-zA-Z0-9:%_+.~#?&//=]*)?$"
             
             if [[ -n "$property_value" ]]; then
               # Remove any < or > characters
