@@ -25,23 +25,25 @@ jobs:
       - name: Issue Definitions
         id: define
         run: |
-          name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
+          echo '${{ toJSON(steps.parse.outputs.data) }}'
+
+          name=$(echo '${{ toJSON(steps.parse.outputs.data) }}' | jq -r '.name.text')
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "$name"
-
-          gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."git-hub-username".text')
+    
+          gitHubUsername=$(echo '${{ toJSON(steps.parse.outputs.data) }}' | jq -r '."git-hub-username".text')
           echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
           echo "$gitHubUsername"
-
-          linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '".linked-in-profile-url".text')
+    
+          linkedInProfileURL=$(echo '${{ toJSON(steps.parse.outputs.data) }}' | jq -r '".linked-in-profile-url".text')
           echo "linkedInProfileURL=$linkedInProfileURL" >> "$GITHUB_OUTPUT"
           echo "$linkedInProfileURL"
-
-          website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
+    
+          website=$(echo '${{ toJSON(steps.parse.outputs.data) }}' | jq -r '.website.text')
           echo "website=$website" >> "$GITHUB_OUTPUT"
           echo "$website"
-
-          profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '."profile-image".text')
+    
+          profileImage=$(echo '${{ toJSON(steps.parse.outputs.data) }}' | jq -r '."profile-image".text')
           echo "profileImage=$profileImage" >> "$GITHUB_OUTPUT"
           echo "$profileImage"
 
