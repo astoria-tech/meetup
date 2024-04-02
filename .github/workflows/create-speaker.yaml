@@ -19,10 +19,10 @@ jobs:
         id: define
         run: |
             name=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.name.text')
-            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.gitHubUsername.text')
-            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.linkedInProfileURL.text')
+            gitHubUsername=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.git-hub-username.text')
+            linkedInProfileURL=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.linked-in-profile-url.text')
             website=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.website.text')
-            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.profileImage.text')
+            profileImage=$(echo '${{ steps.parse.outputs.data }}' | jq -r '.profile-image.text')
 
             echo "name=$name" >> "$GITHUB_OUTPUT"
             echo "gitHubUsername=$gitHubUsername" >> "$GITHUB_OUTPUT"
@@ -39,25 +39,30 @@ jobs:
         run: |
           echo "---" > ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
 
+          add_url() {
+            property_name=$1
+            property_value=$2
+            if [[ -n "$property_value" && "$property_value" =~ ^https?://[^\s/$.?#].[^\s]*$ ]]; then
+              property_value=$(echo "$property_value" | sed 's/[<>]//g')
+              echo "$property_name: $property_value" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+            fi
+          }
+
           # Check if githubUsername is not empty
           if [ -n "${{  steps.define.outputs.githubUsername }}" ]; then
-            echo "githubUsername: ${{  steps.define.outputs.githubUsername }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
+            githubUsername=$(echo '${{ steps.define.outputs.githubUsername }}' | sed 's/@//g')
+            echo "githubUsername: $githubUsername" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
-          # Check if linkedin is not empty
-          if [ -n "${{  steps.define.outputs.linkedin }}" ]; then
-            echo "linkedin: ${{  steps.define.outputs.linkedin }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          fi
-
+          add_url("linkedInProfileURL", "${{ steps.define.outputs.linkedInProfileURL }}")
+          add_url("profileImage", "${{ steps.define.outputs.profileImage }}")
+          
           # Check if name is not empty
           if [ -n "${{  steps.define.outputs.name }}" ]; then
             echo "name: ${{  steps.define.outputs.name }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
           fi
 
-          # Check if website is not empty
-          if [ -n "${{  steps.define.outputs.website }}" ]; then
-            echo "website: ${{  steps.define.outputs.website }}" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
-          fi
+          add_url("website", "${{ steps.define.outputs.website }}")
 
           echo "---" >> ./src/content/speakers/${{ steps.slug.outputs.slug }}.md
 

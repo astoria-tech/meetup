@@ -18,8 +18,6 @@ body:
       placeholder:
     validations:
       required: false
-      pattern: "^[^@]*$"
-      patternErrorMessage: "GitHub username should not contain the '@' symbol."
   - type: input
     id: linkedin
     attributes:
