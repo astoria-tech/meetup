@@ -55,17 +55,19 @@ jobs:
 
       - name: Append
         run: |
+          source shell/deps.sh  
           slug=$(echo '${{ steps.define.outputs.name }}' | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9]/-/g' -e 's/--*/-/g')
-          source shell/deps.sh
+          echo "$slug"
           content_file="speakers/$slug.md"
-          echo "---" > "./src/content/$content_file"
+          echo "$content_file"
+          echo "---" >> "./src/content/$content_file"
           appendcontent "$content_file" "githubUsername" "${{ steps.define.outputs.githubUsername }}"
           appendcontent "$content_file" "linkedInProfileURL" "${{ steps.define.outputs.linkedInProfileURL }}"
           appendcontent "$content_file" "profileImage" "${{ steps.define.outputs.profileImage }}"
           appendcontent "$content_file" "name" "${{ steps.define.outputs.name }}"
           appendcontent "$content_file" "website" "${{ steps.define.outputs.website }}"
-          echo "---" > "./src/content/$content_file"
-          echo "" > "./src/content/$content_file"
+          echo "---" >> "./src/content/$content_file"
+          echo "" >> "./src/content/$content_file"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3

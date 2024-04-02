@@ -57,7 +57,7 @@ jobs:
         run: |
           source shell/deps.sh
           content_file="presentations/${{ steps.define.outputs.date }}-${{ steps.define.outputs.speaker }}.md"
-          echo "---" > "./src/content/$content_file"
+          echo "---" >> "./src/content/$content_file"
           appendcontent "$content_file" "title" "${{ steps.define.outputs.title }}"
           appendcontent "$content_file" "date" "${{ steps.define.outputs.date }}"
           appendcontent "$content_file" "speaker" "${{ steps.define.outputs.speaker }}"
