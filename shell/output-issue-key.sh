@@ -7,9 +7,12 @@ function makeoutput() {
 
   # Use eval to handle dynamic variable names
   local value=$(echo "$jsonData" | jq -r --arg key "$jsonKey" '.[$key].text')
-  eval $variableName="'$value'"
   
-  # Output to GitHub and echo
-  echo "${variableName}=${value}" >> "$GITHUB_OUTPUT"
-  echo "$value"
+  if [[ "$value" != "*No response*" ]]; then
+    eval $variableName="'$value'"
+    
+    # Output to GitHub and echo
+    echo "${variableName}=${value}" >> "$GITHUB_OUTPUT"
+    echo "$value"
+  fi
 }
