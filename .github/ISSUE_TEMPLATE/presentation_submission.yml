@@ -17,7 +17,7 @@ body:
     id: speaker
     attributes:
       label: Speaker
-      description: "Your name as a slug from your markdown "speaker" profile."
+      description: "Your name as a slug from your markdown `speaker` profile."
       placeholder:
     validations:
       required: true
