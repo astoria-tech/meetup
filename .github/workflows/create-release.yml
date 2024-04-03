@@ -14,32 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Find Banners
-        id: find_banners
-        run: |
-          echo "SEARCH_PATH=public/banners/${{ github.event.inputs.date }}" >> $GITHUB_ENV
-          files=$(find $SEARCH_PATH -type f)
-          if [ -z "$files" ]; then
-            echo "No banners found for the specified event date."
-            exit 1
-          fi
-          echo "::set-output name=banner_files::$files"
-
-      - name: Find Presentations
-        id: find_presentations
-        run: |
-          files=$(find public/presentations -type f -name "${{ github.event.inputs.date }}-*.pdf")
-          if [ -z "$files" ]; then
-            echo "No presentations found for the specified event date."
-            exit 1
-          fi
-          echo "::set-output name=presentation_files::$files"
-
       - name: Archive Files
         run: |
           mkdir event_files
-          cp ${{ steps.find_banners.outputs.banner_files }} event_files/
-          cp ${{ steps.find_presentations.outputs.presentation_files }} event_files/
+          cp ./public/banners/${{ github.event.inputs.date }}.png event_files/
+          cp ./public/presentations/${{ github.event.inputs.date }}-*.pdf event_files/
           tar -czvf event-${{ github.event.inputs.date }}.tar.gz event_files
           zip -r event-${{ github.event.inputs.date }}.zip event_files
 
