@@ -28,7 +28,7 @@ jobs:
       - name: Find Presentations
         id: find_presentations
         run: |
-          files=$(find public/presentations -type f -name "*-${{ github.event.inputs.date }}.pdf")
+          files=$(find public/presentations -type f -name "${{ github.event.inputs.date }}-*.pdf")
           if [ -z "$files" ]; then
             echo "No presentations found for the specified event date."
             exit 1
