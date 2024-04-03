@@ -46,7 +46,7 @@ jobs:
       - name: Upload Event Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: event-files-${{ github.event.inputs.date }}
+          name: event-${{ github.event.inputs.date }}
           path: |
             event-${{ github.event.inputs.date }}.tar.gz
             event-${{ github.event.inputs.date }}.zip
@@ -58,7 +58,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: event-files-${{ github.event.inputs.date }}
+          name: event-${{ github.event.inputs.date }}
 
       - name: Create Event
         uses: actions/create-release@v1
