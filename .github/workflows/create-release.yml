@@ -43,24 +43,8 @@ jobs:
           tar -czvf event-${{ github.event.inputs.date }}.tar.gz event_files
           zip -r event-${{ github.event.inputs.date }}.zip event_files
 
-      - name: Upload Event Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: event-${{ github.event.inputs.date }}
-          path: |
-            event-${{ github.event.inputs.date }}.tar.gz
-            event-${{ github.event.inputs.date }}.zip
-
-  create_event:
-    needs: prepare_event
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: event-${{ github.event.inputs.date }}
-
       - name: Create Event
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,6 +53,23 @@ jobs:
           release_name: Event ${{ github.event.inputs.date }}
           draft: false
           prerelease: false
-          files: |
-            event-${{ github.event.inputs.date }}.tar.gz
-            event-${{ github.event.inputs.date }}.zip
+
+      - name: Upload Event Artifact (tar.gz)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This is the step ID of the Create Event step
+          asset_path: ./event-${{ github.event.inputs.date }}.tar.gz
+          asset_name: event-${{ github.event.inputs.date }}.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Event Artifact (zip)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./event-${{ github.event.inputs.date }}.zip
+          asset_name: event-${{ github.event.inputs.date }}.zip
+          asset_content_type: application/zip
