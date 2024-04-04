@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300px" height="300px" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>logo-black</title>
+    <desc>Created with Sketch.</desc>
+    <g id="logo-black" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="#F8FAFC" x="0" y="0" width="300" height="300"></rect>
+        <g id="Black" fill="#1C1917" fill-rule="nonzero">
+            <polyline id="Rectangle" points="170 160 170 300 130 300 130 160"></polyline>
+            <polygon id="Shape" points="220 160 220 200 80 200 80 160"></polygon>
+            <polyline id="Rectangle" points="300 40 300 300 260 300 260 40"></polyline>
+            <polyline id="Rectangle" points="40 40 40 300 0 300 0 40"></polyline>
+            <polyline id="Rectangle" points="0 80 300 80 300 120 0 120"></polyline>
+            <polyline id="Rectangle" points="40 0 261 0 261 40 40 40"></polyline>
+        </g>
+    </g>
+</svg>
