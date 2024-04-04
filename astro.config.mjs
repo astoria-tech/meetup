@@ -6,7 +6,7 @@ export default defineConfig({
   integrations: [tailwind()],
   ...(process.env.NODE_ENV !== 'development'
     ? {
-        site: 'https://astoria-tech.github.io',
+        site: 'https://astoria.app',
         base: '/meetup',
       }
     : {
