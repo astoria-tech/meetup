@@ -1,6 +1,6 @@
 ---
 import '../style.css'
-import { getFeed } from '../data/feed'
+import {getFeed} from '../data/feed'
 import FeedItem from '../components/FeedItem.astro'
 import MainLayout from '../layouts/MainLayout.astro'
 
@@ -8,7 +8,5 @@ const feed = await getFeed({site: Astro.site})
 ---
 
 <MainLayout>
-	{feed.map(feedItem => (
-		<FeedItem {...feedItem}></FeedItem>
-	))}
+  {feed.map(feedItem => <FeedItem {...feedItem} />)}
 </MainLayout>

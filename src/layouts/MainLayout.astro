@@ -1,23 +1,23 @@
 ---
-import copy from '../copy';
+import copy from '../copy'
 
 type Props = {
   title?: string
 }
-const { title } = Astro.props;
+const {title} = Astro.props
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{ title ? `${title} | ${copy.defaultPageTitle}` : copy.defaultPageTitle }</title>
-	</head>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title ? `${title} | ${copy.defaultPageTitle}` : copy.defaultPageTitle}</title>
+  </head>
   <body class="bg-zinc-100">
-		<div class="w-[500px] m-auto">
-    	<slot /> 
-		</div>
+    <div class="w-[500px] m-auto">
+      <slot />
+    </div>
   </body>
 </html>

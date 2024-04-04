@@ -1,9 +1,9 @@
 ---
-import type { HydratedFeedItem } from '../types';
+import type {HydratedFeedItem} from '../types'
 type Props = HydratedFeedItem
-const { html } = Astro.props
-
+const {html} = Astro.props
 ---
+
 <div class="mb-5 bg-slate-300 p-5">
-  <Fragment set:html={html}/>
+  <Fragment set:html={html} />
 </div>

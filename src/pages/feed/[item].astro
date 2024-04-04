@@ -1,6 +1,6 @@
 ---
 import '../../style.css'
-import { getFeed } from '../../data/feed'
+import {getFeed} from '../../data/feed'
 import FeedItem from '../../components/FeedItem.astro'
 import type {HydratedFeedItem} from '../../types'
 import MainLayout from '../../layouts/MainLayout.astro'
@@ -10,14 +10,15 @@ type Props = {
 }
 
 export async function getStaticPaths() {
-  const feed = await getFeed({ site: Astro.site })
+  const feed = await getFeed({site: Astro.site})
   return feed.map((item: HydratedFeedItem) => {
-    return { params: { item: item.slug }, props: {feedItem: item} }
+    return {params: {item: item.slug}, props: {feedItem: item}}
   })
 }
 
-const { feedItem } = Astro.props;
+const {feedItem} = Astro.props
 ---
+
 <MainLayout title={feedItem.title}>
-	<FeedItem {...feedItem} ></FeedItem>
+  <FeedItem {...feedItem} />
 </MainLayout>
