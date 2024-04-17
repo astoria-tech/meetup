@@ -1,4 +1,4 @@
-name: Style Check
+name: Check Build
 
 on:
   push:
@@ -25,3 +25,9 @@ jobs:
 
       - name: Run style check
         run: npm run style
+
+      - name: Run lintpkg
+        run: npm run lintpkg
+
+      - name: Run Build
+        run: npm run build

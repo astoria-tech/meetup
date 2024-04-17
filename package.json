@@ -7,6 +7,9 @@
     "astro": "astro",
     "build": "astro check && astro build",
     "dev": "astro dev",
+    "fix": "npm run lintpkg:fix && npm run style:fix",
+    "lintpkg": "sort-package-json --check",
+    "lintpkg:fix": "sort-package-json",
     "preview": "astro preview",
     "start": "astro dev",
     "style": "prettier --check .",
@@ -27,6 +30,7 @@
   "devDependencies": {
     "@github/prettier-config": "^0.0.6",
     "prettier": "^3.2.5",
-    "prettier-plugin-astro": "^0.13.0"
+    "prettier-plugin-astro": "^0.13.0",
+    "sort-package-json": "^2.10.0"
   }
 }
