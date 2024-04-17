@@ -24,4 +24,4 @@ jobs:
         run: npm install
 
       - name: Run style check
-        run: npm run style:check
+        run: npm run style
