@@ -7,6 +7,7 @@
     "astro": "astro",
     "build": "astro check && astro build",
     "dev": "astro dev",
+    "fix": "npm run lintpkg:fix && npm run style:fix",
     "lintpkg": "sort-package-json --check",
     "lintpkg:fix": "sort-package-json",
     "preview": "astro preview",
