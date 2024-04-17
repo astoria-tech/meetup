@@ -1,4 +1,4 @@
-# Astro Starter Kit: Minimal
+# Astoria Tech Meetup (website)
 
 ```sh
 npm create astro@latest -- --template minimal
