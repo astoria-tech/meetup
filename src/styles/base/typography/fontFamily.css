@@ -1,0 +1,45 @@
+@layer base {
+    @font-face {
+      font-family: "NotoSans";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src:
+          url("../design/fonts/notosans/notosans-medium.otf") format("opentype"),
+          url("../design/fonts/notosans/notosans-medium.woff") format("woff"),
+          url("../design/fonts/notosans/notosans-medium.woff2") format("woff2");
+    }
+  
+    @font-face {
+      font-family: "NotoSans-Bold";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src:
+          url("../design/fonts/notosans/notosans-bold.otf") format("opentype"),
+          url("../design/fonts/notosans/notosans-bold.woff") format("woff"),
+          url("../design/fonts/notosans/notosans-bold.woff2") format("woff2");
+    }
+  
+    @font-face {
+      font-family: "PlayFair";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src:
+          url("../design/fonts/playfair/playfair-medium.otf") format("opentype"),
+          url("../design/fonts/playfair/playfair-medium.woff") format("woff"),
+          url("../design/fonts/playfair/playfair-medium.woff2") format("woff2");
+    }
+      
+    @font-face {
+      font-family: "PlayFair-Bold";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src:
+          url("../design/fonts/playfair/playfair-bold.otf") format("opentype"),
+          url("../design/fonts/playfair/playfair-bold.woff") format("woff"),
+          url("../design/fonts/playfair/playfair-bold.woff2") format("woff2");
+    }
+}

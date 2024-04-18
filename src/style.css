@@ -1,38 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-a {
-  @apply underline text-blue-600;
-}
-a:hover {
-  @apply text-blue-800;
-}
-a:visited {
-  @apply text-purple-600;
-}
+/* Typography */
+@import './styles/base/typography/fontFamily.css'; 
+@import './styles/base/typography/elements.css';
 
-@layer base {
-  h1 {
-    @apply text-2xl;
-  }
-  h2 {
-    @apply text-xl;
-  }
-  h3 {
-    @apply text-lg;
-  }
-  a {
-    @apply text-blue-600 underline;
-  }
-}
 
-@layer base {
-  ul,
-  ol {
-    @apply list-none p-0 m-0;
-  }
-  ul li::before {
-    @apply content-['•'] mr-2; /* Customize the marker color with your Tailwind color */
-  }
-}

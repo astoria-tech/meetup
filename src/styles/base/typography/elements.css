@@ -1,0 +1,36 @@
+@layer base {
+    h1 {
+      @apply text-2xl;
+    }
+    h2 {
+      @apply text-xl;
+    }
+    h3 {
+      @apply text-lg;
+    }
+  
+    a {
+      @apply text-link-base underline;
+    }
+    a:hover {
+      @apply text-link-hover;
+    }
+    a:active {
+      @apply text-link-active;
+    }
+    a:visited {
+      @apply text-link-visited;
+    }
+    a:disabled {
+      @apply text-link-disabled;
+    }
+  
+    ul,
+    ol {
+      @apply list-none p-0 m-0;
+    }
+    
+    ul li::before {
+      @apply content-['•'] mr-2; /* Customize the marker color with your Tailwind color */
+    }
+  }
