@@ -9,11 +9,7 @@ on:
       - main
 
 jobs:
-  style-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Use the workflow in this repo
-        uses: ./.github/workflows/dispatch-check.yml
-        with:
-          branch: main
+  check:
+    uses: ./.github/workflows/dispatch-check.yml
+    with:
+      branch: main
