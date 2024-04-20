@@ -13,21 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Use the workflow in this repo
+        uses: ./.github/workflows/dispatch-check.yml
         with:
-          node-version: '20' # Set this to the node version you are using
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run style check
-        run: npm run style
-
-      - name: Run lintpkg
-        run: npm run lintpkg
-
-      - name: Run Build
-        run: npm run build
+          branch: main
