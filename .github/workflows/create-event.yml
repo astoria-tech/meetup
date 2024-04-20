@@ -49,7 +49,7 @@ jobs:
           EOF
 
       - name: Fix markdown formatting
-        run: npm fix
+        run: npm run fix
 
       - name: Create feed content file
         run: |
