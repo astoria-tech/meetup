@@ -36,7 +36,7 @@ function deepSortObject(obj) {
   return sortedObj
 }
 
-async function readContent(fileName) {
+export async function readContent(fileName) {
   try {
     const file = await fs.readFile(fileName, 'utf8')
 
@@ -74,7 +74,7 @@ function fileContent(data, content = '') {
   return [`---`, `${yaml}`, `---`, content].join('\n')
 }
 
-async function writeContent(fileName, data, content = '') {
+export async function writeContent(fileName, data, content = '') {
   await fs.writeFile(fileName, fileContent(data, content))
 }
 
