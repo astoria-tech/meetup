@@ -1,7 +1,17 @@
-name: Create Image PR
+name: Create Image Call / Dispatch
 
 on:
   workflow_call:
+    inputs:
+      date:
+        description: 'Event Date (YYYY-MM-DD)'
+        required: true
+        type: string
+      image:
+        description: 'Image Type (banner, meetup-image)'
+        default: banner, meetup-image
+        type: string
+  workflow_dispatch:
     inputs:
       date:
         description: 'Event Date (YYYY-MM-DD)'

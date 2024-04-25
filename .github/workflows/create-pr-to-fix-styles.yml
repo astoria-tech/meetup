@@ -1,4 +1,4 @@
-name: Create Fix Style PR
+name: Create PR to Fix Styles
 
 on:
   workflow_dispatch:

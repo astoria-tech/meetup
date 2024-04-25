@@ -1,0 +1,201 @@
+name: Create Content
+
+on:
+  workflow_call:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      githubUsername:
+        type: string
+        description: 'GitHub Username'
+        required: false
+      googleCal:
+        type: string
+        description: 'Google Calendar Link'
+        required: false
+      ical:
+        type: string
+        description: 'iCal Link'
+        required: false
+      linkedin:
+        type: string
+        description: 'LinkedIn Profile URL'
+        required: false
+      meetup:
+        type: string
+        description: 'Meetup Link'
+        required: false
+      name:
+        type: string
+        description: 'Speaker Name'
+        required: false
+      presentations:
+        type: string
+        description: 'Presentations'
+        required: false
+      profileImage:
+        type: string
+        description: 'Profile Image'
+        required: false
+      slides:
+        type: string
+        description: 'Slides'
+        required: false
+      slidesSource:
+        type: string
+        description: 'Slides Source'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      eventTitle:
+        type: string
+        description: 'Event Title'
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
+  workflow_dispatch:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      githubUsername:
+        type: string
+        description: 'GitHub Username'
+        required: false
+      googleCal:
+        type: string
+        description: 'Google Calendar Link'
+        required: false
+      ical:
+        type: string
+        description: 'iCal Link'
+        required: false
+      linkedin:
+        type: string
+        description: 'LinkedIn Profile URL'
+        required: false
+      meetup:
+        type: string
+        description: 'Meetup Link'
+        required: false
+      name:
+        type: string
+        description: 'Speaker Name'
+        required: false
+      presentations:
+        type: string
+        description: 'Presentations'
+        required: false
+      profileImage:
+        type: string
+        description: 'Profile Image'
+        required: false
+      slides:
+        type: string
+        description: 'Slides'
+        required: false
+      slidesSource:
+        type: string
+        description: 'Slides Source'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      eventTitle:
+        type: string
+        description: 'Event Title'
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Set this to the node version you are using
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Create new branch
+        run: git checkout -b event-${{ github.event.inputs.date }}
+
+      - name: Create Anything
+        run: |
+          ./scripts/mkall \
+            --date "${{ github.event.inputs.date }}" \
+            --githubUsername "${{ github.event.inputs.githubUsername }}" \
+            --googleCal "${{ github.event.inputs.googleCal }}" \
+            --ical "${{ github.event.inputs.ical }}" \
+            --linkedin "${{ github.event.inputs.linkedin }}" \
+            --meetup "${{ github.event.inputs.meetup }}" \
+            --name "${{ github.event.inputs.name }}" \
+            --presentations "${{ github.event.inputs.presentations }}" \
+            --profileImage "${{ github.event.inputs.profileImage }}" \
+            --slides "${{ github.event.inputs.slides }}" \
+            --slidesSource "${{ github.event.inputs.slidesSource }}" \
+            --presentationTitle "${{ github.event.inputs.presentationTitle }}" \
+            --eventTitle "${{ github.event.inputs.eventTitle }}" \
+            --website "${{ github.event.inputs.website }}"
+
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Automated ${{ github.event.inputs.date }}"
+
+      - name: Push changes
+        run: git push origin event-${{ github.event.inputs.date }}
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          changed_files=$(git diff --name-only HEAD^ | tr '\n' ',' | sed 's/,$//')
+          echo "files=$changed_files" >> $GITHUB_OUTPUT
+
+      - name: Create PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const date = "${{ github.event.inputs.date }}";
+            const title = "${{ steps.changed-files.outputs.files }}";
+            const headBranch = `event-${date}`;
+            const baseBranch = 'main'; // Ensure this matches your repo's default branch
+
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Auto: ${title}`,
+              head: headBranch,
+              base: baseBranch,
+              body: Automated file creation.',
+            });
+
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v3
+      #   with:
+      #     commit-message: 'New Speaker Submission: ${{  steps.define.outputs.name }} (#${{ github.event.issue.number }})'
+      #     title: 'New Speaker Submission: ${{  steps.define.outputs.name }}'
+      #     body: |
+      #       Adds a new speaker based on issue #${{ github.event.issue.number }}.
+      #     branch: 'new-speaker-${{ github.run_id }}'

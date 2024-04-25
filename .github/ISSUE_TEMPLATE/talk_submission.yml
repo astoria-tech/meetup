@@ -1,7 +1,7 @@
-name: Speaker Submission
-description: Submit a new speaker.
-title: '[Speaker] '
-labels: ['speaker']
+name: Talk Submission
+description: Create a Talk Submission
+title: '[Talk Submission] '
+labels: ['talk-submission']
 assignees: '@reggi'
 body:
   - type: input
@@ -45,6 +45,42 @@ body:
     attributes:
       label: Profile Image
       description: Please profile a profile image URL. (If none is provided we use the GitHub profile image, or [the default image](https://github.com/astoria-tech/meetup/blob/main/packages/image-generator/banner/default.png))
+      placeholder:
+    validations:
+      required: false
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: 'The title of your presentation.'
+      placeholder:
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      description: 'The date of the presentation (YYYY-MM-DD).'
+      placeholder: 'YYYY-MM-DD'
+    validations:
+      required: true
+
+  - type: input
+    id: slides
+    attributes:
+      label: Slides (Optional)
+      description: 'Link to the presentation slides, (if available).'
+      placeholder: 'https://yoursite.com/slides.pdf'
+    validations:
+      required: false
+
+  - type: input
+    id: slidesSource
+    attributes:
+      label: Slides Source (Optional)
+      description: 'Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website).'
       placeholder:
     validations:
       required: false
