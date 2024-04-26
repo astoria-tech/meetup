@@ -57,14 +57,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - run: npm i
+
       - name: Run script and capture output
         id: issueForm
-        run: |
-          npm i
-          ./script/commentbody ${{ github.event.issue.number }}
+        run: ./script/commentbody ${{ github.event.issue.number }}
 
       - name: Set output
-        run: echo "${{ steps.issueForm.outputs.name }}"
+        id: merge
+        run: ./script/mergejson "${{ toJson(steps.issueForm.outputs) }}" "${{ toJson(github.event.inputs) }}"
+
+      - name: log
+        run: echo "${{ toJson(steps.merge.outputs) }}"
 
   # create-pr:
   #   runs-on: ubuntu-latest

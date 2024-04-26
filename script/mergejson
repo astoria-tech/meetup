@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+import deepmerge from 'deepmerge'
+import * as deepCleaner from 'deep-cleaner'
+import fs from 'fs/promises'
+
+const jsona = process.argv[2]
+
+if (!jsona) {
+  throw new Error('JSON A is required')
+}
+
+const jsonb = process.argv[3]
+
+if (!jsonb) {
+  throw new Error('JSON B is required')
+}
+
+const a = JSON.parse(jsona)
+const b = JSON.parse(jsonb)
+
+const merged = deepmerge(deepCleaner.clean(a), deepCleaner.clean(b))
+
+if (process.env.CI && process.env.GITHUB_OUTPUT) {
+  const outputString = Object.entries(merged)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n')
+  await fs.writeFile(process.env.GITHUB_OUTPUT, outputString)
+} else {
+  process.stdout.write(JSON.stringify(merged))
+}
