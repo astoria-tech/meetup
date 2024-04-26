@@ -1,9 +1,26 @@
-name: Create
-description: Create a Talk
+name: Submit / Edit a Talk
+description: As a first time speaker or a repeat speaker this is the form for you.
 title: '[Talk Submission] '
 labels: ['talk-submission']
-assignees: '@reggi'
+assignees: 
+  - 'reggi'
 body:
+  - type: markdown
+    attributes:
+      value: |
+        This form allows you to submit or edit a any information in the system!
+        Not all the form fields are required and you can can come back anytime
+        and submit it again. When you submit a PR will get created by an
+        admin from the content you put down here.
+
+        Note: The important fields are the date and your name. Your name will be
+        slugified, and used as the main id, so keep it consistent. The date will
+        be the night of the meetup you're gonna present.
+
+        If you have any questions or need help, please reach out to us on slack. 
+        
+        https://astoriatech.slack.com/
+
   - type: input
     id: name
     attributes:

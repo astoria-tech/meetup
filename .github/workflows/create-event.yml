@@ -5,50 +5,6 @@ on:
     types: [opened, reopened]
   issue_comment:
     types: [created]
-  workflow_call:
-    inputs:
-      date:
-        type: string
-        description: 'Event Date (YYYY-MM-DD)'
-        required: false
-      meetup:
-        type: string
-        description: 'Meetup Link'
-        required: false
-      presentationTitle:
-        type: string
-        description: 'Presentation Title'
-        required: false
-      eventTitle:
-        type: string
-        description: 'Event Title'
-        required: false
-      website:
-        type: string
-        description: 'Website'
-        required: false
-  workflow_dispatch:
-    inputs:
-      date:
-        type: string
-        description: 'Event Date (YYYY-MM-DD)'
-        required: false
-      meetup:
-        type: string
-        description: 'Meetup Link'
-        required: false
-      presentationTitle:
-        type: string
-        description: 'Presentation Title'
-        required: false
-      eventTitle:
-        type: string
-        description: 'Event Title'
-        required: false
-      website:
-        type: string
-        description: 'Website'
-        required: false
 
 jobs:
   capture-json:
@@ -87,16 +43,9 @@ jobs:
         id: issueForm
         run: ./script/commentbody ${{ github.event.issue.number }}
 
-      - name: Set output
-        id: data
-        env:
-          A: ${{ toJSON(steps.issueForm.outputs) }}
-          B: ${{ toJSON(github.event.inputs) }}
-        run: ./script/mergejson "$A" "$B"
-
       - name: Initial Issue Comment
         env:
-          JSON: ${{ toJSON(steps.data.outputs) }}
+          JSON: ${{ toJSON(steps.issueForm.outputs) }}
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         run: |
           echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
@@ -107,7 +56,7 @@ jobs:
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
           rm comment.txt
 
-      - run: echo "${{ toJSON(steps.data.outputs) }}"
+      - run: echo "${{ toJSON(steps.issueForm.outputs) }}"
       - run: npm i
 
       - name: Operation
@@ -115,20 +64,20 @@ jobs:
         run: |
           ./script/mkall \
             --updateAll \
-            --date "${{ steps.data.outputs.date }}" \
-            --githubUsername "${{ steps.data.outputs.githubUsername }}" \
-            --googleCal "${{ steps.data.outputs.googleCal }}" \
-            --ical "${{ steps.data.outputs.ical }}" \
-            --linkedin "${{ steps.data.outputs.linkedin }}" \
-            --meetup "${{ steps.data.outputs.meetup }}" \
-            --name "${{ steps.data.outputs.name }}" \
-            --presentations "${{ steps.data.outputs.presentations }}" \
-            --profileImage "${{ steps.data.outputs.profileImage }}" \
-            --slides "${{ steps.data.outputs.slides }}" \
-            --slidesSource "${{ steps.data.outputs.slidesSource }}" \
-            --presentationTitle "${{ steps.data.outputs.presentationTitle }}" \
-            --eventTitle "${{ steps.data.outputs.eventTitle }}" \
-            --website "${{ steps.data.outputs.website }}"
+            --date "${{ steps.issueForm.outputs.date }}" \
+            --githubUsername "${{ steps.issueForm.outputs.githubUsername }}" \
+            --googleCal "${{ steps.issueForm.outputs.googleCal }}" \
+            --ical "${{ steps.issueForm.outputs.ical }}" \
+            --linkedin "${{ steps.issueForm.outputs.linkedin }}" \
+            --meetup "${{ steps.issueForm.outputs.meetup }}" \
+            --name "${{ steps.issueForm.outputs.name }}" \
+            --presentations "${{ steps.issueForm.outputs.presentations }}" \
+            --profileImage "${{ steps.issueForm.outputs.profileImage }}" \
+            --slides "${{ steps.issueForm.outputs.slides }}" \
+            --slidesSource "${{ steps.issueForm.outputs.slidesSource }}" \
+            --presentationTitle "${{ steps.issueForm.outputs.presentationTitle }}" \
+            --eventTitle "${{ steps.issueForm.outputs.eventTitle }}" \
+            --website "${{ steps.issueForm.outputs.website }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
