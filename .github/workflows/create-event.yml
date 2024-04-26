@@ -56,6 +56,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Set this to the node version you are using
+
       - name: Get npm cache directory
         id: npm-cache-dir
         shell: bash
@@ -76,56 +81,42 @@ jobs:
         run: ./script/commentbody ${{ github.event.issue.number }}
 
       - name: Set output
-        id: merge
+        id: data
         env:
           A: ${{ toJSON(steps.issueForm.outputs) }}
           B: ${{ toJSON(github.event.inputs) }}
         run: ./script/mergejson "$A" "$B"
 
-      - name: log
-        run: echo "${{ steps.merge.outputs.name }}"
+      - name: Operation
+        run: |
+          npm install
+          ./scripts/mkall \
+            --updateAll \
+            --date "${{ steps.data.outputs.date }}" \
+            --githubUsername "${{ steps.data.outputs.githubUsername }}" \
+            --googleCal "${{ steps.data.outputs.googleCal }}" \
+            --ical "${{ steps.data.outputs.ical }}" \
+            --linkedin "${{ steps.data.outputs.linkedin }}" \
+            --meetup "${{ steps.data.outputs.meetup }}" \
+            --name "${{ steps.data.outputs.name }}" \
+            --presentations "${{ steps.data.outputs.presentations }}" \
+            --profileImage "${{ steps.data.outputs.profileImage }}" \
+            --slides "${{ steps.data.outputs.slides }}" \
+            --slidesSource "${{ steps.data.outputs.slidesSource }}" \
+            --presentationTitle "${{ steps.data.outputs.presentationTitle }}" \
+            --eventTitle "${{ steps.data.outputs.eventTitle }}" \
+            --website "${{ steps.data.outputs.website }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git checkout -b "content-${{ github.run_id }}"
+          git commit -m "Automated Content Changes"
+          git push origin "content-${{ github.run_id }}"
 
-  # create-pr:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '20' # Set this to the node version you are using
-
-  #     - name: Operation
-  #       run: |
-  #         npm install
-  #         ./scripts/mkall \
-  #           --updateAll \
-  #           --date "${{ github.event.inputs.date }}" \
-  #           --githubUsername "${{ github.event.inputs.githubUsername }}" \
-  #           --googleCal "${{ github.event.inputs.googleCal }}" \
-  #           --ical "${{ github.event.inputs.ical }}" \
-  #           --linkedin "${{ github.event.inputs.linkedin }}" \
-  #           --meetup "${{ github.event.inputs.meetup }}" \
-  #           --name "${{ github.event.inputs.name }}" \
-  #           --presentations "${{ github.event.inputs.presentations }}" \
-  #           --profileImage "${{ github.event.inputs.profileImage }}" \
-  #           --slides "${{ github.event.inputs.slides }}" \
-  #           --slidesSource "${{ github.event.inputs.slidesSource }}" \
-  #           --presentationTitle "${{ github.event.inputs.presentationTitle }}" \
-  #           --eventTitle "${{ github.event.inputs.eventTitle }}" \
-  #           --website "${{ github.event.inputs.website }}"
-  #         git config user.name "github-actions"
-  #         git config user.email "github-actions@github.com"
-  #         git add .
-  #         git checkout -b "content-${{ github.run_id }}"
-  #         git commit -m "Automated Content Changes"
-  #         git push origin "content-${{ github.run_id }}"
-
-  #     - name: Create Pull Request
-  #       uses: peter-evans/create-pull-request@v3
-  #       with:
-  #         commit-message: Automated Content Changes
-  #         title: Automated Content Changes
-  #         body: Automated Content Changes
-  #         branch: 'content-${{ github.run_id }}'
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Automated Content Changes
+          title: Automated Content Changes
+          body: Automated Content Changes
+          branch: 'content-${{ github.run_id }}'
