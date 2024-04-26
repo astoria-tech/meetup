@@ -359,9 +359,9 @@ export async function mkpresentation() {
 export async function mkevent() {
   const {required, sanitized} = flags()
   const {date} = required
-  const {eventTitle: title, meetup, presentations, banner} = sanitized
+  const {eventTitle: title, meetup, presentations, ical, googleCal, banner} = sanitized
   const fileName = `./src/content/events/${date}-event.md`
-  const input = {title, meetup, presentations, banner, date}
+  const input = {title, meetup, presentations, banner, date, ical, googleCal}
   const {frontMatter, content} = await readContent(fileName)
   if (!frontMatter.title) {
     frontMatter.title = await nextEventTitle()
