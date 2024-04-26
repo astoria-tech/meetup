@@ -64,7 +64,7 @@ jobs:
           ./script/commentbody ${{ github.event.issue.number }}
 
       - name: Set output
-        run: ${{ steps.issueForm.outputs.name }}
+        run: echo "${{ steps.issueForm.outputs.name }}"
 
   # create-pr:
   #   runs-on: ubuntu-latest

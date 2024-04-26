@@ -57,10 +57,11 @@ const data = Object.fromEntries(
     .filter(v => v),
 )
 
-// process.stdout.write(JSON.stringify(object))
-
-const outputString = Object.entries(data)
-  .map(([key, value]) => `${key}=${value}`)
-  .join('\n')
-
-await fs.writeFile(process.env.GITHUB_OUTPUT, outputString)
+if (process.env.CI && process.env.GITHUB_OUTPUT) {
+  const outputString = Object.entries(data)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n')
+  await fs.writeFile(process.env.GITHUB_OUTPUT, outputString)
+} else {
+  process.stdout.write(JSON.stringify(object))
+}
