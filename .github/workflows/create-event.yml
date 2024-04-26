@@ -98,7 +98,16 @@ jobs:
         env:
           JSON: ${{ toJSON(steps.data.outputs) }}
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
-        run: gh issue comment ${{ github.event.issue.number }} -b "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }} \n ```json\n$JSON\n```"
+        run: |
+          cat << EOF > comment.txt
+          Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          Here are the changes, they will be merged:
+          ```json
+          ${{ toJSON(env.JSON )}}
+          ```
+          EOF
+          gh issue comment ${{ github.event.issue.number }} -body-file comment.txt
+          rm comment.txt
 
       - run: echo "${{ toJSON(steps.data.outputs) }}"
       - run: npm i
@@ -129,7 +138,7 @@ jobs:
           git commit -m "Automated Content Changes"
 
           git diff HEAD^ HEAD > changes.patch
-          hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_ENV
+          "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_ENV
           rm changes.patch
 
       - name: Create Pull Request
