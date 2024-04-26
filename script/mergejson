@@ -16,7 +16,7 @@ if (!jsonb) {
 }
 
 const a = ['null', null, 'undefined', undefined].includes(jsona) ? {} : JSON.parse(jsona)
-const b = ['null', null, 'undefined', undefined].includes(jsona) ? {} : JSON.parse(jsonb)
+const b = ['null', null, 'undefined', undefined].includes(jsonb) ? {} : JSON.parse(jsonb)
 
 console.log({a, b})
 
