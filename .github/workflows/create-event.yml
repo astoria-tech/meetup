@@ -49,21 +49,23 @@ on:
         required: false
 
 jobs:
-  do_something:
-    name: A job that does something
+  capture-json:
     runs-on: ubuntu-latest
     steps:
-      - name: Parse comment
-        id: parse
-        uses: actions/parse-issue-comment-action@v0.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          comment_id: ${{ github.event.comment.id }}
-          format: yaml
-      - name: Echo the output
-        run: echo ${{ steps.parse.outputs.content }}
-      - name: Use the output as JSON
-        run: echo ${{ fromJson(steps.parse.outputs.content).some_key }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run script and capture output
+        id: issueForm
+        run: |
+          json_output=$(./commentbody ${{ github.event.issue.number }}) # Ensure the script is executable
+          echo "issueForm=$json_output" >> $GITHUB_ENV
+
+      - name: Set output
+        run: ${{ steps.issueForm.outputs.issueForm }}
+
+      - name: Set output 2
+        run: ${{ toJson(steps.issueForm.outputs.issueForm) }}
 
   # create-pr:
   #   runs-on: ubuntu-latest

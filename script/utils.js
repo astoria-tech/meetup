@@ -17,8 +17,8 @@ const isValidPresentation = (date, presentation) => {
   return validateDate(presentation) && presentation.startsWith(date)
 }
 
-const parseMdLink = mdLink => {
-  const value = mdLink.trim().match(/\[.+\]\((.+)\)/)
+export const parseMdLink = mdLink => {
+  const value = mdLink.trim().match(/^\!?\[.+\]\((.+)\)$/)
   return value ? value[1] : undefined
 }
 
@@ -181,10 +181,10 @@ const flags = () => {
     }
     static get profileImage() {
       if (flags.profileImage) {
-        const sides = parseMdLink(flags.profileImage) || flags.profileImage
+        const profileImage = flags.profileImage
         try {
-          new URL(sides)
-          return sides
+          new URL(profileImage)
+          return profileImage
         } catch (_e) {
           throw new Error('Invalid profileImage URL.')
         }
@@ -194,7 +194,7 @@ const flags = () => {
       if (!flags.slides) {
         throw new Error('Slides is required.')
       }
-      return parseMdLink(flags.slides) || flags.slides
+      return flags.slides || flags.slides
     }
     static get slidesSource() {
       if (flags.slidesSource) {
