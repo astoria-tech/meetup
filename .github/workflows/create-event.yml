@@ -111,9 +111,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git checkout -b "content-${{ github.run_id }}"
           git commit -m "Automated Content Changes"
-          git push origin "content-${{ github.run_id }}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -121,4 +119,3 @@ jobs:
           commit-message: Automated Content Changes
           title: Automated Content Changes
           body: Automated Content Changes
-          branch: 'content-${{ github.run_id }}'
