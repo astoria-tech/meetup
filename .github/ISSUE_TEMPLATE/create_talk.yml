@@ -50,9 +50,9 @@ body:
       required: false
 
   - type: input
-    id: title
+    id: presentationTitle
     attributes:
-      label: title
+      label: presentationTitle
       description: 'The title of your presentation.'
       placeholder:
     validations:
