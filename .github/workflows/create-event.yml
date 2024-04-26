@@ -83,11 +83,9 @@ jobs:
       - run: npm i
 
       - name: Run script and capture output
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         id: issueForm
         run: ./script/commentbody ${{ github.event.issue.number }}
-
-      - run: |
-          gh issue comment ${{ github.event.issue.number }} -b "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.id }} \n Found changes ${{ toJSON(steps.issueForm.outputs) }}"
 
       - name: Set output
         id: data
@@ -95,6 +93,12 @@ jobs:
           A: ${{ toJSON(steps.issueForm.outputs) }}
           B: ${{ toJSON(github.event.inputs) }}
         run: ./script/mergejson "$A" "$B"
+
+      - name: Run script and capture output
+        env:
+          JSON: ${{ toJSON(steps.data.outputs) }}
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: gh issue comment ${{ github.event.issue.number }} -b "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }} \n ```json\n$JSON\n```"
 
       - run: echo "${{ toJSON(steps.data.outputs) }}"
       - run: npm i
