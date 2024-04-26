@@ -2,7 +2,7 @@ name: Meetup - Create / Edit an Event
 description: As an admin this is a useful intake for creating or editing an event.
 title: '[Event Update] '
 labels: ['non-code']
-assignees: 
+assignees:
   - 'reggi'
 body:
   - type: input
@@ -40,4 +40,3 @@ body:
       placeholder:
     validations:
       required: false
-

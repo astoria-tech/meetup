@@ -2,7 +2,7 @@ name: Meetup - Submit / Edit a Talk
 description: As a first time speaker or a repeat speaker this is the form for you.
 title: '[Talk Submission] '
 labels: ['talk-submission', 'non-code']
-assignees: 
+assignees:
   - 'reggi'
 body:
   - type: markdown
@@ -18,7 +18,7 @@ body:
         be the night of the meetup you're gonna present.
 
         If you have any questions or need help, please reach out to us on slack. 
-        
+
         https://astoriatech.slack.com/
 
   - type: input
