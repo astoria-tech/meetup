@@ -1,0 +1,43 @@
+name: Meetup - Create / Edit an Event
+description: As an admin this is a useful intake for creating or editing an event.
+title: '[Event Update] '
+labels: ['non-code']
+assignees: 
+  - 'reggi'
+body:
+  - type: input
+    id: date
+    attributes:
+      label: date
+      description: Date of the event (YYYY-MM-DD).
+      placeholder:
+    validations:
+      required: false
+
+  - type: input
+    id: meetup
+    attributes:
+      label: meetup
+      description: Please enter the meetup URL.
+      placeholder:
+    validations:
+      required: false
+
+  - type: input
+    id: ical
+    attributes:
+      label: ical
+      description: Please enter the ical URL. (generated on meetup page)
+      placeholder:
+    validations:
+      required: false
+
+  - type: input
+    id: googleCal
+    attributes:
+      label: googleCal
+      description: Please enter the googleCal URL. (generated on meetup page)
+      placeholder:
+    validations:
+      required: false
+

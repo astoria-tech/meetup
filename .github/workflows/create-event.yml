@@ -1,4 +1,4 @@
-name: Create Event
+name: Create Speaker / Event / Presentations
 
 on:
   issues:

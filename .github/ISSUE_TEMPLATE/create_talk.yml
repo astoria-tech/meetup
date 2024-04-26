@@ -1,7 +1,7 @@
-name: Submit / Edit a Talk
+name: Meetup - Submit / Edit a Talk
 description: As a first time speaker or a repeat speaker this is the form for you.
 title: '[Talk Submission] '
-labels: ['talk-submission']
+labels: ['talk-submission', 'non-code']
 assignees: 
   - 'reggi'
 body:

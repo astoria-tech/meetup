@@ -1,0 +1,10 @@
+name: Code - Feature / Bug
+description: As a developer this is a useful intake for creating a feature or bug.
+title: ''
+body:
+  - type: textarea
+    id: textarea
+    attributes:
+      label: textarea
+    validations:
+      required: fals
