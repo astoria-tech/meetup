@@ -90,7 +90,7 @@ jobs:
       - name: Operation
         run: |
           npm install
-          ./scripts/mkall \
+          ./script/mkall \
             --updateAll \
             --date "${{ steps.data.outputs.date }}" \
             --githubUsername "${{ steps.data.outputs.githubUsername }}" \
