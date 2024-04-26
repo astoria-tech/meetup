@@ -1,0 +1,37 @@
+name: Create PR to Fix Styles
+
+on:
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Set this to the node version you are using
+
+      - name: Operation
+        run: |
+          npm install
+          npm run style:fix
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git checkout -b "image-${{ github.run_id }}"
+          git commit -m "Fixed Style Changes"
+          git push origin "image-${{ github.run_id }}"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Fixed Style Changes
+          title: Fixed Style Changes
+          body: Fixed Style Changes
+          branch: 'image-${{ github.run_id }}'

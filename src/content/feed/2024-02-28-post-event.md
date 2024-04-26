@@ -1,4 +1,4 @@
 ---
-event: '2024-02-28'
+event: 2024-02-28-event
 publishedAt: 2024-02-29
 ---

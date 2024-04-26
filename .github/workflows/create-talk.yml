@@ -1,0 +1,125 @@
+name: Create Talk
+
+on:
+  workflow_call:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      githubUsername:
+        type: string
+        description: 'GitHub Username'
+        required: false
+      linkedin:
+        type: string
+        description: 'LinkedIn Profile URL'
+        required: false
+      name:
+        type: string
+        description: 'Speaker Name'
+        required: false
+      profileImage:
+        type: string
+        description: 'Profile Image'
+        required: false
+      slides:
+        type: string
+        description: 'Slides'
+        required: false
+      slidesSource:
+        type: string
+        description: 'Slides Source'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
+  workflow_dispatch:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      githubUsername:
+        type: string
+        description: 'GitHub Username'
+        required: false
+      linkedin:
+        type: string
+        description: 'LinkedIn Profile URL'
+        required: false
+      name:
+        type: string
+        description: 'Speaker Name'
+        required: false
+      profileImage:
+        type: string
+        description: 'Profile Image'
+        required: false
+      slides:
+        type: string
+        description: 'Slides'
+        required: false
+      slidesSource:
+        type: string
+        description: 'Slides Source'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Set this to the node version you are using
+
+      - name: Operation
+        run: |
+          npm install
+          ./scripts/mkall \
+            --updateAll \
+            --date "${{ github.event.inputs.date }}" \
+            --githubUsername "${{ github.event.inputs.githubUsername }}" \
+            --googleCal "${{ github.event.inputs.googleCal }}" \
+            --ical "${{ github.event.inputs.ical }}" \
+            --linkedin "${{ github.event.inputs.linkedin }}" \
+            --meetup "${{ github.event.inputs.meetup }}" \
+            --name "${{ github.event.inputs.name }}" \
+            --presentations "${{ github.event.inputs.presentations }}" \
+            --profileImage "${{ github.event.inputs.profileImage }}" \
+            --slides "${{ github.event.inputs.slides }}" \
+            --slidesSource "${{ github.event.inputs.slidesSource }}" \
+            --presentationTitle "${{ github.event.inputs.presentationTitle }}" \
+            --eventTitle "${{ github.event.inputs.eventTitle }}" \
+            --website "${{ github.event.inputs.website }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git checkout -b "content-${{ github.run_id }}"
+          git commit -m "Automated Content Changes"
+          git push origin "content-${{ github.run_id }}"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Automated Content Changes
+          title: Automated Content Changes
+          body: Automated Content Changes
+          branch: 'content-${{ github.run_id }}'

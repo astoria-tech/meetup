@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+import {typeFlag} from 'type-flag'
+import {$} from 'zx'
+import {validateDate} from './utils.js'
+
+const {flags} = typeFlag({
+  date: String,
+  images: String,
+})
+
+const images = flags.images.split(',').map(v => v.trim())
+const isValidDate = validateDate(flags.date)
+
+if (!isValidDate) {
+  throw new Error('invalid date')
+}
+
+for (const image of images) {
+  const file = `./public/${image}s/${flags.date}.png`
+  await $`npm run -C ./packages/image-generator --silent cli -- --image ${image} --date ${flags.date} > ${file}`
+}

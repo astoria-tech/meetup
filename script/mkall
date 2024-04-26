@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+import {mkall} from './utils.js'
+
+await mkall()

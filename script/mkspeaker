@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+import {mkspeaker} from './utils.js'
+
+await mkspeaker()
