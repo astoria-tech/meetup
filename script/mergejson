@@ -15,8 +15,8 @@ if (!jsonb) {
   throw new Error('JSON B is required')
 }
 
-const a = ['null', null].includes(jsona) ? {} : JSON.parse(jsona)
-const b = ['null', null].includes(jsona) ? {} : JSON.parse(jsonb)
+const a = ['null', null, 'undefined', undefined].includes(jsona) ? {} : JSON.parse(jsona)
+const b = ['null', null, 'undefined', undefined].includes(jsona) ? {} : JSON.parse(jsonb)
 
 console.log({a, b})
 
