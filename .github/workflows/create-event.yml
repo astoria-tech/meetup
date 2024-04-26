@@ -70,7 +70,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - run: npm i
-        if: steps.npm-cache.outputs.cache-hit != 'true'
 
       - name: Run script and capture output
         id: issueForm
