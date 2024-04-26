@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+import {$} from 'zx'
+
+const currentSha = (await $`git rev-parse HEAD`).stdout.trim()
+const previousSha = (await $`git rev-parse HEAD^`).stdout.trim()
+
+const diff = (
+  await $`git diff --name-only --diff-filter=ACMRT ${previousSha} ${currentSha} -- 'src/content/events/'`
+).stdout.trim()
+
+const changes = diff.split('\n').map(v => {
+  return v.replace('src/content/events/', '').replace('-event.md', '')
+})
+
+if (changes.length !== 1) {
+  throw new Error('Expected exactly one change')
+}
+
+process.stdout.write(changes[0])

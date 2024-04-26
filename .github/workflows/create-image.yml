@@ -1,19 +1,73 @@
-name: Create Image on Dispatch
+name: Create Images
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/content/events/**'
+  workflow_call:
+    inputs:
+      date:
+        description: 'Event Date (YYYY-MM-DD)'
+        required: true
+        type: string
+      image:
+        description: 'Image Type (banner, meetup-image)'
+        default: banner, meetup-image
+        type: string
   workflow_dispatch:
     inputs:
       date:
         description: 'Event Date (YYYY-MM-DD)'
         required: true
+        type: string
       image:
         description: 'Image Type (banner, meetup-image)'
         default: banner, meetup-image
         type: string
 
 jobs:
-  create-image-on-dispatch:
-    uses: ./.github/workflows/create-image-shared.yml
-    with:
-      date: ${{ github.event.inputs.date }}
-      image: ${{ github.event.inputs.image }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set date on push event
+        if: github.event_name == 'push'
+        run: |
+          DATE=$(./script/eventchanged)
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      - name: Set date on workflow_dispatch or workflow_call event
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+        run: |
+          DATE="${{ github.event.inputs.date }}"
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      - name: Export message
+        id: MESSAGE
+        run: |
+          MESSAGE="Add image(s) ${{ inputs.image }} for ${{ env.DATE }}"
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+
+      - name: Checkout and Push Branch
+        run: |
+          echo "${{ env.DATE }}"
+          npm install
+          ./script/genimage --date "${{ env.DATE }}" --image "${{ inputs.image }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git checkout -b "image-${{ github.run_id }}"
+          git commit -m "${{ steps.message.outputs.message }}"
+          git push origin "image-${{ github.run_id }}"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          title: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          body: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          branch: 'image-${{ github.run_id }}'

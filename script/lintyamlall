@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Find all Markdown files in the directory and subdirectories
+find "./src/content" -type f -name '*.md' | while read -r file; do
+  # Run lintyaml on each file and output to a temporary file
+  ./script/lintyaml "$file"
+done

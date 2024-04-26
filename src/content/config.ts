@@ -8,7 +8,7 @@ const eventsCollection = defineCollection({
     meetup: z.string(),
     presentations: z.array(reference('presentations')),
     title: z.string(),
-    google_cal: z.string().optional(),
+    googleCal: z.string().optional(),
     ical: z.string().optional(),
   }),
 })

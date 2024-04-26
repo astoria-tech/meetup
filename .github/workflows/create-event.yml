@@ -1,89 +1,111 @@
-name: Create Event PR
+name: Create Event
 
 on:
+  issues:
+    types: [opened, reopened]
+  workflow_call:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      meetup:
+        type: string
+        description: 'Meetup Link'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      eventTitle:
+        type: string
+        description: 'Event Title'
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
   workflow_dispatch:
     inputs:
       date:
+        type: string
         description: 'Event Date (YYYY-MM-DD)'
-        required: true
-      meetup_link:
+        required: false
+      meetup:
+        type: string
         description: 'Meetup Link'
-        required: true
-      title:
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
+        required: false
+      eventTitle:
+        type: string
         description: 'Event Title'
-        required: true
+        required: false
+      website:
+        type: string
+        description: 'Website'
+        required: false
 
 jobs:
-  create-pr:
+  do_something:
+    name: A job that does something
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Parse comment
+        id: parse
+        uses: actions/parse-issue-comment-action@v0.1
         with:
-          node-version: '20' # Set this to the node version you are using
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          comment_id: ${{ github.event.comment.id }}
+          format: yaml
+      - name: Echo the output
+        run: echo ${{ steps.parse.outputs.content }}
+      - name: Use the output as JSON
+        run: echo ${{ fromJson(steps.parse.outputs.content).some_key }}
 
-      - name: Install dependencies
-        run: npm install
+  # create-pr:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Configure git
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '20' # Set this to the node version you are using
 
-      - name: Create new branch
-        run: git checkout -b event-${{ github.event.inputs.date }}
+  #     - name: Operation
+  #       run: |
+  #         npm install
+  #         ./scripts/mkall \
+  #           --updateAll \
+  #           --date "${{ github.event.inputs.date }}" \
+  #           --githubUsername "${{ github.event.inputs.githubUsername }}" \
+  #           --googleCal "${{ github.event.inputs.googleCal }}" \
+  #           --ical "${{ github.event.inputs.ical }}" \
+  #           --linkedin "${{ github.event.inputs.linkedin }}" \
+  #           --meetup "${{ github.event.inputs.meetup }}" \
+  #           --name "${{ github.event.inputs.name }}" \
+  #           --presentations "${{ github.event.inputs.presentations }}" \
+  #           --profileImage "${{ github.event.inputs.profileImage }}" \
+  #           --slides "${{ github.event.inputs.slides }}" \
+  #           --slidesSource "${{ github.event.inputs.slidesSource }}" \
+  #           --presentationTitle "${{ github.event.inputs.presentationTitle }}" \
+  #           --eventTitle "${{ github.event.inputs.eventTitle }}" \
+  #           --website "${{ github.event.inputs.website }}"
+  #         git config user.name "github-actions"
+  #         git config user.email "github-actions@github.com"
+  #         git add .
+  #         git checkout -b "content-${{ github.run_id }}"
+  #         git commit -m "Automated Content Changes"
+  #         git push origin "content-${{ github.run_id }}"
 
-      - name: Create event content file
-        run: |
-          mkdir -p src/content/events
-          cat << EOF > src/content/events/${{ github.event.inputs.date }}.md
-          ---
-          date: ${{ github.event.inputs.date }}
-          meetup: ${{ github.event.inputs.meetup_link }}
-          presentations: []
-          title: "${{ github.event.inputs.title }}"
-          ---
-          EOF
-
-      - name: Fix markdown formatting
-        run: npm run fix
-
-      - name: Create feed content file
-        run: |
-          mkdir -p src/content/feed
-          today=$(date +%Y-%m-%d)
-          cat << EOF > src/content/feed/${{ github.event.inputs.date }}-event.md
-          ---
-          event: '${{ github.event.inputs.date }}'
-          publishedAt: $today
-          ---
-          EOF
-
-      - name: Commit files
-        run: |
-          git add .
-          git commit -m "Add event content for ${{ github.event.inputs.date }}"
-
-      - name: Push changes
-        run: git push origin event-${{ github.event.inputs.date }}
-
-      - name: Create PR
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const date = "${{ github.event.inputs.date }}";
-            const title = "${{ github.event.inputs.title }}";
-            const headBranch = `event-${date}`;
-            const baseBranch = 'main'; // Ensure this matches your repo's default branch
-
-            github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `New event on ${date}: ${title}`,
-              head: headBranch,
-              base: baseBranch,
-              body: 'This PR adds new event content.',
-            });
+  #     - name: Create Pull Request
+  #       uses: peter-evans/create-pull-request@v3
+  #       with:
+  #         commit-message: Automated Content Changes
+  #         title: Automated Content Changes
+  #         body: Automated Content Changes
+  #         branch: 'content-${{ github.run_id }}'

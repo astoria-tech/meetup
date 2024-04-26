@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+import {mkpresentation} from './utils.js'
+
+await mkpresentation()

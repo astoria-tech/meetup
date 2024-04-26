@@ -1,4 +1,4 @@
 ---
-name: Carlos Compoy
 githubUsername: lospoy
+name: Carlos Compoy
 ---
