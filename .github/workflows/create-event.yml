@@ -87,9 +87,11 @@ jobs:
           B: ${{ toJSON(github.event.inputs) }}
         run: ./script/mergejson "$A" "$B"
 
+      - run: echo "${{ steps.data.outputs }}"
+      - run: npm i
+
       - name: Operation
         run: |
-          npm install
           ./script/mkall \
             --updateAll \
             --date "${{ steps.data.outputs.date }}" \
