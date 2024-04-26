@@ -68,7 +68,7 @@ jobs:
         run: ${{ steps.issueForm.outputs.issueForm }}
 
       - name: Set output 2
-        run: echo "${{ steps.issueForm.outputs.issueForm.name }}"
+        run: echo "${{ fromJson(steps.issueForm.outputs.issueForm).name }}"
 
   # create-pr:
   #   runs-on: ubuntu-latest
