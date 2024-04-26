@@ -31,4 +31,4 @@ jobs:
           commit-message: Fixed Style Changes
           title: Fixed Style Changes
           body: Fixed Style Changes
-          branch: 'image-${{ github.run_id }}'
+          branch: 'styles-${{ github.run_id }}'
