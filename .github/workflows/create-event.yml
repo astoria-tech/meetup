@@ -99,12 +99,12 @@ jobs:
           JSON: ${{ toJSON(steps.data.outputs) }}
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         run: |
-          echo "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
+          echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
           echo "Here are the changes, they will be merged:" >> comment.txt
-          echo "```json" >> comment.txt
-          echo "$JSON" >> comment.txt
-          echo "```" >> comment.txt
-          gh issue comment ${{ github.event.issue.number }} -body-file comment.txt
+          echo '```json' >> comment.txt
+          echo "${JSON}" >> comment.txt  # Ensure proper quoting of JSON
+          echo '```' >> comment.txt
+          gh issue comment ${{ github.event.issue.number }} -F comment.txt
           rm comment.txt
 
       - run: echo "${{ toJSON(steps.data.outputs) }}"
