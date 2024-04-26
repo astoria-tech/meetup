@@ -33,9 +33,11 @@
   },
   "devDependencies": {
     "@github/prettier-config": "^0.0.6",
+    "autoprefixer": "^10.4.19",
     "change-case": "^5.4.4",
     "deep-cleaner": "^2.0.0-alpha.3",
     "deepmerge": "^4.3.1",
+    "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "sort-package-json": "^2.10.0",
