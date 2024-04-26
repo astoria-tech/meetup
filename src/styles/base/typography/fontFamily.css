@@ -5,9 +5,9 @@
     font-weight: 400;
     font-display: swap;
     src:
-      url('../design/fonts/notosans/notosans-medium.otf') format('opentype'),
-      url('../design/fonts/notosans/notosans-medium.woff') format('woff'),
-      url('../design/fonts/notosans/notosans-medium.woff2') format('woff2');
+      url('@notosans-medium.otf') format('opentype'),
+      url('@notosans-medium.woff') format('woff'),
+      url('@notosans-medium.woff2') format('woff2');
   }
 
   @font-face {
@@ -16,9 +16,9 @@
     font-weight: 700;
     font-display: swap;
     src:
-      url('../design/fonts/notosans/notosans-bold.otf') format('opentype'),
-      url('../design/fonts/notosans/notosans-bold.woff') format('woff'),
-      url('../design/fonts/notosans/notosans-bold.woff2') format('woff2');
+      url('@notosans-bold.otf') format('opentype'),
+      url('@notosans-bold.woff') format('woff'),
+      url('@notosans-bold.woff2') format('woff2');
   }
 
   @font-face {
@@ -27,9 +27,9 @@
     font-weight: 400;
     font-display: swap;
     src:
-      url('../design/fonts/playfair/playfair-medium.otf') format('opentype'),
-      url('../design/fonts/playfair/playfair-medium.woff') format('woff'),
-      url('../design/fonts/playfair/playfair-medium.woff2') format('woff2');
+      url('@playfair-regular.otf') format('opentype'),
+      url('@playfair-regular.woff') format('woff'),
+      url('@playfair-regular.woff2') format('woff2');
   }
 
   @font-face {
@@ -38,8 +38,8 @@
     font-weight: 700;
     font-display: swap;
     src:
-      url('../design/fonts/playfair/playfair-bold.otf') format('opentype'),
-      url('../design/fonts/playfair/playfair-bold.woff') format('woff'),
-      url('../design/fonts/playfair/playfair-bold.woff2') format('woff2');
+      url('@playfair-bold.otf') format('opentype'),
+      url('@playfair-bold.woff') format('woff'),
+      url('@playfair-bold.woff2') format('woff2');
   }
 }
