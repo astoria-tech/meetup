@@ -52,7 +52,6 @@ jobs:
   do_something:
     name: A job that does something
     runs-on: ubuntu-latest
-    if: github.event_name == 'issues'
     steps:
       - name: Parse comment
         id: parse
