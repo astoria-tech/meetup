@@ -3,6 +3,8 @@ name: Create Event
 on:
   issues:
     types: [opened, reopened]
+  issue_comment:
+    types: [created]
   workflow_call:
     inputs:
       date:
@@ -49,63 +51,106 @@ on:
         required: false
 
 jobs:
-  do_something:
-    name: A job that does something
+  capture-json:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Parse comment
-        id: parse
-        uses: actions/parse-issue-comment-action@v0.1
+      - name: Check conditions and exit
+        if: github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr' && github.event.comment.user.login != 'reggi'
+        run: exit 0
+
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          comment_id: ${{ github.event.comment.id }}
-          format: yaml
-      - name: Echo the output
-        run: echo ${{ steps.parse.outputs.content }}
-      - name: Use the output as JSON
-        run: echo ${{ fromJson(steps.parse.outputs.content).some_key }}
+          node-version: '20' # Set this to the node version you are using
 
-  # create-pr:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '20' # Set this to the node version you are using
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-  #     - name: Operation
-  #       run: |
-  #         npm install
-  #         ./scripts/mkall \
-  #           --updateAll \
-  #           --date "${{ github.event.inputs.date }}" \
-  #           --githubUsername "${{ github.event.inputs.githubUsername }}" \
-  #           --googleCal "${{ github.event.inputs.googleCal }}" \
-  #           --ical "${{ github.event.inputs.ical }}" \
-  #           --linkedin "${{ github.event.inputs.linkedin }}" \
-  #           --meetup "${{ github.event.inputs.meetup }}" \
-  #           --name "${{ github.event.inputs.name }}" \
-  #           --presentations "${{ github.event.inputs.presentations }}" \
-  #           --profileImage "${{ github.event.inputs.profileImage }}" \
-  #           --slides "${{ github.event.inputs.slides }}" \
-  #           --slidesSource "${{ github.event.inputs.slidesSource }}" \
-  #           --presentationTitle "${{ github.event.inputs.presentationTitle }}" \
-  #           --eventTitle "${{ github.event.inputs.eventTitle }}" \
-  #           --website "${{ github.event.inputs.website }}"
-  #         git config user.name "github-actions"
-  #         git config user.email "github-actions@github.com"
-  #         git add .
-  #         git checkout -b "content-${{ github.run_id }}"
-  #         git commit -m "Automated Content Changes"
-  #         git push origin "content-${{ github.run_id }}"
+      - run: npm i
 
-  #     - name: Create Pull Request
-  #       uses: peter-evans/create-pull-request@v3
-  #       with:
-  #         commit-message: Automated Content Changes
-  #         title: Automated Content Changes
-  #         body: Automated Content Changes
-  #         branch: 'content-${{ github.run_id }}'
+      - name: Run script and capture output
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        id: issueForm
+        run: ./script/commentbody ${{ github.event.issue.number }}
+
+      - name: Set output
+        id: data
+        env:
+          A: ${{ toJSON(steps.issueForm.outputs) }}
+          B: ${{ toJSON(github.event.inputs) }}
+        run: ./script/mergejson "$A" "$B"
+
+      - name: Initial Issue Comment
+        env:
+          JSON: ${{ toJSON(steps.data.outputs) }}
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
+          echo "Here are the changes, they will be merged:" >> comment.txt
+          echo '```json' >> comment.txt
+          echo "${JSON}" >> comment.txt  # Ensure proper quoting of JSON
+          echo '```' >> comment.txt
+          gh issue comment ${{ github.event.issue.number }} -F comment.txt
+          rm comment.txt
+
+      - run: echo "${{ toJSON(steps.data.outputs) }}"
+      - run: npm i
+
+      - name: Operation
+        id: op
+        run: |
+          ./script/mkall \
+            --updateAll \
+            --date "${{ steps.data.outputs.date }}" \
+            --githubUsername "${{ steps.data.outputs.githubUsername }}" \
+            --googleCal "${{ steps.data.outputs.googleCal }}" \
+            --ical "${{ steps.data.outputs.ical }}" \
+            --linkedin "${{ steps.data.outputs.linkedin }}" \
+            --meetup "${{ steps.data.outputs.meetup }}" \
+            --name "${{ steps.data.outputs.name }}" \
+            --presentations "${{ steps.data.outputs.presentations }}" \
+            --profileImage "${{ steps.data.outputs.profileImage }}" \
+            --slides "${{ steps.data.outputs.slides }}" \
+            --slidesSource "${{ steps.data.outputs.slidesSource }}" \
+            --presentationTitle "${{ steps.data.outputs.presentationTitle }}" \
+            --eventTitle "${{ steps.data.outputs.eventTitle }}" \
+            --website "${{ steps.data.outputs.website }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add .
+          git commit -m "Automated Content Changes"
+
+          git diff HEAD^ HEAD > changes.patch
+          echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
+          rm changes.patch
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        id: cpr
+        with:
+          commit-message: Automated Content Changes
+          title: Automated Content Changes
+          body: Automated Content Changes
+          branch: auto-${{ steps.op.outputs.hash}}
+
+      - name: Follow Issue Comment
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          echo "Automated pull request: ${{ steps.cpr.outputs.pull-request-url }}" >> comment.txt
+          gh issue comment ${{ github.event.issue.number }} -F comment.txt
+          rm comment.txt

@@ -17,8 +17,8 @@ const isValidPresentation = (date, presentation) => {
   return validateDate(presentation) && presentation.startsWith(date)
 }
 
-const parseMdLink = mdLink => {
-  const value = mdLink.trim().match(/\[.+\]\((.+)\)/)
+export const parseMdLink = mdLink => {
+  const value = mdLink.trim().match(/^\!?\[.+\]\((.+)\)$/)
   return value ? value[1] : undefined
 }
 
@@ -171,8 +171,10 @@ const flags = () => {
       return Require.name.toLowerCase().replace(/\s+/g, '-')
     }
     static get presentations() {
-      if (!flags.presentations) {
-        return [`${flag.date}-${flag.nameSlug}`]
+      flags.presentations = flags.presentations.filter(v => v)
+
+      if (!flags.presentations.length) {
+        return [`${Require.date}-${Require.nameSlug}`]
       }
       if (!flags.presentations.every(presi => isValidPresentation(flags.date, presi))) {
         throw new Error('Invalid presentation file format format. Date must be in yyyy-mm-dd format.')
@@ -181,10 +183,10 @@ const flags = () => {
     }
     static get profileImage() {
       if (flags.profileImage) {
-        const sides = parseMdLink(flags.profileImage) || flags.profileImage
+        const profileImage = flags.profileImage
         try {
-          new URL(sides)
-          return sides
+          new URL(profileImage)
+          return profileImage
         } catch (_e) {
           throw new Error('Invalid profileImage URL.')
         }
@@ -194,7 +196,7 @@ const flags = () => {
       if (!flags.slides) {
         throw new Error('Slides is required.')
       }
-      return parseMdLink(flags.slides) || flags.slides
+      return flags.slides || flags.slides
     }
     static get slidesSource() {
       if (flags.slidesSource) {
@@ -273,7 +275,11 @@ const flags = () => {
       return swallowError(() => Require.nameSlug)
     }
     static get presentations() {
-      return flags.presentations.filter(presi => isValidPresentation(flags.date, presi))
+      try {
+        return Require.presentations
+      } catch (e) {
+        return flags.presentations.filter(presi => isValidPresentation(flags.date, presi))
+      }
     }
     static get profileImage() {
       return swallowError(() => Require.profileImage)
@@ -360,7 +366,9 @@ export async function mkevent() {
   if (!frontMatter.title) {
     frontMatter.title = await nextEventTitle()
   }
-  const merge = deepmerge(frontMatter, deepCleaner.clean(input))
+  const p = [...new Set([...frontMatter.presentations, ...presentations])]
+  delete frontMatter.presentations
+  const merge = deepmerge(frontMatter, deepCleaner.clean({...input, presentations: p}))
   await writeContent(fileName, merge, content)
 }
 
@@ -376,7 +384,7 @@ export async function mkall() {
     try {
       await mkspeaker()
     } catch (e) {
-      console.error(e.message)
+      console.log(e)
     }
   }
 
@@ -384,7 +392,7 @@ export async function mkall() {
     try {
       await mkpresentation()
     } catch (e) {
-      console.error(e.message)
+      console.log(e)
     }
   }
 
@@ -392,7 +400,7 @@ export async function mkall() {
     try {
       await mkevent()
     } catch (e) {
-      console.error(e.message)
+      console.log(e)
     }
   }
 }
