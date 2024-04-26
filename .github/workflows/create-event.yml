@@ -78,10 +78,13 @@ jobs:
 
       - name: Set output
         id: merge
-        run: ./script/mergejson "${{ steps.issueForm.outputs }}" "${{ github.event.inputs }}"
+        env:
+          A: ${{ toJSON(steps.issueForm.outputs) }}
+          B: ${{ toJSON(github.event.inputs) }}
+        run: ./script/mergejson "$A" "$B"
 
       - name: log
-        run: echo "${{ steps.merge.outputs }}"
+        run: echo "${{ steps.merge.outputs.name }}"
 
   # create-pr:
   #   runs-on: ubuntu-latest
