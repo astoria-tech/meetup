@@ -1,39 +1,7 @@
-name: Create Content
+name: Create Talk
 
 on:
   workflow_call:
-    inputs:
-      date:
-        type: string
-        description: 'Event Date (YYYY-MM-DD)'
-        required: false
-        type: string
-        description: 'LinkedIn Profile URL'
-        required: false
-      meetup:
-        type: string
-        description: 'Meetup Link'
-        required: false
-      name:
-        type: string
-        description: 'Speaker Name'
-        required: false
-      presentations:
-        type: string
-        description: 'Presentations'
-        required: false
-      profileImage:
-        type: string
-        description: 'Profile Image'
-        required: false
-        type: string
-        description: 'Presentation Title'
-        required: false
-      eventTitle:
-        type: string
-        description: 'Event Title'
-        required: false
-  workflow_dispatch:
     inputs:
       date:
         type: string
@@ -43,29 +11,13 @@ on:
         type: string
         description: 'GitHub Username'
         required: false
-      googleCal:
-        type: string
-        description: 'Google Calendar Link'
-        required: false
-      ical:
-        type: string
-        description: 'iCal Link'
-        required: false
       linkedin:
         type: string
         description: 'LinkedIn Profile URL'
         required: false
-      meetup:
-        type: string
-        description: 'Meetup Link'
-        required: false
       name:
         type: string
         description: 'Speaker Name'
-        required: false
-      presentations:
-        type: string
-        description: 'Presentations'
         required: false
       profileImage:
         type: string
@@ -83,9 +35,43 @@ on:
         type: string
         description: 'Presentation Title'
         required: false
-      eventTitle:
+      website:
         type: string
-        description: 'Event Title'
+        description: 'Website'
+        required: false
+  workflow_dispatch:
+    inputs:
+      date:
+        type: string
+        description: 'Event Date (YYYY-MM-DD)'
+        required: false
+      githubUsername:
+        type: string
+        description: 'GitHub Username'
+        required: false
+      linkedin:
+        type: string
+        description: 'LinkedIn Profile URL'
+        required: false
+      name:
+        type: string
+        description: 'Speaker Name'
+        required: false
+      profileImage:
+        type: string
+        description: 'Profile Image'
+        required: false
+      slides:
+        type: string
+        description: 'Slides'
+        required: false
+      slidesSource:
+        type: string
+        description: 'Slides Source'
+        required: false
+      presentationTitle:
+        type: string
+        description: 'Presentation Title'
         required: false
       website:
         type: string

@@ -17,6 +17,11 @@ const isValidPresentation = (date, presentation) => {
   return validateDate(presentation) && presentation.startsWith(date)
 }
 
+const parseMdLink = mdLink => {
+  const value = mdLink.trim().match(/\[.+\]\((.+)\)/)
+  return value ? value[1] : undefined
+}
+
 function deepSortObject(obj) {
   if (typeof obj !== 'object' || obj === null) {
     return obj
@@ -166,6 +171,9 @@ const flags = () => {
       return Require.name.toLowerCase().replace(/\s+/g, '-')
     }
     static get presentations() {
+      if (!flags.presentations) {
+        return [`${flag.date}-${flag.nameSlug}`]
+      }
       if (!flags.presentations.every(presi => isValidPresentation(flags.date, presi))) {
         throw new Error('Invalid presentation file format format. Date must be in yyyy-mm-dd format.')
       }
@@ -173,9 +181,10 @@ const flags = () => {
     }
     static get profileImage() {
       if (flags.profileImage) {
+        const sides = parseMdLink(flags.profileImage) || flags.profileImage
         try {
-          new URL(flags.profileImage)
-          return flags.profileImage
+          new URL(sides)
+          return sides
         } catch (_e) {
           throw new Error('Invalid profileImage URL.')
         }
@@ -185,7 +194,7 @@ const flags = () => {
       if (!flags.slides) {
         throw new Error('Slides is required.')
       }
-      return flags.slides
+      return parseMdLink(flags.slides) || flags.slides
     }
     static get slidesSource() {
       if (flags.slidesSource) {

@@ -1,5 +1,5 @@
-name: Talk Submission
-description: Create a Talk Submission
+name: Create 
+description: Create a Talk
 title: '[Talk Submission] '
 labels: ['talk-submission']
 assignees: '@reggi'
@@ -40,7 +40,7 @@ body:
     validations:
       required: false
 
-  - type: input
+  - type: textarea
     id: profileImage
     attributes:
       label: Profile Image
