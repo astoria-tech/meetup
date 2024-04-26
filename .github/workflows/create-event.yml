@@ -136,7 +136,7 @@ jobs:
           git commit -m "Automated Content Changes"
 
           git diff HEAD^ HEAD > changes.patch
-          echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_ENV
+          echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
           rm changes.patch
 
       - name: Create Pull Request
