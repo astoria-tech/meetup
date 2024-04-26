@@ -44,7 +44,7 @@ const content = parseContent(parsed)
 const noResponse = '_No response_'
 const setKey = v => changeCase.camelCase(v.trim().toLowerCase().replace('(optional)', ''))
 
-const object = Object.fromEntries(
+const data = Object.fromEntries(
   content
     .map(value => {
       const key = setKey(value.label)
