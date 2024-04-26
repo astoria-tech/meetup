@@ -8,42 +8,21 @@ on:
       - 'src/content/events/**'
 
 jobs:
-  get-date-from-changed-file:
+  changed:
     runs-on: ubuntu-latest
-    outputs: # Declare the outputs for this job
-      date: ${{ steps.check-file.outputs.date }} # Specify the output variable
+    outputs:
+      date: ${{ steps.check-file.outputs.date }}
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 # Fetches all history for all branches and tags
+          fetch-depth: 0
       - name: Check and get changed file
         id: check-file
         run: |
-          FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.sha }} -- 'src/content/events/')
-          echo "Files found:"
-          echo "$FILES"
-
-          # Initialize an empty array
-          fileArray=()
-
-          # Read each line from $FILES and append to fileArray
-          while IFS= read -r line; do
-            fileArray+=("$line")
-          done <<< "$FILES"
-
-          echo "Number of files in array: ${#fileArray[@]}"
-
-          if [ "${#fileArray[@]}" -ne 1 ]; then
-            echo "Error: More than one file has been changed."
-            exit 1
-          fi
-          FILENAME=$(basename -- "${fileArray[0]}")
-          BASENAME="${FILENAME%.*}"
-          echo "$BASENAME"
-          echo "date=$BASENAME" >> $GITHUB_OUTPUT
+          echo "date=$(./script/eventchanged)" >> $GITHUB_OUTPUT
 
   create-image:
-    needs: get-date-from-changed-file
-    uses: ./.github/workflows/create-image-shared.yml
+    needs: changed
+    uses: ./.github/workflows/create-image-call-dispatch.yml
     with:
-      date: ${{ needs.get-date-from-changed-file.outputs.date }}
+      date: ${{ needs.changed.outputs.date }}

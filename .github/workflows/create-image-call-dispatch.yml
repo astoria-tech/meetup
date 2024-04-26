@@ -29,59 +29,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Generate unique branch name
-        id: branchname
-        run: |
-          # Using a combination of the event date and a unique suffix (UUID)
-          echo "branchname=image-${{ inputs.date }}-$(uuidgen)" >> $GITHUB_OUTPUT
-
-      - name: Configure git
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-      - name: Create new branch
-        run: git checkout -b ${{ steps.branchname.outputs.branchname }}
-
-      - name: Create Image
-        run: |
-          npm i tsx -g
-          cd ./packages/image-generator
-          npm i
-          IFS=',' read -ra ADDR <<< "${{ inputs.image }}"
-          for i in "${ADDR[@]}"; do
-            trimmed=$(echo "$i" | xargs) # Trim whitespace
-            echo "$trimmed"
-            mkdir -p "../../public/${trimmed}s"
-            npm run --silent cli -- --image "${trimmed}" --date ${{ inputs.date }} > "../../public/${trimmed}s/${{ inputs.date }}.png"
-          done
-
-      - name: Generate unique branch name
-        id: message
+      - name: Export message
+        id: MESSAGE
         run: |
           MESSAGE="Add image(s) ${{ inputs.image }} for ${{ inputs.date }}"
           echo "message=$MESSAGE" >> $GITHUB_OUTPUT
 
-      - name: Commit files
+      - name: Checkout and Push Branch
         run: |
+          npm install
+          ./script/genimage --date "${{ inputs.date }}" --image "${{ inputs.image }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add .
+          git checkout -b "image-${{ github.run_id }}"
           git commit -m "${{ steps.message.outputs.message }}"
+          git push origin "image-${{ github.run_id }}"
 
-      - name: Push changes
-        run: git push origin ${{ steps.branchname.outputs.branchname }}
-
-      - name: Create PR
-        uses: actions/github-script@v6
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
         with:
-          script: |
-            const headBranch = '${{ steps.branchname.outputs.branchname }}';
-            const baseBranch = 'main'; // Ensure this matches your repo's default branch
-
-            github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: "${{ steps.message.outputs.MESSAGE }}",
-              head: headBranch,
-              base: baseBranch,
-              body: "${{ steps.message.outputs.MESSAGE }}",
-            });
+          commit-message: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          title: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          body: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          branch: 'image-${{ github.run_id }}'

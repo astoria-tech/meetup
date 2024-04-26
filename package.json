@@ -15,6 +15,9 @@
     "style": "prettier --check .",
     "style:fix": "prettier --write ."
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@astrojs/check": "^0.5.6",
     "@astrojs/rss": "^4.0.5",
@@ -35,6 +38,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "sort-package-json": "^2.10.0",
-    "type-flag": "^3.0.0"
+    "type-flag": "^3.0.0",
+    "zx": "^8.0.2"
   }
 }

@@ -44,7 +44,7 @@ async function getSpeakerData(speakerFilePath: string): Promise<Speaker> {
 }
 
 async function buildEventTree(directoryPath: string, eventFileName: string) {
-  if (!eventFileName.endsWith('.md')) eventFileName = `${eventFileName}.md`
+  if (!eventFileName.endsWith('.md')) eventFileName = `${eventFileName}-event.md`
   const eventData = await getEventData(`${directoryPath}/events/${eventFileName}`)
   const presentations = await Promise.all(
     eventData.presentations.map(async presentationFile => {

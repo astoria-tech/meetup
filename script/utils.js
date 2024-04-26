@@ -9,7 +9,7 @@ import {pipeline} from 'stream'
 import {promisify} from 'util'
 const streamPipeline = promisify(pipeline)
 
-const validateDate = date => {
+export const validateDate = date => {
   return /^\d{4}-\d{2}-\d{2}(-.*)?$/.test(date)
 }
 
