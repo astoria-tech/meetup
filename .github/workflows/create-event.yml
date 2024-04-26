@@ -51,7 +51,8 @@ on:
 jobs:
   capture-json:
     runs-on: ubuntu-latest
-
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -64,8 +65,6 @@ jobs:
 
       - name: Set output
         id: merge
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: ./script/mergejson "${{ fromJson(steps.issueForm.outputs) }}" "${{ fromJson(github.event.inputs) }}"
 
       - name: log
