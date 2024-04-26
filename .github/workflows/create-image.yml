@@ -34,6 +34,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - run: npm install
+
       - name: Set date on push event
         if: github.event_name == 'push'
         run: |
@@ -55,7 +57,6 @@ jobs:
       - name: Checkout and Push Branch
         run: |
           echo "${{ env.DATE }}"
-          npm install
           ./script/genimage --date "${{ env.DATE }}" --image "${{ inputs.image }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
