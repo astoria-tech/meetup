@@ -7,19 +7,6 @@ on:
         type: string
         description: 'Event Date (YYYY-MM-DD)'
         required: false
-      githubUsername:
-        type: string
-        description: 'GitHub Username'
-        required: false
-      googleCal:
-        type: string
-        description: 'Google Calendar Link'
-        required: false
-      ical:
-        type: string
-        description: 'iCal Link'
-        required: false
-      linkedin:
         type: string
         description: 'LinkedIn Profile URL'
         required: false
@@ -39,25 +26,12 @@ on:
         type: string
         description: 'Profile Image'
         required: false
-      slides:
-        type: string
-        description: 'Slides'
-        required: false
-      slidesSource:
-        type: string
-        description: 'Slides Source'
-        required: false
-      presentationTitle:
         type: string
         description: 'Presentation Title'
         required: false
       eventTitle:
         type: string
         description: 'Event Title'
-        required: false
-      website:
-        type: string
-        description: 'Website'
         required: false
   workflow_dispatch:
     inputs:
@@ -134,6 +108,7 @@ jobs:
         run: |
           npm install
           ./scripts/mkall \
+            --updateAll \
             --date "${{ github.event.inputs.date }}" \
             --githubUsername "${{ github.event.inputs.githubUsername }}" \
             --googleCal "${{ github.event.inputs.googleCal }}" \
