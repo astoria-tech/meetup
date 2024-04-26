@@ -31,6 +31,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set date on push event
         if: github.event_name == 'push'
         run: |
@@ -43,39 +46,28 @@ jobs:
           DATE="${{ github.event.inputs.date }}"
           echo "DATE=$DATE" >> $GITHUB_ENV
 
-      - name: Test
+      - name: Export message
+        id: MESSAGE
+        run: |
+          MESSAGE="Add image(s) ${{ inputs.image }} for ${{ env.DATE }}"
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+
+      - name: Checkout and Push Branch
         run: |
           echo "${{ env.DATE }}"
+          npm install
+          ./script/genimage --date "${{ env.DATE }}" --image "${{ inputs.image }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git checkout -b "image-${{ github.run_id }}"
+          git commit -m "${{ steps.message.outputs.message }}"
+          git push origin "image-${{ github.run_id }}"
 
-      - name: Test
-        run: |
-          echo "$DATE"
-
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
-
-      # - name: Export message
-      #   id: MESSAGE
-      #   run: |
-      #     MESSAGE="Add image(s) ${{ inputs.image }} for ${{ env.DATE }}"
-      #     echo "message=$MESSAGE" >> $GITHUB_OUTPUT
-
-      # - name: Checkout and Push Branch
-      #   run: |
-      #     echo "${{ env.DATE }}"
-      #     npm install
-      #     ./script/genimage --date "${{ env.DATE }}" --image "${{ inputs.image }}"
-      #     git config user.name "github-actions"
-      #     git config user.email "github-actions@github.com"
-      #     git add .
-      #     git checkout -b "image-${{ github.run_id }}"
-      #     git commit -m "${{ steps.message.outputs.message }}"
-      #     git push origin "image-${{ github.run_id }}"
-
-      # - name: Create Pull Request
-      #   uses: peter-evans/create-pull-request@v3
-      #   with:
-      #     commit-message: ${{ steps.MESSAGE.outputs.MESSAGE }}
-      #     title: ${{ steps.MESSAGE.outputs.MESSAGE }}
-      #     body: ${{ steps.MESSAGE.outputs.MESSAGE }}
-      #     branch: 'image-${{ github.run_id }}'
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          title: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          body: ${{ steps.MESSAGE.outputs.MESSAGE }}
+          branch: 'image-${{ github.run_id }}'
