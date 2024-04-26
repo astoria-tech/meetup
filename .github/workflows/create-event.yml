@@ -81,9 +81,7 @@ jobs:
         env:
           A: ${{ toJSON(steps.issueForm.outputs) }}
           B: ${{ toJSON(github.event.inputs) }}
-        run: |
-          echo "$A"
-          echo "$B"
+        run: ./script/mergejson "$A" "$B"
 
       - name: log
         run: echo "${{ steps.merge.outputs.name }}"
