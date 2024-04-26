@@ -3,6 +3,8 @@ name: Create Event
 on:
   issues:
     types: [opened, reopened]
+  issue_comment:
+    types: [created]
   workflow_call:
     inputs:
       date:
@@ -54,6 +56,10 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      - name: Check conditions and exit
+        if: github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr' && github.event.comment.user.login != 'reggi'
+        run: exit 0
+
       - uses: actions/checkout@v3
 
       - name: Set up Node.js
