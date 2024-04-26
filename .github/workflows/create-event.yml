@@ -87,7 +87,7 @@ jobs:
           B: ${{ toJSON(github.event.inputs) }}
         run: ./script/mergejson "$A" "$B"
 
-      - run: echo "${{ steps.data.outputs }}"
+      - run: echo "${{ toJSON(steps.data.outputs) }}"
       - run: npm i
 
       - name: Operation

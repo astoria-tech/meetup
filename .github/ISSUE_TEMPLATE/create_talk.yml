@@ -7,7 +7,7 @@ body:
   - type: input
     id: name
     attributes:
-      label: Name
+      label: name
       description: Please enter the name of the speaker.
       placeholder:
     validations:
@@ -16,7 +16,7 @@ body:
   - type: input
     id: githubUsername
     attributes:
-      label: GitHub Username
+      label: githubUsername
       description: Please enter the GitHub username. (No @ symbol needed.)
       placeholder:
     validations:
@@ -25,7 +25,7 @@ body:
   - type: input
     id: linkedin
     attributes:
-      label: LinkedIn Profile URL
+      label: linkedin
       description: Please enter the LinkedIn profile URL.
       placeholder:
     validations:
@@ -34,7 +34,7 @@ body:
   - type: input
     id: website
     attributes:
-      label: Website
+      label: website
       description: Please enter the personal or professional website URL.
       placeholder:
     validations:
@@ -43,7 +43,7 @@ body:
   - type: textarea
     id: profileImage
     attributes:
-      label: Profile Image
+      label: profileImage
       description: Please profile a profile image URL. (If none is provided we use the GitHub profile image, or [the default image](https://github.com/astoria-tech/meetup/blob/main/packages/image-generator/banner/default.png))
       placeholder:
     validations:
@@ -52,7 +52,7 @@ body:
   - type: input
     id: title
     attributes:
-      label: Title
+      label: title
       description: 'The title of your presentation.'
       placeholder:
     validations:
@@ -61,7 +61,7 @@ body:
   - type: input
     id: date
     attributes:
-      label: Date
+      label: date
       description: 'The date of the presentation (YYYY-MM-DD).'
       placeholder: 'YYYY-MM-DD'
     validations:
@@ -70,7 +70,7 @@ body:
   - type: textarea
     id: slides
     attributes:
-      label: Slides (Optional)
+      label: slides
       description: 'Link to the presentation slides, (if available).'
       placeholder: 'https://yoursite.com/slides.pdf'
     validations:
@@ -79,7 +79,7 @@ body:
   - type: input
     id: slidesSource
     attributes:
-      label: Slides Source (Optional)
+      label: slidesSource
       description: 'Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website).'
       placeholder:
     validations:
