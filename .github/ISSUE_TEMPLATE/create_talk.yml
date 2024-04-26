@@ -11,7 +11,7 @@ body:
       description: Please enter the name of the speaker.
       placeholder:
     validations:
-      required: true
+      required: false
 
   - type: input
     id: githubUsername
@@ -56,7 +56,7 @@ body:
       description: 'The title of your presentation.'
       placeholder:
     validations:
-      required: true
+      required: false
 
   - type: input
     id: date
@@ -65,7 +65,7 @@ body:
       description: 'The date of the presentation (YYYY-MM-DD).'
       placeholder: 'YYYY-MM-DD'
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: slides
