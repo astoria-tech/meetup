@@ -82,7 +82,6 @@ jobs:
           git config user.email "github-actions@github.com"
 
           git add .
-          git commit -m "Automated Content Changes"
 
           git diff HEAD^ HEAD > changes.patch
           echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
