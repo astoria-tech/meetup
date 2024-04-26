@@ -57,7 +57,7 @@ jobs:
       - name: Checkout and Push Branch
         run: |
           echo "${{ env.DATE }}"
-          ./script/genimage --date "${{ env.DATE }}" --image "${{ inputs.image }}"
+          ./script/genimage --date "${{ env.DATE }}" --images "${{ inputs.image }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
