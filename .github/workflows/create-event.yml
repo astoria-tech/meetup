@@ -58,6 +58,7 @@ jobs:
       - name: Run script and capture output
         id: issueForm
         run: |
+          npm i
           json_output=$(./script/commentbody ${{ github.event.issue.number }}) # Ensure the script is executable
           echo "issueForm=$json_output" >> $GITHUB_ENV
 
