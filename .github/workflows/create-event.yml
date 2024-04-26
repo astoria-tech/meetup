@@ -94,7 +94,7 @@ jobs:
           B: ${{ toJSON(github.event.inputs) }}
         run: ./script/mergejson "$A" "$B"
 
-      - name: Run script and capture output
+      - name: Initial Issue Comment
         env:
           JSON: ${{ toJSON(steps.data.outputs) }}
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
@@ -141,8 +141,16 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
+        id: cpr
         with:
           commit-message: Automated Content Changes
           title: Automated Content Changes
           body: Automated Content Changes
           branch: auto-${{ steps.op.outputs.hash}}
+
+      - name: Follow Issue Comment
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          echo "Automated pull request: ${{ steps.cpr.outputs.pull-request-url }}" >> comment.txt
+          gh issue comment ${{ github.event.issue.number }} -F comment.txt
+          rm comment.txt
