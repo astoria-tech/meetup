@@ -18,6 +18,8 @@ if (!jsonb) {
 const a = ['null', null].includes(jsona) ? {} : JSON.parse(jsona)
 const b = ['null', null].includes(jsona) ? {} : JSON.parse(jsonb)
 
+console.log({a, b})
+
 const merged = deepmerge(deepCleaner.clean(a), deepCleaner.clean(b))
 
 if (process.env.CI && process.env.GITHUB_OUTPUT) {
