@@ -61,14 +61,10 @@ jobs:
         id: issueForm
         run: |
           npm i
-          json_output=$(./script/commentbody ${{ github.event.issue.number }}) # Ensure the script is executable
-          echo "issueForm=$json_output" >> $GITHUB_ENV
+          ./script/commentbody ${{ github.event.issue.number }}
 
       - name: Set output
-        run: ${{ steps.issueForm.outputs.issueForm }}
-
-      - name: Set output 2
-        run: echo "${{ fromJson(steps.issueForm.outputs.issueForm).name }}"
+        run: ${{ steps.issueForm.outputs.name }}
 
   # create-pr:
   #   runs-on: ubuntu-latest
