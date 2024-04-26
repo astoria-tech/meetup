@@ -87,9 +87,7 @@ jobs:
         run: ./script/commentbody ${{ github.event.issue.number }}
 
       - run: |
-          gh issue comment \
-          ${{ github.event.issue.number }} \
-          -b "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.id }} \n Found changes ${{ toJSON(steps.issueForm.outputs) }}"
+          gh issue comment ${{ github.event.issue.number }} -b "Running workflow ${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.id }} \n Found changes ${{ toJSON(steps.issueForm.outputs) }}"
 
       - name: Set output
         id: data
