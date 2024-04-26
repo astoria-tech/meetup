@@ -61,9 +61,6 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git checkout -b "image-${{ github.run_id }}"
-          git commit -m "${{ steps.message.outputs.message }}"
-          git push origin "image-${{ github.run_id }}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
