@@ -28,7 +28,7 @@ const presentationsCollection = defineCollection({
     slides: z.string().optional(),
     slidesSource: z.string().optional(),
     speaker: reference('speakers'),
-    title: z.string(),
+    title: z.string().optional(),
   }),
 })
 
