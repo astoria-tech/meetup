@@ -82,6 +82,7 @@ jobs:
           git config user.email "github-actions@github.com"
 
           git add .
+          got commit -m "Automated Content Changes"
 
           git diff HEAD^ HEAD > changes.patch
           echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
@@ -91,7 +92,6 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         id: cpr
         with:
-          commit-message: Automated Content Changes
           title: Automated Content Changes
           body: Automated Content Changes
           branch: auto-${{ steps.op.outputs.hash}}
