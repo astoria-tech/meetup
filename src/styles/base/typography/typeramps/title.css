@@ -1,0 +1,86 @@
+@layer components {
+    .title-sans-2xl {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 68px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-sans-xl {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 56px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-sans-lg {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 44px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-sans-md {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-sans-sm {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-sans-xs {
+      @apply font-sans font-bold tabular-nums;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-2xl {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 68px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-xl {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 56px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-lg {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 44px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-md {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-sm {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  
+    .title-serif-xs {
+      @apply font-serif font-bold tabular-nums;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0.375px;
+    }
+  }
+  

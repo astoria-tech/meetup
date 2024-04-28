@@ -1,0 +1,85 @@
+@layer components {
+    .body-sans-lg {
+      @apply font-sans tabular-nums;
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-sans-heavy-lg {
+      @apply font-sans-bold tabular-nums;
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+  
+    .body-sans {
+      @apply font-sans tabular-nums;
+      font-size: 16px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-sans-heavy {
+      @apply font-sans-bold tabular-nums;
+      font-size: 16px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+  
+    .body-sans-sm {
+      @apply font-sans tabular-nums;
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-sans-heavy-sm {
+      @apply font-sans-bold tabular-nums;
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+
+    .body-serif-lg {
+      @apply font-sans tabular-nums;
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-serif-heavy-lg {
+      @apply font-sans-bold tabular-nums;
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+  
+    .body-serif {
+      @apply font-sans tabular-nums;
+      font-size: 16px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-serif-heavy {
+      @apply font-sans-bold tabular-nums;
+      font-size: 16px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+  
+    .body-serif-sm {
+      @apply font-sans tabular-nums;
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.5px;
+    }
+  
+    .body-serif-heavy-sm {
+      @apply font-sans-bold tabular-nums;
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.375px;
+    }
+  }

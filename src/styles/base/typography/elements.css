@@ -9,22 +9,6 @@
     @apply text-lg;
   }
 
-  a {
-    @apply text-link-base underline;
-  }
-  a:hover {
-    @apply text-link-hover;
-  }
-  a:active {
-    @apply text-link-active;
-  }
-  a:visited {
-    @apply text-link-visited;
-  }
-  a:disabled {
-    @apply text-link-disabled;
-  }
-
   ul,
   ol {
     @apply list-none p-0 m-0;

@@ -3,7 +3,6 @@ import type {HydratedFeedItem} from '../types'
 type Props = HydratedFeedItem
 const {html} = Astro.props
 ---
-
-<div class="mb-5 bg-slate-300 p-5">
+<div class="mb-5 bg-slate-300 p-5 w-[500px] m-auto">
   <Fragment set:html={html} />
 </div>

@@ -5,3 +5,5 @@
 /* Typography */
 @import './styles/base/typography/fontFamily.css';
 @import './styles/base/typography/elements.css';
+@import './styles/base/typography/typeramps.css';
+
