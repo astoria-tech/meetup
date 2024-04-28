@@ -14,7 +14,7 @@ export interface Options extends _Options {
 
 async function fetchImage(url: string, speakerName: string, clearCache: boolean): Promise<Buffer> {
   const slug = speakerName.toLowerCase().replace(/\s/g, '')
-  const speakerImagesDir = path.join(__dirname, '../..', 'public/speakers')
+  const speakerImagesDir = path.join(import.meta.dirname, '../..', 'public/speakers')
   const files = await fs.readdir(speakerImagesDir)
   const existingFile = files.find(file => file.startsWith(slug))
   if (existingFile && clearCache !== true) {

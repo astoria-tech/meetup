@@ -1,5 +1,6 @@
 import sharp from 'sharp'
 import fs from 'fs'
+import {optimalName} from './name'
 
 export interface Speaker {
   profileImage?: string
@@ -8,7 +9,7 @@ export interface Speaker {
 }
 
 // Reads and verifies the template file exists, then returns its buffer
-function readTemplateFile(templatePath: string): Buffer {
+export function readTemplateFile(templatePath: string): Buffer {
   if (!fs.existsSync(templatePath)) {
     throw new Error(`Template file does not exist at path: ${templatePath}`)
   }
@@ -18,7 +19,7 @@ function readTemplateFile(templatePath: string): Buffer {
 // Generates SVG for speaker names
 function generateSpeakerNameSvg(name: string, width: number, yOffset: number, fontSize: string): string {
   const fontColor = 'white'
-  const nameParts = name.split(' ') // Split the name into parts based on spaces
+  const nameParts = optimalName(name)
   const lineHeight = parseInt(fontSize) + 5 // Adjust the line height based on the font size
 
   // Generate the SVG for each name part on a new line
