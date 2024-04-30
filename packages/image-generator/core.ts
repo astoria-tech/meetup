@@ -5,7 +5,7 @@ import {optimalName} from './name'
 export interface Speaker {
   profileImage?: string
   buffer?: Buffer
-  name: string
+  name: string | string[]
 }
 
 // Reads and verifies the template file exists, then returns its buffer
@@ -17,9 +17,9 @@ export function readTemplateFile(templatePath: string): Buffer {
 }
 
 // Generates SVG for speaker names
-function generateSpeakerNameSvg(name: string, width: number, yOffset: number, fontSize: string): string {
+function generateSpeakerNameSvg(name: string | string[], width: number, yOffset: number, fontSize: string): string {
   const fontColor = 'white'
-  const nameParts = optimalName(name)
+  const nameParts = typeof name === 'string' ? optimalName(name) : name
   const lineHeight = parseInt(fontSize) + 5 // Adjust the line height based on the font size
 
   // Generate the SVG for each name part on a new line
@@ -125,6 +125,14 @@ export async function generateEventImage(options: Options) {
       throw new Error('Template image dimensions are undefined')
     }
 
+    const defaultUser = {
+      name: ['Want to present?', 'DM Us'],
+    }
+
+    if (speakers.length <= 3) {
+      speakers.push(defaultUser)
+    }
+
     const speakerImageYOffset = Math.floor((templateHeight * speakerImageYPctOffset) / 100)
     const speakerImageGapWidth = Math.floor((templateWidth * speakerImagePctGapWidth) / 100 / (speakers.length + 1))
     const speakerImageMaxWidth = Math.floor((templateWidth * speakerImagePctMaxWidth) / 100)
@@ -154,8 +162,12 @@ export async function generateEventImage(options: Options) {
       ),
     )
 
+    const fontRatio = 30 / 304
+    let fontParalax = speakerWidth * fontRatio
+    if (speakerWidth < 304) fontParalax = fontParalax + 4
+
     const nameOverlays = speakers.map((speaker, index) => ({
-      input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25, `30px`)),
+      input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25, fontParalax + 'px')),
       top: speakerImageYOffset + speakerWidth + 5,
       left: startLeft + index * (speakerWidth + speakerImageGapWidth),
     }))
