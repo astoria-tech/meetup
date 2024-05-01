@@ -126,27 +126,3 @@
     </div>
   </body>
 </html>
-
-<script>
-  window.addEventListener('DOMContentLoaded', event => {
-    const linkTitles = document.querySelectorAll('.link-title')
-    let saveTheDateLink
-
-    for (let i = 0; i < linkTitles.length; i++) {
-      if (linkTitles[i].textContent.startsWith('Save the date')) {
-        saveTheDateLink = (linkTitles[i].parentElement as HTMLAnchorElement).href
-        break
-      }
-    }
-
-    if (saveTheDateLink) {
-      const newLink = document.createElement('a')
-      newLink.href = saveTheDateLink
-      newLink.className = 'link-wrapper'
-      newLink.innerHTML = '<span class="link-title">Save the date</span>'
-
-      const linksContainer = document.querySelector('.links-container')
-      linksContainer.insertBefore(newLink, linksContainer.firstChild)
-    }
-  })
-</script>
