@@ -8,6 +8,8 @@ export interface Speaker {
   name: string | string[]
 }
 
+console.error(import.meta.dirname)
+
 // Reads and verifies the template file exists, then returns its buffer
 export function readTemplateFile(templatePath: string): Buffer {
   if (!fs.existsSync(templatePath)) {
@@ -129,7 +131,7 @@ export async function generateEventImage(options: Options) {
       name: ['Want to present?', 'DM Us'],
     }
 
-    if (speakers.length <= 3) {
+    if (speakers.length <= 2) {
       speakers.push(defaultUser)
     }
 

@@ -4,21 +4,38 @@ import {buildRelative} from './index'
 const program = new Command()
 
 program
-  .option('-i, --image <string>', 'Image path')
+  .option('-i, --images <string>', 'Image type or comma seperated list')
   .option('-d, --date <string>', 'Date string')
-  .option('-o, --out <string>', 'Output Path string')
+  .option('-o, --outDir <string>', 'Dir for saving string')
 
 program.parse(process.argv)
 
 const options = program.opts()
 
-const image = options.image && typeof options.image === 'string' ? options.image : null
+let images = options.images && typeof options.images === 'string' ? options.images : null
 const date = options.date && typeof options.date === 'string' ? options.date : null
-const outputPath = options.out && typeof options.out === 'string' ? options.out : null
+const outDir = options.outDir && typeof options.outDir === 'string' ? options.outDir : null
 
-if (image && date) {
-  buildRelative({image, date, outputPath})
-} else {
-  console.error('Both image and date flags are required.')
-  process.exit(1)
+const i = images.split(',').map(v => v.trim())
+
+if (i.length === 0) {
+  throw new Error('No images provided')
 }
+
+if (!date) {
+  throw new Error('No date provided')
+}
+
+if (!outDir) {
+  throw new Error('No outputDir provided')
+}
+
+i.forEach(image => {
+  if (image && date) {
+    const outputPath = `${outDir}/${image}s/${date}.png`
+    console.log({outputPath})
+    // buildRelative({image, date, outputPath})
+  } else {
+    console.error('Both image and date flags are required.')
+  }
+})
