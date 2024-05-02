@@ -1,6 +1,14 @@
 #!/usr/bin/env node
-import {$} from 'zx'
 
+/**
+ * @module
+ * if a new event is added this script will get
+ * the change from the latest commit and get the
+ * date from the event md file changed, useful for
+ * regenerating the images for a particular event
+ */
+
+import {$} from 'zx'
 const diff = await $`git diff --name-only HEAD HEAD~1 -- 'src/content/events/'`
 const changes = diff.stdout
   .trim()
