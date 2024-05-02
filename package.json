@@ -16,7 +16,8 @@
     "preview": "astro preview",
     "start": "astro dev",
     "style": "prettier --check .",
-    "style:fix": "prettier --write ."
+    "style:fix": "prettier --write .",
+    "genimage": "npm -C ./packages/image-generator run cli --"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",

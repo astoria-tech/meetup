@@ -2,9 +2,9 @@
   "name": "astora-tech-image",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "bin": "4.cli.ts",
   "scripts": {
-    "cli": "tsx --tsconfig ./tsconfig.json ./cli.ts"
+    "cli": "./4.cli.ts"
   },
   "type": "module",
   "keywords": [],

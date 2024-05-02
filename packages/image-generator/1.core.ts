@@ -1,6 +1,11 @@
 import sharp from 'sharp'
 import fs from 'fs'
-import {optimalName} from './name'
+import {optimalName} from './utils/name.js'
+
+/**
+ * @module
+ * this is the core internals of image creation
+ */
 
 export interface Speaker {
   profileImage?: string
@@ -8,10 +13,8 @@ export interface Speaker {
   name: string | string[]
 }
 
-console.error(import.meta.dirname)
-
 // Reads and verifies the template file exists, then returns its buffer
-export function readTemplateFile(templatePath: string): Buffer {
+function readTemplateFile(templatePath: string): Buffer {
   if (!fs.existsSync(templatePath)) {
     throw new Error(`Template file does not exist at path: ${templatePath}`)
   }
@@ -100,7 +103,7 @@ export type Options = {
   timeLeft: number
 }
 
-export async function generateEventImage(options: Options) {
+export async function build(options: Options) {
   const {
     templatePath,
     defaultProfilePath,
