@@ -52,7 +52,7 @@ const data = Object.fromEntries(
       if (content === noResponse) {
         return undefined
       }
-      return [key, parseMdLink(content) || content]
+      return [key, content]
     })
     .filter(v => v),
 )
