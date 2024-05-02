@@ -92,8 +92,8 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         id: cpr
         with:
-          title: 'Intake Form: ${{ steps.issueForm.outputs.name }}'
-          body: 'Intake Form: ${{ steps.issueForm.outputs.name }}'
+          title: intake submission ${{ steps.issueForm.outputs.name }}
+          body: intake submission ${{ steps.issueForm.outputs.name }}
           branch: auto-${{ steps.op.outputs.hash}}
 
       - name: Follow Issue Comment
