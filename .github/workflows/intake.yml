@@ -121,6 +121,6 @@ jobs:
       - name: Follow Issue Comment
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         run: |
-          echo "Automated pull request: ${{ steps.cpr.outputs.pull-request-url }}" >> comment.txt
+          echo "[Talk PR] ${{ steps.issueForm.outputs.name }} ${{ steps.cpr.outputs.pull-request-url }}" >> comment.txt
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
           rm comment.txt
