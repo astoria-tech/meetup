@@ -1,3 +1,4 @@
+import path from 'path'
 import {Command} from 'commander'
 import {buildRelative} from './index'
 
@@ -32,7 +33,7 @@ if (!outDir) {
 
 i.forEach(image => {
   if (image && date) {
-    const outputPath = `${outDir}/${image}s/${date}.png`
+    const outputPath = path.join(process.cwd(), `${outDir}/${image}s/${date}.png`)
     buildRelative({image, date, outputPath})
   } else {
     console.error('Both image and date flags are required.')
