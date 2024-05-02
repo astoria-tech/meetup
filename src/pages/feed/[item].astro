@@ -20,7 +20,5 @@ const {feedItem} = Astro.props
 ---
 
 <MainLayout title={feedItem.title}>
-  <div class="w-[500px] m-auto">
-    <FeedItem {...feedItem} />
-  </div>
+  <FeedItem {...feedItem} />
 </MainLayout>
