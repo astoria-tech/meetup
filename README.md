@@ -1,4 +1,4 @@
-# Astoria Tech Meetup (website)
+# Astoria Tech Meetup (website) 🎉
 
 ```sh
 npm create astro@latest -- --template minimal
