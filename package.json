@@ -11,13 +11,13 @@
     "build": "astro check && astro build",
     "dev": "astro dev",
     "fix": "npm run lintpkg:fix && npm run style:fix",
+    "genimage": "npm -C ./packages/image-generator run cli --",
     "lintpkg": "sort-package-json --check",
     "lintpkg:fix": "sort-package-json",
     "preview": "astro preview",
     "start": "astro dev",
     "style": "prettier --check .",
-    "style:fix": "prettier --write .",
-    "genimage": "npm -C ./packages/image-generator run cli --"
+    "style:fix": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
