@@ -1,6 +1,7 @@
 import sharp from 'sharp'
 import fs from 'fs'
 import {optimalName} from './utils/name.js'
+import {speakerSvg} from './utils/svg.js'
 
 /**
  * @module
@@ -22,21 +23,7 @@ function readTemplateFile(templatePath: string): Buffer {
 }
 
 // Generates SVG for speaker names
-function generateSpeakerNameSvg(name: string | string[], width: number, yOffset: number, fontSize: string): string {
-  const fontColor = 'white'
-  const nameParts = typeof name === 'string' ? optimalName(name) : name
-  const lineHeight = parseInt(fontSize) + 5 // Adjust the line height based on the font size
-
-  // Generate the SVG for each name part on a new line
-  const nameSvg = nameParts
-    .map((part, index) => {
-      const y = yOffset + lineHeight * index // Calculate the y position for each line
-      return `<text x="50%" y="${y}" alignment-baseline="middle" text-anchor="middle" font-size="${fontSize}" font-family="Helvetica" fill="${fontColor}" font-weight="bold">${part}</text>`
-    })
-    .join('')
-
-  return `<svg width="${width}" height="${lineHeight * nameParts.length + 10}">${nameSvg}</svg>`
-}
+function generateSpeakerNameSvg(name: string | string[], width: number, yOffset: number, fontSize: string): string {}
 
 // Resizes and masks speaker images into circles
 async function processSpeakerImage(
@@ -103,6 +90,33 @@ export type Options = {
   timeLeft: number
 }
 
+function resolveSpeakerImage(speaker: Speaker, defaultSpeakerImageBuffer: Buffer) {
+  let speakerImageBuffer: Buffer
+  if (speaker.buffer) {
+    speakerImageBuffer = speaker.buffer
+  } else if (speaker.profileImage) {
+    if (!fs.existsSync(speaker.profileImage)) {
+      throw new Error(`Speaker image file does not exist at path: ${speaker.profileImage}`)
+    }
+    speakerImageBuffer = fs.readFileSync(speaker.profileImage)
+  } else {
+    speakerImageBuffer = defaultSpeakerImageBuffer
+  }
+  return speakerImageBuffer
+}
+
+async function bufferToBase64(buffer: Buffer, width: number) {
+  const resizedImageBuf = await sharp(buffer)
+    .resize({
+      width: width,
+      height: width,
+    })
+    .toFormat('png')
+    .toBuffer()
+
+  return `data:image/png;base64,${resizedImageBuf.toString('base64')}`
+}
+
 export async function build(options: Options) {
   const {
     templatePath,
@@ -154,28 +168,29 @@ export async function build(options: Options) {
     const defaultSpeakerImageBuffer = fs.readFileSync(defaultProfilePath)
 
     const speakerImages = await Promise.all(
-      speakers.map((speaker, index) =>
-        processSpeakerImage(
-          defaultSpeakerImageBuffer,
-          speaker,
-          speakerWidth,
-          speakerImageYOffset,
-          speakerImageGapWidth,
-          startLeft,
-          index,
-        ),
-      ),
+      speakers.map(async (speaker, index) => {
+        const buffer = resolveSpeakerImage(speaker, defaultSpeakerImageBuffer)
+        const base64 = await bufferToBase64(buffer, speakerWidth)
+
+        const svg = speakerSvg({
+          imageSize: speakerWidth,
+          xPadding: 20,
+          lines: Array.isArray(speaker.name) ? speaker.name : optimalName(speaker.name),
+          image: base64,
+          fontSize: 31,
+          fontColor: 'white',
+          lineHeight: 29,
+          bottomPadding: 10,
+          imageBottomPadding: 10,
+        })
+
+        return {
+          input: Buffer.from(svg),
+          top: speakerImageYOffset,
+          left: startLeft + index * (speakerWidth + speakerImageGapWidth),
+        }
+      }),
     )
-
-    const fontRatio = 30 / 304
-    let fontParalax = speakerWidth * fontRatio
-    if (speakerWidth < 304) fontParalax = fontParalax + 4
-
-    const nameOverlays = speakers.map((speaker, index) => ({
-      input: Buffer.from(generateSpeakerNameSvg(speaker.name, speakerWidth, 25, fontParalax + 'px')),
-      top: speakerImageYOffset + speakerWidth + 5,
-      left: startLeft + index * (speakerWidth + speakerImageGapWidth),
-    }))
 
     const dateOverlay = {
       input: createDateSvg(dateDay, '250px', '300px', 'white', '80px'),
@@ -195,15 +210,12 @@ export async function build(options: Options) {
       left: timeLeft,
     }
 
+    const compositeLayers = [...speakerImages, dateOverlay, dateMonthOverlay, time]
+
     if (outputPath) {
-      await template
-        .composite([...speakerImages, ...nameOverlays, dateOverlay, dateMonthOverlay, time])
-        .toFile(outputPath)
+      await template.composite(compositeLayers).toFile(outputPath)
     } else {
-      const imageBuffer = await template
-        .composite([...speakerImages, ...nameOverlays, dateOverlay, dateMonthOverlay, time])
-        .toBuffer()
-      process.stdout.write(imageBuffer)
+      process.stdout.write(await template.composite(compositeLayers).toBuffer())
     }
   } catch (error) {
     console.error('Error generating event image:', error.message)
