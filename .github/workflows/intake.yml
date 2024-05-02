@@ -61,6 +61,7 @@ jobs:
           echo '```json' >> comment.txt
           echo "${JSON}" >> comment.txt  # Ensure proper quoting of JSON
           echo '```' >> comment.txt
+          echo "Keep in mind ☝️ this hasn't yet been validated / sanitized." >> comment.txt
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
           rm comment.txt
 
