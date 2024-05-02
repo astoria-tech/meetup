@@ -16,6 +16,14 @@ jobs:
         if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.create-pr')
         run: exit 1
 
+      - name: Pree Issue Comment
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          echo "🫡 initating intake.yml workflow" >> comment.txt
+          echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
+          gh issue comment ${{ github.event.issue.number }} -F comment.txt
+          rm comment.txt
+
       - uses: actions/checkout@v3
 
       - name: Set up Node.js
