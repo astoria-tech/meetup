@@ -149,39 +149,31 @@ const flags = () => {
       return flags.githubUsername && flags.githubUsername.replace('@', '')
     }
     static get googleCal() {
-      if (flags.googleCal) {
-        try {
-          return parseLink(flags.googleCal)
-        } catch (_e) {
-          throw new Error('Invalid googleCal URL.')
-        }
+      try {
+        return parseLink(flags.googleCal)
+      } catch (_e) {
+        throw new Error('Invalid googleCal URL.')
       }
     }
     static get ical() {
-      if (flags.ical) {
-        try {
-          return parseLink(flags.ical)
-        } catch (_e) {
-          throw new Error('Invalid ical URL.')
-        }
+      try {
+        return parseLink(flags.ical)
+      } catch (_e) {
+        throw new Error('Invalid ical URL.')
       }
     }
     static get linkedin() {
-      if (flags.linkedin) {
-        try {
-          return parseLink(flags.linkedin)
-        } catch (_e) {
-          throw new Error('Invalid LinkedIn URL.')
-        }
+      try {
+        return parseLink(flags.linkedin)
+      } catch (_e) {
+        throw new Error('Invalid LinkedIn URL.')
       }
     }
     static get meetup() {
-      if (flags.meetup) {
-        try {
-          return parseLink(flags.meetup)
-        } catch (_e) {
-          throw new Error('Invalid meetup URL.')
-        }
+      try {
+        return parseLink(flags.meetup)
+      } catch (_e) {
+        throw new Error('Invalid meetup URL.')
       }
     }
     static get name() {
@@ -208,41 +200,35 @@ const flags = () => {
       return flags.presentations
     }
     static get profileImage() {
-      if (flags.profileImage) {
-        try {
-          return parseLink(flags.profileImage)
-        } catch (_e) {
-          throw new Error('Invalid profileImage URL.')
-        }
+      try {
+        return parseLink(flags.profileImage)
+      } catch (_e) {
+        throw new Error('Invalid profileImage URL.')
       }
     }
     static get slides() {
-      if (!flags.slides) {
-        try {
-          const link = parseLink(flags.slides)
-          const ext = path.extname(new URL(link).pathname)
-          if (!['.pdf'].includes(ext)) {
-            if (!flags.slidesSource) {
-              // here we have a valid link, but
-              // it's not a pdf, so if there's no
-              // source then assume its source
-              flags.slidesSource = flag.slides
-            }
-            throw new Error('Invalid slides format. Slides must be in PDF')
+      try {
+        const link = parseLink(flags.slides)
+        const ext = path.extname(new URL(link).pathname)
+        if (!['.pdf'].includes(ext)) {
+          if (!flags.slidesSource) {
+            // here we have a valid link, but
+            // it's not a pdf, so if there's no
+            // source then assume its source
+            flags.slidesSource = flag.slides
           }
-        } catch (_e) {
-          throw new Error('Slides is required.')
+          throw new Error('Invalid slides format. Slides must be in PDF')
         }
+        return link
+      } catch (_e) {
+        throw new Error('Slides is required.')
       }
-      return flags.slides || flags.slides
     }
     static get slidesSource() {
-      if (flags.slidesSource) {
-        try {
-          return parseLink(flags.slidesSource)
-        } catch (_e) {
-          throw new Error('Slides is required.')
-        }
+      try {
+        return parseLink(flags.slidesSource)
+      } catch (_e) {
+        throw new Error('slidesSource is required.')
       }
     }
     static get speaker() {
@@ -264,13 +250,10 @@ const flags = () => {
       return flags.eventTitle
     }
     static get website() {
-      if (flags.website) {
-        try {
-          new URL(flags.website)
-          return flags.website
-        } catch (_e) {
-          throw new Error('Invalid profileImage URL.')
-        }
+      try {
+        return parseLink(flags.website)
+      } catch (_e) {
+        throw new Error('Invalid website.')
       }
     }
   }
@@ -279,7 +262,7 @@ const flags = () => {
     try {
       return handle()
     } catch (_e) {
-      console.log(`invalid value swallowError and resolving undefined: ${_e.message}`)
+      // console.log(`invalid value swallowError and resolving undefined: ${_e.message}`)
       return undefined
     }
   }
