@@ -9,7 +9,8 @@ const link = initializeLink(Astro.site)
 <!doctype html>
 <html>
   <head>
-    <title>Linktree</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Astoria Tech Links</title>
     <style>
       body {
         display: flex;
@@ -29,8 +30,9 @@ const link = initializeLink(Astro.site)
       }
 
       .content-wrapper {
-        padding-bottom: 100px;
         background-color: #1c1917;
+        padding-bottom: 50px;
+        opacity: 0.97;
       }
 
       .links-container {
@@ -38,51 +40,46 @@ const link = initializeLink(Astro.site)
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 20px;
-        width: 100%;
       }
 
       .link-wrapper {
         width: 80%;
         background-color: #f5f5f5;
-        opacity: 0.95;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
+        border-radius: 20px;
+        padding: 12px;
+        margin-bottom: 16px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
       }
 
       .link-title {
-        font-size: 2rem;
+        font-size: 1.1rem;
         font-weight: bold;
         margin-bottom: 10px;
       }
 
       .link-wrapper:last-child {
-        margin-top: 50px;
-        animation: border-fun 2s infinite;
+        margin-top: 20px;
+        animation: pulse 2s infinite alternate;
         box-shadow: inset 0 0 0 5px #fde67a;
         background-color: #846e8b;
         color: #f5f5f5;
       }
 
-      @keyframes border-fun {
+      @keyframes pulse {
         0% {
-          box-shadow: inset 0 0 0 10px #fde67a;
-        }
-        50% {
-          box-shadow: inset 0 0 0 5px #493350;
+          transform: scale(0.99);
+          box-shadow: inset 0 0 0 2px #493350;
         }
         100% {
-          box-shadow: inset 0 0 0 10px #fde67a;
+          transform: scale(1.04);
+          box-shadow: inset 0 0 0 4px #fde67a;
         }
       }
 
       @media (min-width: 768px) {
         .content-wrapper {
           max-width: 600px;
-          padding-bottom: 20px;
         }
 
         .link-wrapper {
