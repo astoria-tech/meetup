@@ -64,7 +64,10 @@ jobs:
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
           rm comment.txt
 
-      - run: echo "${{ fromJson(steps.issueForm.outputs) }}"
+      - env:
+          JSON: ${{ toJSON(steps.issueForm.outputs) }}
+        run: echo ${JSON}
+
       - run: npm i
 
       - name: Operation
