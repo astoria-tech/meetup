@@ -13,7 +13,7 @@ const render = (markdown: string) => {
   return parser.render(markdown)
 }
 
-const initializeLink = (site: URL) => (path: string) => {
+export const initializeLink = (site: URL) => (path: string) => {
   const pathname = nodePath.join(import.meta.env.BASE_URL, path)
   return new URL(pathname, site).toString()
 }
