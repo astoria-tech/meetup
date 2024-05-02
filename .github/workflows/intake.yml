@@ -1,5 +1,9 @@
 name: Intake
 
+# responsible for watching issues come in from the
+# intake form and creating a new pr based on the
+# form field data
+
 on:
   issues:
     types: [opened, reopened]

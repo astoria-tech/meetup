@@ -1,5 +1,8 @@
 name: Check
 
+# responsible for checking the the code is in good
+# working order, before merging (or while its in main)
+
 on:
   issue_comment:
     types: [created]

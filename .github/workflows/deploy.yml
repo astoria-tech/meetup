@@ -1,4 +1,6 @@
-name: Deploy GitHub Pages
+name: Deploy
+
+# responsbile for deploying the site to GitHub Pages
 
 on:
   push:

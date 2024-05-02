@@ -1,4 +1,7 @@
-name: Create PR to Fix Styles
+name: Fix Styles
+
+# responsible for dispatching to fix the styles if
+# they get messed up
 
 on:
   workflow_dispatch:

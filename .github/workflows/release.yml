@@ -1,4 +1,9 @@
-name: Create Release
+name: Release
+
+# responsble for creating a "release" for an event
+# which will bundle the baner and presentations
+# into a zip / tarball so that it can be easily
+# downloaded the day of the event
 
 on:
   workflow_dispatch:

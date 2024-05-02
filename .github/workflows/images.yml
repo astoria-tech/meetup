@@ -1,4 +1,6 @@
-name: Create Image(s)
+name: Images
+
+# responsible for creating the images for the event
 
 on:
   push:
