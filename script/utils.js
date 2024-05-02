@@ -191,7 +191,10 @@ const flags = () => {
       return flags.name
     }
     static get nameSlug() {
-      return Require.name.toLowerCase().replace(/\s+/g, '-')
+      return Require.name
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, '-')
     }
     static get presentations() {
       flags.presentations = flags.presentations.filter(v => v)
