@@ -400,10 +400,10 @@ export async function mkevent() {
   const {eventTitle: title, meetup, presentations, ical, googleCal, banner} = sanitized
   const fileName = `./src/content/events/${date}-event.md`
   const input = {title, meetup, presentations, banner, date, ical, googleCal}
-  const {frontMatter, content} = await readContent(fileName)
-  if (!frontMatter.title) {
-    frontMatter.title = await nextEventTitle()
-  }
+  const {frontMatter: fm, content} = await readContent(fileName)
+  const defaultTitle = await nextEventTitle()
+  const frontMatter = {title: defaultTitle, presentations: [], ...fm}
+
   const p = [...new Set([...frontMatter.presentations, ...presentations])]
   delete frontMatter.presentations
   const merge = deepmerge(frontMatter, deepCleaner.clean({...input, presentations: p}))
