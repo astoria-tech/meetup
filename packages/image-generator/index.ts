@@ -34,6 +34,7 @@ export async function build(options: BuildOptions) {
 type BuildRelativeOptions = Omit<BuildOptions, 'contentPath'>
 
 export function buildRelative(options: BuildRelativeOptions) {
+  console.log(import.meta.dirname)
   return build({
     ...options,
     contentPath: path.join(import.meta.dirname, '../../', './src/content'),
