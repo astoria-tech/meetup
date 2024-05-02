@@ -91,10 +91,16 @@ jobs:
             --website "${{ steps.issueForm.outputs.website }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
           git add .
-          git commit -m "Automated Content Changes"
 
+      - run: |
+          if [ -z $(git status --porcelain) ]; then
+            gh issue comment ${{ github.event.issue.number }} -b "No changes detected, exiting."
+            exit 1
+          fi
+
+      - run: |
+          git commit -m "Automated Content Changes"
           git diff HEAD^ HEAD > changes.patch
           echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
           rm changes.patch
