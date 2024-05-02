@@ -1,4 +1,4 @@
-name: Create Speaker / Event / Presentations
+name: Intake
 
 on:
   issues:
@@ -92,8 +92,8 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         id: cpr
         with:
-          title: Automated Content Changes
-          body: Automated Content Changes
+          title: 'Intake Form: ${{ steps.issueForm.outputs.name }}'
+          body: 'Intake Form: ${{ steps.issueForm.outputs.name }}'
           branch: auto-${{ steps.op.outputs.hash}}
 
       - name: Follow Issue Comment
