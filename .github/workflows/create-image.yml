@@ -83,7 +83,7 @@ jobs:
           npm run -C ./packages/image-generator cli -- \
             --images "${{ inputs.image }}" \
             --date "${{ env.DATE }}" \
-            --outDir ./public
+            --outDir ../../public
 
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"

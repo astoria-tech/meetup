@@ -33,7 +33,7 @@ if (!outDir) {
 
 i.forEach(image => {
   if (image && date) {
-    const outputPath = path.join(process.cwd(), `${outDir}/${image}s/${date}.png`)
+    const outputPath = `${outDir}/${image}s/${date}.png`
     buildRelative({image, date, outputPath})
   } else {
     console.error('Both image and date flags are required.')
