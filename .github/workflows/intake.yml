@@ -72,7 +72,6 @@ jobs:
       - run: npm i
 
       - name: Operation
-        id: op
         run: |
           ./script/mkall \
             --updateAll \
@@ -100,7 +99,8 @@ jobs:
             exit 1
           fi
 
-      - run: |
+      - id: op
+        run: |
           git commit -m "Automated Content Changes"
           git diff HEAD^ HEAD > changes.patch
           echo "hash=$(sha256sum changes.patch | awk '{ print $1 }')" >> $GITHUB_OUTPUT
