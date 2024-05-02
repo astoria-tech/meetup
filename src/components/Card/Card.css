@@ -1,0 +1,11 @@
+.card-wrapper {
+    @apply border-2 border-black rounded p-2;
+}
+
+.card-title {
+    @apply title-serif-lg text-black;
+}
+
+.card-title-border {
+    @apply border border-black w-full px-1;
+}

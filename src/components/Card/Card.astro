@@ -1,0 +1,12 @@
+---
+type Props = {
+  title: string;
+  description: string;
+}
+const {title, description} = Astro.props
+---
+<div class="card-wrapper">
+    <h2 class="card-title"> {title}</h2>
+    <div class="card-title-border"></div>
+    <p>{description}</p>
+</div>
