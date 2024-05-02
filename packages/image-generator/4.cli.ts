@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S npx tsx
 
 import {Command} from 'commander'
 import {build} from './3.settings.js'
