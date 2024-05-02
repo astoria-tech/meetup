@@ -75,6 +75,10 @@ jobs:
 
       - run: npm i
 
+      - if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --title "[Talk Submission] ${{ steps.issueForm.outputs.name }}"
+
       - name: Operation
         run: |
           ./script/mkall \
