@@ -27,13 +27,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload your site
         uses: withastro/action@v2
+        env:
+          ASTRO_CONFIG_SITE: ${{ secrets.ASTRO_CONFIG_SITE }}
+          ASTRO_CONFIG_BASE: ${{ secrets.ASTRO_CONFIG_BASE }}
         with:
           path: .
           node-version: 20
           package-manager: npm@latest
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
