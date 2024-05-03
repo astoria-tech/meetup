@@ -9,4 +9,7 @@ const {title, description} = Astro.props
     <h2 class="card-title"> {title}</h2>
     <div class="card-title-border"></div>
     <p>{description}</p>
+    <div class="card-content">
+      <slot />
+    </div>
 </div>

@@ -1,17 +1,18 @@
 ---
 import '../../style.css'
+import { styleguideData } from '../../data/styleguide'
 import MainLayout from '../../layouts/MainLayout.astro'
-import Card from '../../components/Card/Card.astro';
+import Card from '../../components/Card/Card.astro'
+import Table from '../../components/Table/Table.astro'
 ---
 
 <MainLayout title='styleguide'>
     <div class="w-11/12 m-auto">
-        <h1 class="title-serif-2xl">Styleguide</h1>
-        <p class="body-sans-sm">I'm a test!</p>
-        <a href="#" class="link-serif">LINK</a>
         <Card 
             title="Title: Sans Serif" 
             description="Title elements are used for header tags and also any section titles or high emphasis type. The Title Sans typeramp is the default font treatment for h1-h6 tags."
-        />
+        >
+            <Table data={styleguideData.typography.titleSans} />
+        </Card>
     </div>
 </MainLayout>

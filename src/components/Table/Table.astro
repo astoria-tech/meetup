@@ -1,0 +1,21 @@
+---
+type Props = {
+  data: {[key:string]: string}[];
+}
+const {data} = Astro.props;
+---
+<table>
+    <tr>
+        <td>test</td>
+        <td>test</td>
+        <td>test</td>
+    </tr>
+    {data.forEach(item => {
+        return (
+        <tr>
+            <td>{item.name}</td>
+        </tr>
+    );
+    
+    })}
+</table>
