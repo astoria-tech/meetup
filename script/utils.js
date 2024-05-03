@@ -215,7 +215,7 @@ const flags = () => {
             // here we have a valid link, but
             // it's not a pdf, so if there's no
             // source then assume its source
-            flags.slidesSource = flag.slides
+            flags.slidesSource = flags.slides
           }
           throw new Error('Invalid slides format. Slides must be in PDF')
         }
