@@ -174,7 +174,7 @@ export async function build(options: Options) {
 
         const svg = speakerSvg({
           imageSize: speakerWidth,
-          xPadding: 20,
+          xPadding: 50,
           lines: Array.isArray(speaker.name) ? speaker.name : optimalName(speaker.name),
           image: base64,
           fontSize: 31,
