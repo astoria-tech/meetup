@@ -20,14 +20,24 @@ jobs:
         if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.create-pr')
         run: exit 1
 
-      - name: Detect2
-        run: echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}"
+      - id: detect
+        run: |
+          IS_TALK=$(echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}")
+          IS_EVENT=$(echo "${{ contains(github.event.issue.labels.*.name, 'event-submission') }}")
+          echo "IS_TALK=$IS_TALK" >> $GITHUB_OUTPUT
+          echo "IS_EVENT=$IS_EVENT" >> $GITHUB_OUTPUT
+          if [ "$IS_TALK" != "true" ] || [ "$IS_EVENT" != "true" ]; then
+            exit 1
+          fi
 
       - uses: actions/checkout@v3
 
       - name: Pre Issue Comment
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         run: |
+          echo "🎉 Thank you for submitting a talk!" >> comment.txt
+          echo "The next few comments are going to be about autogenerating a pull request to get you added to the roster." >> comment.txt
+          echo "" >> comment.txt
           echo "🫡 initating intake.yml workflow" >> comment.txt
           echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
@@ -78,9 +88,13 @@ jobs:
 
       - run: npm i
 
-      - if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+      - if: (github.event_name == 'issue_comment' || github.event_name == 'issues') && steps.detect.outputs.IS_TALK == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Talk Submission] ${{ steps.issueForm.outputs.name }}"
+
+      - if: (github.event_name == 'issue_comment' || github.event_name == 'issues') && steps.detect.outputs.IS_EVENT == 'true'
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --title "[Event Submission] ${{ steps.issueForm.outputs.date }}"
 
       - name: Operation
         run: |
