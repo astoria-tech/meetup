@@ -26,9 +26,10 @@ jobs:
           IS_EVENT=$(echo "${{ contains(github.event.issue.labels.*.name, 'event-submission') }}")
           echo "IS_TALK=$IS_TALK" >> $GITHUB_OUTPUT
           echo "IS_EVENT=$IS_EVENT" >> $GITHUB_OUTPUT
-          if [ "$IS_TALK" != "true" ] || [ "$IS_EVENT" != "true" ]; then
-            exit 1
-          fi
+
+      - name: Ensure only run for talk or event submissions
+        if: steps.detect.outputs.IS_TALK != 'true' && steps.detect.outputs.IS_EVENT != 'true'
+        run: exit 1
 
       - uses: actions/checkout@v3
 
