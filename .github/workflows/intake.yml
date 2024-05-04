@@ -30,7 +30,7 @@ jobs:
       - name:
         id: SHOULD_RUN
         run: |
-          SHOULD_RUN=${{ (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr')) && (steps.detect.outputs.IS_TALK != 'true' && steps.detect.outputs.IS_EVENT != 'true') }}
+          SHOULD_RUN=${{ (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr')) && (steps.detect.outputs.IS_TALK == 'true' || steps.detect.outputs.IS_EVENT == 'true') }}
           echo "should-run=$SHOULD_RUN" >> $GITHUB_OUTPUT
 
   process-issue:
