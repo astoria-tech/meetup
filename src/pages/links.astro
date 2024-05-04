@@ -1,0 +1,137 @@
+---
+import Layout from '../layouts/Layout.astro'
+import {getLink} from '../components/Link.astro'
+import fs from 'fs/promises'
+import path from 'path'
+
+const svgContent = await fs.readFile(path.join(import.meta.dirname, '../../public/css/wavy-background.svg'), 'utf8')
+
+const background = `url("data:image/svg+xml,${encodeURIComponent(svgContent)}")`
+
+const logo = getLink('/design/symbol-white-astoria-tech-mark.png')
+
+const data = [
+  {name: 'Meetup page', href: 'https://www.meetup.com/astoria-tech-meetup/'},
+  {name: 'Instagram page', href: 'https://www.instagram.com/astoria.tech/'},
+  {name: 'GitHub repo', href: 'https://github.com/astoria-tech'},
+  {name: 'Slack Channel', href: 'https://astoriatech.slack.com/'},
+  {name: "I'd like to present", href: 'https://astoria.app/intake'},
+  {name: 'RSVP next event', href: 'https://partiful.com/e/M6dvVrW5HuqMl4bfEaIi'},
+]
+---
+
+<style define:vars={{background}}>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #846e8b;
+    background-image: var(--background);
+    margin: 0;
+    padding: 0;
+  }
+
+  .logo {
+    margin: 0 auto 0 auto;
+    width: 70%;
+    padding: 40px 0 30px 0;
+  }
+
+  .content-wrapper {
+    padding-bottom: 100px;
+    background-color: #1c1917;
+  }
+
+  .links-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+  }
+
+  .link-wrapper {
+    width: 80%;
+    background-color: #f5f5f5;
+    opacity: 0.95;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .link-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .link-wrapper:last-child {
+    margin-top: 50px;
+    animation: border-fun 2s infinite;
+    box-shadow: inset 0 0 0 5px #fde67a;
+    background-color: #846e8b;
+    color: #f5f5f5;
+  }
+
+  @keyframes border-fun {
+    0% {
+      box-shadow: inset 0 0 0 10px #fde67a;
+    }
+    50% {
+      box-shadow: inset 0 0 0 5px #493350;
+    }
+    100% {
+      box-shadow: inset 0 0 0 10px #fde67a;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .content-wrapper {
+      margin-top: 20px;
+      max-width: 600px;
+      padding-bottom: 20px;
+    }
+
+    .link-wrapper {
+      width: 70%;
+      padding: 15px;
+    }
+
+    .link-title {
+      font-size: 1.2rem;
+    }
+
+    .link-wrapper:last-child {
+      margin-top: 30px;
+    }
+
+    .logo {
+      margin: 0 auto 0 auto;
+      width: 50%;
+      padding: 40px 0;
+    }
+  }
+</style>
+
+<Layout>
+  <body>
+    <div class="content-wrapper">
+      <header>
+        <img class="logo" src={logo} alt="Astoria Tech Logo" />
+      </header>
+      <div class="links-container">
+        {
+          data.map(item => (
+            <a class="link-wrapper" href={item.href}>
+              <span class="link-title">{item.name}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </body>
+</Layout>

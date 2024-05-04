@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "astro": "astro",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && npx @divriots/jampack ./dist",
     "dev": "astro dev",
     "fix": "npm run lintpkg:fix && npm run style:fix",
     "genimage": "npm -C ./packages/image-generator run cli --",
@@ -33,6 +33,7 @@
     "yaml": "^2.4.1"
   },
   "devDependencies": {
+    "@divriots/jampack": "^0.24.0",
     "@github/prettier-config": "^0.0.6",
     "autoprefixer": "^10.4.19",
     "change-case": "^5.4.4",
