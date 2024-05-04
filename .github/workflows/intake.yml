@@ -16,22 +16,28 @@ jobs:
     runs-on: ubuntu-latest
     # To keep it simple name the step and output the same as job
     outputs:
-      SHOULD_RUN: ${{ steps.SHOULD_RUN.outputs.SHOULD_RUN }}
+      SHOULD_RUN: ${{ steps.detect.outputs.SHOULD_RUN }}
       IS_EVENT: ${{ steps.detect.outputs.IS_EVENT }}
       IS_TALK: ${{ steps.detect.outputs.IS_TALK }}
+      IS_COMMENT: ${{ steps.detect.outputs.IS_COMMENT }}
+      IS_ISSUE: ${{ steps.detect.outputs.IS_ISSUE }}
     steps:
       - id: detect
         run: |
           IS_TALK=$(echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}")
           IS_EVENT=$(echo "${{ contains(github.event.issue.labels.*.name, 'event-submission') }}")
+          IS_COMMENT=$(echo "${{ github.event_name == 'issue_comment' && github.event.comment.body == '.create-pr' }}")
+          IS_ISSUE=$(echo "${{ github.event_name == 'issues' }}")
           echo "IS_TALK=$IS_TALK" >> $GITHUB_OUTPUT
           echo "IS_EVENT=$IS_EVENT" >> $GITHUB_OUTPUT
-
-      - name:
-        id: SHOULD_RUN
-        run: |
-          SHOULD_RUN=${{ (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr')) && (steps.detect.outputs.IS_TALK == 'true' || steps.detect.outputs.IS_EVENT == 'true') }}
-          echo "should-run=$SHOULD_RUN" >> $GITHUB_OUTPUT
+          echo "IS_COMMENT=$IS_COMMENT" >> $GITHUB_OUTPUT
+          echo "IS_ISSUE=$IS_ISSUE" >> $GITHUB_OUTPUT
+          echo "SHOULD_RUN=false" >> $GITHUB_OUTPUT
+          if [ "$IS_TALK" == "true" || "$IS_EVENT" == "true"]; then
+            if [IS_COMMENT == "true" || IS_ISSUE == "true"]; then
+              echo "SHOULD_RUN=true" >> $GITHUB_OUTPUT
+            fi
+          fi
 
   process-issue:
     runs-on: ubuntu-latest
