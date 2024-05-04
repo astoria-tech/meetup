@@ -4,6 +4,7 @@ const eventsCollection = defineCollection({
   type: 'content',
   schema: z.object({
     banner: z.string().optional(),
+    meetupImage: z.string().optional(),
     date: z.date(),
     meetup: z.string(),
     presentations: z.array(reference('presentations')),
