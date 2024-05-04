@@ -20,8 +20,8 @@ jobs:
         if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.create-pr')
         run: exit 1
 
-      - name: Detect
-        run: echo "${{ contains(github.event.pull_request.labels.*.name, 'talk-submission') }}"
+      - name: Detect2
+        run: echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}"
 
       - uses: actions/checkout@v3
 
