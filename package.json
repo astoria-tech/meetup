@@ -11,7 +11,7 @@
     "build": "npm run check && astro build && npx @divriots/jampack ./dist",
     "check": "npm run lintpkg && npm run style && astro check",
     "dev": "astro dev",
-    "fix": "npm run lintpkg:fix && npm run style:fix",
+    "fix": "npm run lintpkg:fix && npm run style:fix && ./script/lintyamlall",
     "genimage": "npm -C ./packages/image-generator run cli --",
     "lintpkg": "sort-package-json --check",
     "lintpkg:fix": "sort-package-json",
