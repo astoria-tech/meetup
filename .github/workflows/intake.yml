@@ -11,15 +11,15 @@ on:
     types: [created]
 
 jobs:
-  capture-json:
+  planner:
+    name: Determine which jobs to run
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
+    # To keep it simple name the step and output the same as job
+    outputs:
+      SHOULD_RUN: ${{ steps.SHOULD_RUN.outputs.SHOULD_RUN }}
+      IS_EVENT: ${{ steps.detect.outputs.IS_EVENT }}
+      IS_TALK: ${{ steps.detect.outputs.IS_TALK }}
     steps:
-      - name: Check conditions and exit
-        if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.create-pr')
-        run: exit 1
-
       - id: detect
         run: |
           IS_TALK=$(echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}")
@@ -27,10 +27,19 @@ jobs:
           echo "IS_TALK=$IS_TALK" >> $GITHUB_OUTPUT
           echo "IS_EVENT=$IS_EVENT" >> $GITHUB_OUTPUT
 
-      - name: Ensure only run for talk or event submissions
-        if: steps.detect.outputs.IS_TALK != 'true' && steps.detect.outputs.IS_EVENT != 'true'
-        run: exit 1
+      - name:
+        id: SHOULD_RUN
+        run: |
+          SHOULD_RUN=${{ (github.event_name == 'issues' || (github.event_name == 'issue_comment' && github.event.comment.body != '.create-pr')) && (steps.detect.outputs.IS_TALK != 'true' && steps.detect.outputs.IS_EVENT != 'true') }}
+          echo "should-run=$SHOULD_RUN" >> $GITHUB_OUTPUT
 
+  process-issue:
+    runs-on: ubuntu-latest
+    needs: planner
+    if: needs.planner.outputs.SHOULD_RUN == 'true'
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
       - uses: actions/checkout@v3
 
       - name: Pre Issue Comment
@@ -89,11 +98,11 @@ jobs:
 
       - run: npm i
 
-      - if: (github.event_name == 'issue_comment' || github.event_name == 'issues') && steps.detect.outputs.IS_TALK == 'true'
+      - if: (github.event_name == 'issues') && needs.planner.outputs.IS_TALK == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Talk Submission] ${{ steps.issueForm.outputs.name }}"
 
-      - if: (github.event_name == 'issue_comment' || github.event_name == 'issues') && steps.detect.outputs.IS_EVENT == 'true'
+      - if: (github.event_name == 'issues') && needs.planner.outputs.IS_EVENT == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Event Submission] ${{ steps.issueForm.outputs.date }}"
 
