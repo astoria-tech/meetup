@@ -46,6 +46,11 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      - run: |
+          echo ${{needs.planner.outputs.SHOULD_RUN}}
+          echo ${{needs.planner.outputs.IS_EVENT}}
+          echo ${{needs.planner.outputs.IS_TALK}}
+
       - uses: actions/checkout@v3
 
       - name: Pre Issue Comment
@@ -104,11 +109,11 @@ jobs:
 
       - run: npm i
 
-      - if: (github.event_name == 'issues') && needs.planner.outputs.IS_TALK == 'true'
+      - if: needs.planner.outputs.IS_TALK == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Talk Submission] ${{ steps.issueForm.outputs.name }}"
 
-      - if: (github.event_name == 'issues') && needs.planner.outputs.IS_EVENT == 'true'
+      - if: needs.planner.outputs.IS_EVENT == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Event Submission] ${{ steps.issueForm.outputs.date }}"
 
