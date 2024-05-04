@@ -4,8 +4,6 @@ name: Check
 # working order, before merging (or while its in main)
 
 on:
-  issue_comment:
-    types: [created]
   push:
     paths-ignore:
       - 'design/**'
