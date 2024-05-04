@@ -29,10 +29,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check conditions and exit
-        if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.check')
-        run: exit 1
-
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref || github.event.inputs.branch || 'main' }}
