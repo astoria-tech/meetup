@@ -11,20 +11,54 @@ on:
     types: [created]
 
 jobs:
-  capture-json:
+  planner:
+    name: Determine which jobs to run
     runs-on: ubuntu-latest
+    # To keep it simple name the step and output the same as job
+    outputs:
+      SHOULD_RUN: ${{ steps.detect.outputs.SHOULD_RUN }}
+      IS_EVENT: ${{ steps.detect.outputs.IS_EVENT }}
+      IS_TALK: ${{ steps.detect.outputs.IS_TALK }}
+      IS_COMMENT: ${{ steps.detect.outputs.IS_COMMENT }}
+      IS_ISSUE: ${{ steps.detect.outputs.IS_ISSUE }}
+    steps:
+      - id: detect
+        run: |
+          IS_TALK=$(echo "${{ contains(github.event.issue.labels.*.name, 'talk-submission') }}")
+          IS_EVENT=$(echo "${{ contains(github.event.issue.labels.*.name, 'event-submission') }}")
+          IS_COMMENT=$(echo "${{ github.event_name == 'issue_comment' && github.event.comment.body == '.create-pr' }}")
+          IS_ISSUE=$(echo "${{ github.event_name == 'issues' }}")
+          echo "IS_TALK=$IS_TALK" >> $GITHUB_OUTPUT
+          echo "IS_EVENT=$IS_EVENT" >> $GITHUB_OUTPUT
+          echo "IS_COMMENT=$IS_COMMENT" >> $GITHUB_OUTPUT
+          echo "IS_ISSUE=$IS_ISSUE" >> $GITHUB_OUTPUT
+          echo "SHOULD_RUN=false" >> $GITHUB_OUTPUT
+          if [ "$IS_TALK" = "true" ] || [ "$IS_EVENT" = "true" ]; then
+            if [ "$IS_COMMENT" = "true" ] || [ "$IS_ISSUE" = "true" ]; then
+              echo "SHOULD_RUN=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  process-issue:
+    runs-on: ubuntu-latest
+    needs: planner
+    if: needs.planner.outputs.SHOULD_RUN == 'true'
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Check conditions and exit
-        if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.create-pr')
-        run: exit 1
+      - run: |
+          echo ${{needs.planner.outputs.SHOULD_RUN}}
+          echo ${{needs.planner.outputs.IS_EVENT}}
+          echo ${{needs.planner.outputs.IS_TALK}}
 
       - uses: actions/checkout@v3
 
       - name: Pre Issue Comment
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
         run: |
+          echo "🎉 Thank you for submitting a talk!" >> comment.txt
+          echo "The next few comments are going to be about autogenerating a pull request to get you added to the roster." >> comment.txt
+          echo "" >> comment.txt
           echo "🫡 initating intake.yml workflow" >> comment.txt
           echo "Running workflow ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> comment.txt
           gh issue comment ${{ github.event.issue.number }} -F comment.txt
@@ -75,9 +109,13 @@ jobs:
 
       - run: npm i
 
-      - if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+      - if: needs.planner.outputs.IS_TALK == 'true'
         run: |
           gh issue edit ${{ github.event.issue.number }} --title "[Talk Submission] ${{ steps.issueForm.outputs.name }}"
+
+      - if: needs.planner.outputs.IS_EVENT == 'true'
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --title "[Event Submission] ${{ steps.issueForm.outputs.date }}"
 
       - name: Operation
         run: |

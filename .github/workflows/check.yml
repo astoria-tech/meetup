@@ -7,8 +7,6 @@ on:
   issue_comment:
     types: [created]
   push:
-    branches:
-      - main
     paths-ignore:
       - 'design/**'
   pull_request:
@@ -31,10 +29,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check conditions and exit
-        if: (github.event_name == 'issue_comment') && (github.event.comment.body != '.check')
-        run: exit 1
-
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref || github.event.inputs.branch || 'main' }}
@@ -44,8 +38,20 @@ jobs:
         with:
           node-version: '20' # Set this to the node version you are using
 
-      - name: Install dependencies
-        run: npm install
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm i
 
       - name: Run style check
         run: npm run style
