@@ -7,9 +7,7 @@ const {dataItem} = Astro.props;
 const valueProps = (dataItem) => Object.entries(dataItem);
 ---
 
-<td>
-    <>
-    {valueProps(dataItem).map(valueItem => `${valueItem[0]}: ${valueItem[1]}` )}
-    </>
+<td class="values-cell">
+    {valueProps(dataItem).map(valueItem => <span>{valueItem[0]}: {valueItem[1]}</span> )}
 </td>
 

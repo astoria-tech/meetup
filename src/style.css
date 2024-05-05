@@ -9,4 +9,6 @@
 
 /* Components */
 @import './components/Card/Card.css';
+@import './components/Table/Table.css';
+@import './components/Table/TableCell.css';
 

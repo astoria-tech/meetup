@@ -1,0 +1,4 @@
+.values-cell {
+    @apply flex flex-col;
+    flex: 1;
+}

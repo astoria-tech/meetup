@@ -7,11 +7,15 @@ const {data} = Astro.props;
 
 ---
 
-<table>
+<table class="table">
+    <tr class="table-row">
+        <td class="table-cell body-sans-heavy">Name</td>
+        <td class="table-cell body-sans-heavy">Value</td>
+    </tr>
     {data.map(item => {
         return (
-        <tr>
-            <td>{item.name}</td>
+        <tr class="table-row">
+            <td class="table-cell">{item.name}</td>
             <TableCell dataItem={item} />
         </tr>
     );
