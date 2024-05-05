@@ -1,19 +1,18 @@
 ---
+import TableCell from './TableCell.astro'
 type Props = {
   data: {[key:string]: string}[];
 }
 const {data} = Astro.props;
+
 ---
+
 <table>
-    <tr>
-        <td>test</td>
-        <td>test</td>
-        <td>test</td>
-    </tr>
-    {data.forEach(item => {
+    {data.map(item => {
         return (
         <tr>
             <td>{item.name}</td>
+            <TableCell dataItem={item} />
         </tr>
     );
     

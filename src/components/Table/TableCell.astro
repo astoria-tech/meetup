@@ -1,0 +1,15 @@
+---
+type Props = {
+  dataItem: {[key:string]: string};
+}
+const {dataItem} = Astro.props;
+
+const valueProps = (dataItem) => Object.entries(dataItem);
+---
+
+<td>
+    <>
+    {valueProps(dataItem).map(valueItem => `${valueItem[0]}: ${valueItem[1]}` )}
+    </>
+</td>
+
