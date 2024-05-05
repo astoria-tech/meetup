@@ -36,6 +36,7 @@
   "devDependencies": {
     "@divriots/jampack": "^0.24.0",
     "@github/prettier-config": "^0.0.6",
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "autoprefixer": "^10.4.19",
     "change-case": "^5.4.4",
     "deep-cleaner": "^2.0.0-alpha.3",
