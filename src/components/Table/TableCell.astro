@@ -1,13 +1,18 @@
 ---
 type Props = {
-  dataItem: {[key:string]: string};
+  dataItem: {[key:string]: string | number};
 }
 const {dataItem} = Astro.props;
 
 const valueProps = (dataItem) => Object.entries(dataItem);
+
+const camelCaseToWords = (keyString: string) => {
+  const result = keyString.replace(/([A-Z])/g, ' $1');
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}
 ---
 
 <td class="values-cell">
-    {valueProps(dataItem).map(valueItem => <span>{valueItem[0]}: {valueItem[1]}</span> )}
+    {valueProps(dataItem).map(valueItem => <span>{camelCaseToWords(valueItem[0])}: {valueItem[1]}</span> )}
 </td>
 

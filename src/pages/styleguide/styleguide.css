@@ -1,0 +1,3 @@
+.styleguide-header {
+    @apply w-full h-auto my-5 text-center;
+}

@@ -7,12 +7,13 @@
     }
   
     .body-sans-heavy-lg {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 18px;
       line-height: 1.4;
       letter-spacing: 0.375px;
     }
-  
+    
+    p,
     .body-sans {
       @apply font-sans tabular-nums;
       font-size: 16px;
@@ -21,7 +22,7 @@
     }
   
     .body-sans-heavy {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 16px;
       line-height: 1.4;
       letter-spacing: 0.375px;
@@ -35,7 +36,7 @@
     }
   
     .body-sans-heavy-sm {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 12px;
       line-height: 1.4;
       letter-spacing: 0.375px;
@@ -49,7 +50,7 @@
     }
   
     .body-serif-heavy-lg {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 18px;
       line-height: 1.4;
       letter-spacing: 0.375px;
@@ -63,7 +64,7 @@
     }
   
     .body-serif-heavy {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 16px;
       line-height: 1.4;
       letter-spacing: 0.375px;
@@ -77,7 +78,7 @@
     }
   
     .body-serif-heavy-sm {
-      @apply font-sans-bold tabular-nums;
+      @apply font-sansBold tabular-nums;
       font-size: 12px;
       line-height: 1.4;
       letter-spacing: 0.375px;

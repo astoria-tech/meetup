@@ -55,7 +55,7 @@
     }
 
     .link-sans-heavy-lg {
-        @apply font-sans-bold text-link-base tabular-nums underline transition-colors;
+        @apply font-sansBold text-link-base tabular-nums underline transition-colors;
         font-size: 18px;
         line-height: 1.4;
         letter-spacing: 0.5px;
@@ -73,7 +73,7 @@
     }
 
     .link-sans-heavy {
-      @apply font-sans-bold text-link-base tabular-nums underline transition-colors;
+      @apply font-sansBold text-link-base tabular-nums underline transition-colors;
       font-size: 16px;
       line-height: 1.4;
       letter-spacing: 0.5px;
@@ -91,7 +91,7 @@
     }
 
     .link-sans-heavy-sm {
-        @apply font-sans-bold text-link-base tabular-nums underline transition-colors;
+        @apply font-sansBold text-link-base tabular-nums underline transition-colors;
         font-size: 12px;
         line-height: 1.4;
         letter-spacing: 0.5px;
@@ -163,7 +163,7 @@
     }
 
     .link-serif-heavy-lg {
-        @apply font-serif-bold text-link-base tabular-nums underline transition-colors;
+        @apply font-serifBold text-link-base tabular-nums underline transition-colors;
         font-size: 18px;
         line-height: 1.4;
         letter-spacing: 0.5px;
@@ -181,7 +181,7 @@
     }
 
     .link-serif-heavy {
-      @apply font-serif-bold text-link-base tabular-nums underline transition-colors;
+      @apply font-serifBold text-link-base tabular-nums underline transition-colors;
       font-size: 16px;
       line-height: 1.4;
       letter-spacing: 0.5px;
@@ -199,7 +199,7 @@
     }
 
     .link-serif-heavy-sm {
-        @apply font-serif-bold text-link-base tabular-nums underline transition-colors;
+        @apply font-serifBold text-link-base tabular-nums underline transition-colors;
         font-size: 12px;
         line-height: 1.4;
         letter-spacing: 0.5px;
