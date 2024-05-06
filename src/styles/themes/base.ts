@@ -31,7 +31,7 @@ export const colors = {
 
 export const fontFamily = {
   sans: ['NotoSans', 'Arial', 'Helvetica', 'sans-serif'],
-  'sans-bold': ['NotoSans-bold', 'Arial', 'Helvetica', 'sans-serif'],
+  sansBold: ['NotoSans-bold', 'Arial', 'Helvetica', 'sans-serif'],
   serif: ['PlayFair', 'Times New Roman', 'serif'],
-  'serif-bold': ['PlayFair-Bold', 'Times New Roman', 'serif'],
+  serifBold: ['PlayFair-Bold', 'Times New Roman', 'serif'],
 }
