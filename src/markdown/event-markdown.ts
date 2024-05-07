@@ -1,11 +1,13 @@
 import type {HydratedFeedItemPreHtml} from '../types'
+const optionsTime = {timeZone:"UTC", hour:"numeric", minute:"numeric"};
+const optionsDate = {weekday:"long", year:"numeric", month:"long", day:"numeric"};
 
 export default ({event, permalink}: HydratedFeedItemPreHtml) => `
 # [Save the date - ${event.data.title}](${permalink})
 
 ${event.data.meetupImage ? `<img alt="event banner for ${event.data.date}" src="${event.data.meetupImage}" style="width:500px"/>` : ''}
 
-Our next Event will be on ${event.data.date}
+Our next Event will be on ${event.data.date.toLocaleDateString("en-US", optionsDate)+", at "+event.data.date.toLocaleTimeString("en-US", optionsTime)}
 
 Be sure to RSVP on meetup [Event Link on Meetup](${event.data.meetup}).
 
