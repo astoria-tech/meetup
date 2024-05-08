@@ -1,15 +1,12 @@
 ---
+import { camelCaseToWords } from '../../utils';
+
 type Props = {
   dataItem: {[key:string]: string | number};
 }
 const {dataItem} = Astro.props;
 
 const valueProps = (dataItem) => Object.entries(dataItem);
-
-const camelCaseToWords = (keyString: string) => {
-  const result = keyString.replace(/([A-Z])/g, ' $1');
-  return result.charAt(0).toUpperCase() + result.slice(1);
-}
 ---
 
 <td class="values-cell">
