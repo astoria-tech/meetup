@@ -1,7 +1,3 @@
-.table {
-    @apply w-full my-2;
-}
-
 .table-row {
     @apply flex flex-wrap py-1 w-full border-b border-black;
     justify-content: space-between;

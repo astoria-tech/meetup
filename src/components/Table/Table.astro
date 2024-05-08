@@ -1,5 +1,6 @@
 ---
 import TableCell from './TableCell.astro'
+
 type Props = {
   data: {[key:string]: string | number}[];
 }
@@ -7,7 +8,7 @@ const {data} = Astro.props;
 
 ---
 
-<table class="table">
+<table class="w-full my-2">
     <tr class="table-row">
         <td class="table-cell body-sans-heavy">Name</td>
         <td class="table-cell body-sans-heavy">Value</td>

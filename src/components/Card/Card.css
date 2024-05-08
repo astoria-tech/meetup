@@ -9,7 +9,3 @@
 .card-title-border {
     @apply border border-black w-full px-1 mb-2;
 }
-
-.card-content {
-    @apply pt-2;
-}
