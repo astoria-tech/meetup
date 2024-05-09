@@ -26,8 +26,9 @@ const markdownMap = {
 // this is to get the H1 tag from the markdown for the "title" of a feed post
 // also content is the html without the H1 for RSS
 const forRss = (html: string) => {
+  // console.log({html})
   const $ = cheerio(html)
-  const title = $('h1').text()
+  const title = $('h1').text();
   $('h1').remove()
   const content = $('body').html()
   return {title, content}

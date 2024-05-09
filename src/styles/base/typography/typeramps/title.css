@@ -20,7 +20,7 @@
       line-height: 1.2;
       letter-spacing: 0.375px;
     }
-
+    
     h2,
     .title-sans-md {
       @apply font-sans font-bold tabular-nums;
@@ -28,6 +28,7 @@
       line-height: 1.2;
       letter-spacing: 0.375px;
     }
+
     h3,
     .title-sans-sm {
       @apply font-sans font-bold tabular-nums;
@@ -35,6 +36,7 @@
       line-height: 1.2;
       letter-spacing: 0.375px;
     }
+
     h4,
     h5,
     h6

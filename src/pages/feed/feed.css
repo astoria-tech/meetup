@@ -1,0 +1,14 @@
+/* 
+    note: this solution is less than ideal, copies values from .title-sans-large.
+
+    Would suggest: one of three options here.
+    1. use scss to extend classes
+    2. update event-markdown and post-event-markdown to use html tags rather than markdown, apply classes there
+*/
+
+h1 > a {
+    @apply font-sans font-bold tabular-nums;
+    font-size: 44px;
+    line-height: 1.2;
+    letter-spacing: 0.375px;
+}

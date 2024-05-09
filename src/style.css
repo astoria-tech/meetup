@@ -9,6 +9,7 @@
 
 /* Pages */
 @import './pages/styleguide/styleguide.css';
+@import './pages/feed/feed.css';
 
 /* Components */
 @import './components/Card/Card.css';
