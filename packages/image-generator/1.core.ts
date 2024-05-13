@@ -171,10 +171,11 @@ export async function build(options: Options) {
       speakers.map(async (speaker, index) => {
         const buffer = resolveSpeakerImage(speaker, defaultSpeakerImageBuffer)
         const base64 = await bufferToBase64(buffer, speakerWidth)
+        const padding = 100
 
         const svg = speakerSvg({
           imageSize: speakerWidth,
-          xPadding: 100,
+          xPadding: padding,
           lines: Array.isArray(speaker.name) ? speaker.name : optimalName(speaker.name),
           image: base64,
           fontSize: 31,
@@ -187,7 +188,7 @@ export async function build(options: Options) {
         return {
           input: Buffer.from(svg),
           top: speakerImageYOffset,
-          left: startLeft + index * (speakerWidth + speakerImageGapWidth),
+          left: startLeft - padding + index * (speakerWidth + speakerImageGapWidth),
         }
       }),
     )
