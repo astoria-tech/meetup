@@ -1,15 +1,16 @@
 ---
 type Props = {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 const {title, description} = Astro.props
 ---
+
 <div class="border-2 border-black rounded p-2 mb-5;">
-    <h2 class="title-serif-lg text-black"> {title}</h2>
-    <div class="border border-black w-full px-1 mb-2"></div>
-    <p>{description}</p>
-    <div class="pt-2">
-      <slot />
-    </div>
+  <h2 class="title-serif-lg text-black">{title}</h2>
+  <div class="border border-black w-full px-1 mb-2"></div>
+  <p>{description}</p>
+  <div class="pt-2">
+    <slot />
+  </div>
 </div>

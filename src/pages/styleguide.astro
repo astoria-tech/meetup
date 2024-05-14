@@ -1,57 +1,56 @@
 ---
 import '../style.css'
-import { styleguideData } from '../data/styleguide'
+import {styleguideData} from '../data/styleguide'
 import MainLayout from '../layouts/MainLayout.astro'
 import Card from '../components/styleguide/Card.astro'
 import Table from '../components/styleguide/Table.astro'
 import Swatch from '../components/styleguide/Swatch.astro'
 ---
 
-<MainLayout title='styleguide'>
-    <div class="w-11/12 m-auto">
-        <div class="w-full h-auto my-5 text-center">
-            <h1>The Astoria Tech Meetup Styleguide</h1>
-            <p class="body-sans-lg mt-2">A guide for contributors for element styling.  It is always evolving.</p>
-        </div>
-     
-        <Card 
-            title="Title: Sans Serif" 
-            description="Title classes are used for any section titles or high emphasis type. These type treatments use the default Noto Sans font. The Title Sans typeramp is the default type styling for header elements if no class name is provided."
-        >
-            <Table data={styleguideData.typography.titleSans} />
-        </Card>
-        <Card 
-            title="Title: Serif" 
-            description="The Title Serif typeramp is a compliment to the sans serif title styling.  These type treatments use the Playfair font.  Adding a serif class name will override default styling."
-        >
-            <Table data={styleguideData.typography.titleSerif} />
-        </Card>
-        <Card 
-            title="Body: Sans Serif" 
-            description="Body classes are used for the majority of the copy on this site.  There are large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the default Noto Sans font. The Body Sans typeramp is the default type styling for paragraph elements if no class name is provided."
-        >
-            <Table data={styleguideData.typography.bodySans} />
-        </Card>
-        <Card 
-            title="Body: Serif" 
-            description="The Body Serif typeramp is a compliment to the sans serif title styling.  There are also large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the Playfair font.  Adding a serif class name will override default styling."
-        >
-            <Table data={styleguideData.typography.bodySerif} />
-        </Card>
-        <Card 
-            title="Links: Sans Serif and Serif" 
-            description="Link classes are used for anchor tag styling.  There are large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the default Noto Sans font for sans-serif styles and the Playfair font for serif styles. Thelink sans-serif typeramp is the default type styling for anchor tags if no class name is provided."
-        >
-            <Table data={styleguideData.typography.link} />
-        </Card>
-        <Card 
-            title="Themes: Default" 
-            description="The goal with theming is to have a set of standard colors that can be used in light or dark mode for any element.  Contributors should feel confident to add, modify, or delete themes when they want to change the look of the site with ease.  This theme is the default theme, which should be used as a starting point for any additional themes."
-        >
-            <div class="inline-flex flex-wrap w-full">
-                {Object.entries(styleguideData.colors).map(color =>      <Swatch name={color[0]} color={color[1]} />)}
-            </div> 
-        </Card>
-    
+<MainLayout title="styleguide">
+  <div class="w-11/12 m-auto">
+    <div class="w-full h-auto my-5 text-center">
+      <h1>The Astoria Tech Meetup Styleguide</h1>
+      <p class="body-sans-lg mt-2">A guide for contributors for element styling. It is always evolving.</p>
     </div>
+
+    <Card
+      title="Title: Sans Serif"
+      description="Title classes are used for any section titles or high emphasis type. These type treatments use the default Noto Sans font. The Title Sans typeramp is the default type styling for header elements if no class name is provided."
+    >
+      <Table data={styleguideData.typography.titleSans} />
+    </Card>
+    <Card
+      title="Title: Serif"
+      description="The Title Serif typeramp is a compliment to the sans serif title styling.  These type treatments use the Playfair font.  Adding a serif class name will override default styling."
+    >
+      <Table data={styleguideData.typography.titleSerif} />
+    </Card>
+    <Card
+      title="Body: Sans Serif"
+      description="Body classes are used for the majority of the copy on this site.  There are large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the default Noto Sans font. The Body Sans typeramp is the default type styling for paragraph elements if no class name is provided."
+    >
+      <Table data={styleguideData.typography.bodySans} />
+    </Card>
+    <Card
+      title="Body: Serif"
+      description="The Body Serif typeramp is a compliment to the sans serif title styling.  There are also large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the Playfair font.  Adding a serif class name will override default styling."
+    >
+      <Table data={styleguideData.typography.bodySerif} />
+    </Card>
+    <Card
+      title="Links: Sans Serif and Serif"
+      description="Link classes are used for anchor tag styling.  There are large, regular, and small varieties as well as bold and regular versions of the sizes. These type treatments use the default Noto Sans font for sans-serif styles and the Playfair font for serif styles. Thelink sans-serif typeramp is the default type styling for anchor tags if no class name is provided."
+    >
+      <Table data={styleguideData.typography.link} />
+    </Card>
+    <Card
+      title="Themes: Default"
+      description="The goal with theming is to have a set of standard colors that can be used in light or dark mode for any element.  Contributors should feel confident to add, modify, or delete themes when they want to change the look of the site with ease.  This theme is the default theme, which should be used as a starting point for any additional themes."
+    >
+      <div class="inline-flex flex-wrap w-full">
+        {Object.entries(styleguideData.colors).map(color => <Swatch name={color[0]} color={color[1]} />)}
+      </div>
+    </Card>
+  </div>
 </MainLayout>

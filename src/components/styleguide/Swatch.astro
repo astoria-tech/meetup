@@ -1,12 +1,14 @@
 ---
 type Props = {
-  name: string;
-  color: string;
+  name: string
+  color: string
 }
 const {name, color} = Astro.props
 ---
+
 <div class="w-[125px] flex flex-col p-2 mx-2 h-auto min-h-[125px]">
-    <div class='w-[125px] h-[125px] inline-block border border-solid border-black' style={`background-color: ${color}`}></div>
-    <p class="body-sans-heavy-sm">Name: {name}</p>
-    <p class="body-sans-sm">Hex code: {color}</p>
+  <div class="w-[125px] h-[125px] inline-block border border-solid border-black" style={`background-color: ${color}`}>
+  </div>
+  <p class="body-sans-heavy-sm">Name: {name}</p>
+  <p class="body-sans-sm">Hex code: {color}</p>
 </div>

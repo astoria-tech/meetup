@@ -1,3 +1,3 @@
-import { camelCaseToWords } from "./typography";
+import {camelCaseToWords} from './typography'
 
-export {camelCaseToWords};
+export {camelCaseToWords}

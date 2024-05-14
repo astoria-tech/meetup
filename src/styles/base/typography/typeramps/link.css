@@ -1,218 +1,218 @@
 @layer components {
-    .link-sans-lg {
-        @apply font-sans text-link-base tabular-nums underline transition-colors;
-        font-size: 18px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
+  .link-sans-lg {
+    @apply font-sans text-link-base tabular-nums underline transition-colors;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-        &:hover,
-        &:active,
-        &:focus {
-            @apply font-sans text-link-light tabular-nums;
-        }
-
-        &:visted,
-        &:disabled {
-            @apply font-sans text-link-dark tabular-nums;
-        }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    a,
-    .link-sans {
-      @apply font-sans text-link-base tabular-nums underline transition-colors;
-      font-size: 16px;
-      line-height: 1.4;
-      letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
 
-      &:hover,
-      &:active,
-      &:focus {
-        @apply font-sans text-link-light tabular-nums;
-      }
+  a,
+  .link-sans {
+    @apply font-sans text-link-base tabular-nums underline transition-colors;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-      &:visted,
-      &:disabled {
-        @apply font-sans text-link-dark tabular-nums;
-      }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    .link-sans-sm {
-        @apply font-sans text-link-base tabular-nums underline transition-colors;
-        font-size: 12px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
-  
-        &:hover,
-        &:active,
-        &:focus {
-          @apply font-sans text-link-light tabular-nums;
-        }
-  
-        &:visted,
-        &:disabled {
-          @apply font-sans text-link-dark tabular-nums;
-        }
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
+
+  .link-sans-sm {
+    @apply font-sans text-link-base tabular-nums underline transition-colors;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    .link-sans-heavy-lg {
-        @apply font-sansBold text-link-base tabular-nums underline transition-colors;
-        font-size: 18px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
 
-        &:hover,
-        &:active,
-        &:focus {
-            @apply font-sans text-link-light tabular-nums;
-        }
+  .link-sans-heavy-lg {
+    @apply font-sansBold text-link-base tabular-nums underline transition-colors;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-        &:visted,
-        &:disabled {
-            @apply font-sans text-link-dark tabular-nums;
-        }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    .link-sans-heavy {
-      @apply font-sansBold text-link-base tabular-nums underline transition-colors;
-      font-size: 16px;
-      line-height: 1.4;
-      letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
 
-      &:hover,
-      &:active,
-      &:focus {
-        @apply font-sans text-link-light tabular-nums;
-      }
+  .link-sans-heavy {
+    @apply font-sansBold text-link-base tabular-nums underline transition-colors;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-      &:visted,
-      &:disabled {
-        @apply font-sans text-link-dark tabular-nums;
-      }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    .link-sans-heavy-sm {
-        @apply font-sansBold text-link-base tabular-nums underline transition-colors;
-        font-size: 12px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
-  
-        &:hover,
-        &:active,
-        &:focus {
-          @apply font-sans text-link-light tabular-nums;
-        }
-  
-        &:visted,
-        &:disabled {
-          @apply font-sans text-link-dark tabular-nums;
-        }
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
+
+  .link-sans-heavy-sm {
+    @apply font-sansBold text-link-base tabular-nums underline transition-colors;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-sans text-link-light tabular-nums;
     }
 
-    .link-serif-lg {
-        @apply font-serif text-link-base tabular-nums underline transition-colors;
-        font-size: 18px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-sans text-link-dark tabular-nums;
+    }
+  }
 
-        &:hover,
-        &:active,
-        &:focus {
-            @apply font-serif text-link-light tabular-nums;
-        }
+  .link-serif-lg {
+    @apply font-serif text-link-base tabular-nums underline transition-colors;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-        &:visted,
-        &:disabled {
-            @apply font-serif text-link-dark tabular-nums;
-        }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
     }
 
-    .link-serif {
-      @apply font-serif text-link-base tabular-nums underline transition-colors;
-      font-size: 16px;
-      line-height: 1.4;
-      letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
+    }
+  }
 
-      &:hover,
-      &:active,
-      &:focus {
-        @apply font-serif text-link-light tabular-nums;
-      }
+  .link-serif {
+    @apply font-serif text-link-base tabular-nums underline transition-colors;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-      &:visted,
-      &:disabled {
-        @apply font-serif text-link-dark tabular-nums;
-      }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
     }
 
-    .link-serif-sm {
-        @apply font-serif text-link-base tabular-nums underline transition-colors;
-        font-size: 12px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
-  
-        &:hover,
-        &:active,
-        &:focus {
-          @apply font-serif text-link-light tabular-nums;
-        }
-  
-        &:visted,
-        &:disabled {
-          @apply font-serif text-link-dark tabular-nums;
-        }
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
+    }
+  }
+
+  .link-serif-sm {
+    @apply font-serif text-link-base tabular-nums underline transition-colors;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
     }
 
-    .link-serif-heavy-lg {
-        @apply font-serifBold text-link-base tabular-nums underline transition-colors;
-        font-size: 18px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
+    }
+  }
 
-        &:hover,
-        &:active,
-        &:focus {
-            @apply font-serif text-link-light tabular-nums;
-        }
+  .link-serif-heavy-lg {
+    @apply font-serifBold text-link-base tabular-nums underline transition-colors;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-        &:visted,
-        &:disabled {
-            @apply font-serif text-link-dark tabular-nums;
-        }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
     }
 
-    .link-serif-heavy {
-      @apply font-serifBold text-link-base tabular-nums underline transition-colors;
-      font-size: 16px;
-      line-height: 1.4;
-      letter-spacing: 0.5px;
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
+    }
+  }
 
-      &:hover,
-      &:active,
-      &:focus {
-        @apply font-serif text-link-light tabular-nums;
-      }
+  .link-serif-heavy {
+    @apply font-serifBold text-link-base tabular-nums underline transition-colors;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 
-      &:visted,
-      &:disabled {
-        @apply font-serif text-link-dark tabular-nums;
-      }
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
     }
 
-    .link-serif-heavy-sm {
-        @apply font-serifBold text-link-base tabular-nums underline transition-colors;
-        font-size: 12px;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
-  
-        &:hover,
-        &:active,
-        &:focus {
-          @apply font-serif text-link-light tabular-nums;
-        }
-  
-        &:visted,
-        &:disabled {
-          @apply font-serif text-link-dark tabular-nums;
-        }
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
     }
+  }
+
+  .link-serif-heavy-sm {
+    @apply font-serifBold text-link-base tabular-nums underline transition-colors;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      @apply font-serif text-link-light tabular-nums;
+    }
+
+    &:visted,
+    &:disabled {
+      @apply font-serif text-link-dark tabular-nums;
+    }
+  }
 }
