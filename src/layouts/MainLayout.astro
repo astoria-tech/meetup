@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro'
+import copy from '../copy'
 
 type Props = {
   title?: string
@@ -7,7 +8,7 @@ type Props = {
 }
 const {title, bodyClass = []} = Astro.props
 ---
-
+      
 <Layout useWavyBackgroundDark title={title} bodyClass={['bg-zinc-100', ...bodyClass]}>
   <div class="w-[500px] m-auto">
     <slot />
