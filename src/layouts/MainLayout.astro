@@ -3,14 +3,14 @@ import Layout from './Layout.astro'
 
 type Props = {
   title?: string
+  bodyClass?: string[]
+  
 }
-const {title} = Astro.props
+const {title, bodyClass = []} = Astro.props
 ---
 
-<Layout title={title}>
-  <body class="bg-zinc-100">
+<Layout title={title} bodyClass={['bg-zinc-100', ...bodyClass]}>
     <div class="w-[500px] m-auto">
       <slot />
     </div>
-  </body>
 </Layout>

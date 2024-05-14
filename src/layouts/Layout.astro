@@ -1,10 +1,13 @@
 ---
+import '../style.css'
 import copy from '../copy'
+import { propsToFilename } from 'astro/assets/utils'
 
 type Props = {
   title?: string
+  bodyClass?: string[]
 }
-const {title} = Astro.props
+const {title, bodyClass = []} = Astro.props
 ---
 
 <html lang="en">
@@ -16,7 +19,8 @@ const {title} = Astro.props
     <meta name="description" content={copy.siteDescription} />
     <title>{title ? `${title} | ${copy.defaultPageTitle}` : copy.defaultPageTitle}</title>
   </head>
-  <slot />
 
-
+  <body class:list={bodyClass}>
+    <slot />
+  </body>
 </html>
