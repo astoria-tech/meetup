@@ -1,12 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import {getLink} from '../components/Link.astro'
-import fs from 'fs/promises'
-import path from 'path'
-
-const svgContent = await fs.readFile(path.join(import.meta.dirname, '../../public/css/wavy-background.svg'), 'utf8')
-
-const background = `url("data:image/svg+xml,${encodeURIComponent(svgContent)}")`
 
 const logo = getLink('/design/symbol-white-astoria-tech-mark.png')
 
@@ -20,14 +14,12 @@ const data = [
 ]
 ---
 
-<style define:vars={{background}}>
+<style>
   body {
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    background-color: #846e8b;
-    background-image: var(--background);
     margin: 0;
     padding: 0;
   }
@@ -117,7 +109,7 @@ const data = [
   }
 </style>
 
-<Layout>
+<Layout useWavyBackground>
   <body>
     <div class="content-wrapper">
       <header>

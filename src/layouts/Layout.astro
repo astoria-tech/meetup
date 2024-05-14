@@ -1,14 +1,25 @@
 ---
 import '../style.css'
 import copy from '../copy'
-import {propsToFilename} from 'astro/assets/utils'
+import {getCssUrl} from '../components/Link.astro'
 
 type Props = {
   title?: string
   bodyClass?: string[]
+  useWavyBackground?: boolean
 }
-const {title, bodyClass = []} = Astro.props
+
+const {title, useWavyBackground, bodyClass = []} = Astro.props
+const applyWavyBackground = useWavyBackground ? ['wavy-background'] : []
 ---
+
+<style define:vars={{background: getCssUrl('/css/wavy-background.svg')}}>
+  .wavy-background {
+    background-color: #846e8b;
+    background-image: var(--background);
+    background-attachment: fixed;
+  }
+</style>
 
 <html lang="en">
   <head>
@@ -20,7 +31,7 @@ const {title, bodyClass = []} = Astro.props
     <title>{title ? `${title} | ${copy.defaultPageTitle}` : copy.defaultPageTitle}</title>
   </head>
 
-  <body class:list={bodyClass}>
+  <body class:list={[bodyClass, ...applyWavyBackground]}>
     <slot />
   </body>
 </html>
