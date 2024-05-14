@@ -5,9 +5,9 @@ type Props = {
 }
 const {title, description} = Astro.props
 ---
-<div class="card-wrapper">
-    <h2 class="card-title"> {title}</h2>
-    <div class="card-title-border"></div>
+<div class="border-2 border-black rounded p-2 mb-5;">
+    <h2 class="title-serif-lg text-black"> {title}</h2>
+    <div class="border border-black w-full px-1 mb-2"></div>
     <p>{description}</p>
     <div class="pt-2">
       <slot />

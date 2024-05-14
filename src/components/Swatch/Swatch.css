@@ -1,9 +1,0 @@
-.swatch-wrapper {
-    @apply w-[125px] flex flex-col p-2 mx-2;
-    height: auto;
-    min-height: 125px;
-}
-
-.swatch {
-    @apply w-[125px] h-[125px] inline-block border border-solid border-black;
-}

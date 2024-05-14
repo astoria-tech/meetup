@@ -9,7 +9,7 @@ const {dataItem} = Astro.props;
 const valueProps = (dataItem) => Object.entries(dataItem);
 ---
 
-<td class="values-cell">
+<td class="flex flex-col flex-1">
     {valueProps(dataItem).map(valueItem => <span>{camelCaseToWords(valueItem[0])}: {valueItem[1]}</span> )}
 </td>
 

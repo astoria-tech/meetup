@@ -1,0 +1,24 @@
+---
+import TableCell from './TableCell.astro'
+
+type Props = {
+  data: {[key:string]: string | number}[];
+}
+const {data} = Astro.props;
+
+---
+
+<table class="w-full my-2">
+    <tr class="flex flex-wrap py-1 w-full border-b border-black justify-normal items-center">
+        <td class="flex flex-col flex-1 body-sans-heavy">Name</td>
+        <td class="flex flex-col flex-1 body-sans-heavy">Value</td>
+    </tr>
+    {data.map(item => {
+        return (
+        <tr class="flex flex-wrap py-1 w-full border-b border-black justify-normal items-center">
+            <td class="flex flex-col flex-1">{item.className}</td>
+            <TableCell dataItem={item} />
+        </tr>
+        )
+    })}
+</table>
