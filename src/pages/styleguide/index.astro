@@ -1,0 +1,37 @@
+---
+import {colors, fontFamily} from '../../styles/themes/base'
+---
+<>
+    <div class="w-11/12 m-auto mb-5">
+        <h1 class="text-center text-4xl">The Astoria Tech Meetup Styleguide</h1>
+        <p class="text-center mt-2">A guide for contributors for element styling.  It is always evolving.</p>
+    </div>
+    <div class="w-11/12 m-auto mx-5">
+        <h2 class="text-center text-2xl">Theme Colors</h2>
+        <div>
+            <h3 class="text-xl">Themes: Default</h3>
+            <p>The goal with theming is to have a set of standard colors that can be used in light or dark mode for any element. Contributors should feel confident to add, modify, or delete themes when they want to change the look of the site with ease. This theme is the default theme, which should be used as a starting point for any additional themes.</p>
+            <ul>
+                {Object.entries(colors).map(itemArr => (
+                    <li>
+                        <span class="font-bold">{itemArr[0]}:</span>{itemArr[1]}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </div>
+    <div class="w-11/12 m-auto mx-5">
+        <h2 class="text-center text-2xl">Typography</h2>
+        <div>
+            <h3 class="text-xl">Typography: Font Families</h3>
+            <p>These are the current font families available for use.  Noto Sans is the default font for this site unless otherwise stated.</p>
+            <ul>
+                {Object.entries(fontFamily).map(itemArr => (
+                    <li>
+                        <span class="font-bold">{itemArr[0]}:</span>{itemArr[1]}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </div>
+</>
