@@ -1,9 +1,10 @@
 ---
 import type {HydratedFeedItem} from '../types'
+import Card from '../layouts/Card.astro'
 type Props = HydratedFeedItem
 const {html} = Astro.props
 ---
 
-<div class="mb-5 bg-[#2d272e] p-5 text-[#f8fafc] border-[#1c1917] border-8 rounded-2xl">
+<Card>
   <Fragment set:html={html} />
-</div>
+</Card>
