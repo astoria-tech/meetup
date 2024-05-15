@@ -6,26 +6,15 @@ import {getCssUrl} from '../components/Link.astro'
 type Props = {
   title?: string
   bodyClass?: string[]
-  useWavyBackgroundLight?: boolean
-  useWavyBackgroundDark?: boolean
+  useWavyBackground?: boolean
 }
 
-const {title, useWavyBackgroundLight, useWavyBackgroundDark, bodyClass = []} = Astro.props
-const applyWavyBackground = useWavyBackgroundLight
-  ? ['wavy-background-light']
-  : useWavyBackgroundDark
-    ? ['wavy-background-dark']
-    : []
+const {title, useWavyBackground, bodyClass = []} = Astro.props
+const applyWavyBackground = useWavyBackground ? ['wavy-background'] : []
 ---
 
-<!-- not DRY but works -->
 <style define:vars={{background: getCssUrl('/css/wavy-background.svg')}}>
-  .wavy-background-light {
-    background-color: #846e8b;
-    background-image: var(--background);
-    background-attachment: fixed;
-  }
-  .wavy-background-dark {
+  .wavy-background {
     background-color: #2d272e;
     background-image: var(--background);
     background-attachment: fixed;
