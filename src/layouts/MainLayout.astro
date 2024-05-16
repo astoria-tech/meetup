@@ -8,8 +8,8 @@ type Props = {
 const {title, bodyClass = []} = Astro.props
 ---
 
-<Layout title={title} bodyClass={['bg-zinc-100', ...bodyClass]}>
-  <div class="w-[500px] m-auto">
+<Layout useWavyBackground title={title} bodyClass={['bg-zinc-100', ...bodyClass]}>
+  <div class="lg:w-[500px] m-auto">
     <slot />
   </div>
 </Layout>
