@@ -5,7 +5,7 @@ const optionsDate: Intl.DateTimeFormatOptions = {weekday: 'long', year: 'numeric
 export default ({event, permalink}: HydratedFeedItemPreHtml) => `
 # [Save the date - ${event.data.title}](${permalink})
 
-${event.data.meetupImage ? `<img alt="event banner for ${event.data.date}" src="${event.data.meetupImage}" style="width:500px"/>` : ''}
+${event.data.meetupImage ? `![event banner for ${event.data.date}](${event.data.meetupImage})` : ''}
 
 Our next Event will be on ${event.data.date.toLocaleDateString('en-US', optionsDate) + ', at ' + event.data.date.toLocaleTimeString('en-US', optionsTime)}
 

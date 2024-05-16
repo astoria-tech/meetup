@@ -1,12 +1,12 @@
 @layer base {
   h1 {
-    @apply text-2xl;
+    @apply text-2xl pb-2;
   }
   h2 {
-    @apply text-xl;
+    @apply text-xl pb-2;
   }
   h3 {
-    @apply text-lg;
+    @apply text-lg pb-2;
   }
 
   a {
@@ -32,5 +32,9 @@
 
   ul li::before {
     @apply content-['•'] mr-2; /* Customize the marker color with your Tailwind color */
+  }
+
+  img {
+    @apply pb-2
   }
 }

@@ -3,7 +3,7 @@ import type {HydratedFeedItemPreHtml} from '../types'
 export default ({event, permalink}: HydratedFeedItemPreHtml) => `
 # [Slides for - ${event.data.title}](${permalink})
 
-${event.data.banner && `<img alt="event banner for ${event.data.date}" src="${event.data.banner}" style="width:500px"/>`}
+${event.data.banner && `![event banner for ${event.data.date}](${event.data.banner})`}
 
 Special thanks to our presenters ${event.presentations.map(p => p.speaker.data.name).join(', ')} for sharing their knowledge with us.
 
