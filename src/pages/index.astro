@@ -2,10 +2,26 @@
 import {getFeed} from '../data/feed'
 import FeedItem from '../components/FeedItem.astro'
 import MainLayout from '../layouts/MainLayout.astro'
+import Card from '../components/Card.astro'
 
 const feed = await getFeed({site: Astro.site})
 ---
 
 <MainLayout>
+  <Card>
+    <header>
+      <h1>👋 Welcome to the Astoria Tech Meetup!</h1>
+    </header>
+    <main>
+      <p>
+        Here, you can explore both our upcoming events and slides for previous events. Our community-driven, open-source
+        website is hosted on GitHub at <a href="https://github.com/astoria-tech/meetup">astoria-tech/meetup</a>. We
+        encourage you to contribute! If you notice any issues or have suggestions for improvements, please don't
+        hesitate to open a pull request. For updates, be sure to check out our <a href="/rss.xml">RSS feed</a>. Visit
+        our <a href="/links">Links page</a> to discover a curated list of useful resources and connections related to our
+        events and community.
+      </p>
+    </main>
+  </Card>
   {feed.map(feedItem => <FeedItem {...feedItem} />)}
 </MainLayout>
