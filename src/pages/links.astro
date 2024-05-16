@@ -3,7 +3,8 @@ import MainLayout from '../layouts/MainLayout.astro'
 import {getLink} from '../components/Link.astro'
 import Card from '../components/Card.astro'
 
-const logo = getLink('/design/symbol-white-astoria-tech-mark.png')
+const darkmodeLogo = getLink('/design/symbol-white-astoria-tech-mark.png')
+const lightmodeLogo = getLink('/design/symbol-black-astoria-tech-mark.png')
 
 const data = [
   {name: 'Meetup page', href: 'https://www.meetup.com/astoria-tech-meetup/'},
@@ -18,7 +19,8 @@ const data = [
 <MainLayout>
   <Card>
     <header>
-      <img class="mx-auto w-70 p-10" src={logo} alt="Astoria Tech Logo" />
+      <img class="mx-auto w-70 p-10 hidden dark:inline-block" src={darkmodeLogo} alt="Astoria Tech Logo" />
+      <img class="mx-auto w-70 p-10 dark:hidden" src={lightmodeLogo} alt="Astoria Tech Logo" />
     </header>
     <div class="flex flex-col items-center">
       {
