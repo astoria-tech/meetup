@@ -83,8 +83,8 @@ export async function getFeed(props: {site?: URL}): Promise<HydratedFeedItem[]> 
       }
       const markdown = markdownMap[type](hydrated)
       const html = render(markdown)
-      const {title, content} = forRss(html)
-      return {...hydrated, html, title, content}
+      const breakdown = forRss(html)
+      return {...hydrated, ...breakdown, html}
     })
     .sort((a, b) => {
       return new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()

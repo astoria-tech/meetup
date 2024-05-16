@@ -1,10 +1,15 @@
 ---
 import type {HydratedFeedItem} from '../types'
 import Card from '../components/Card.astro'
-type Props = HydratedFeedItem
-const {html} = Astro.props
+type Props = HydratedFeedItem & {heading?: 'h1' | 'h2'}
+const {heading: Heading, title, content, permalink} = {heading: 'h1', ...Astro.props}
 ---
 
 <Card>
-  <Fragment set:html={html} />
+  <heading>
+    <Heading>
+      <a href={permalink}>{title}</a>
+    </Heading>
+  </heading>
+  <Fragment set:html={content} />
 </Card>

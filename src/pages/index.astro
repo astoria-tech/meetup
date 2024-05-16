@@ -23,5 +23,5 @@ const feed = await getFeed({site: Astro.site})
       </p>
     </main>
   </Card>
-  {feed.map(feedItem => <FeedItem {...feedItem} />)}
+  {feed.map(feedItem => <FeedItem {...feedItem} heading="h2" />)}
 </MainLayout>
