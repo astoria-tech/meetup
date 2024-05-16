@@ -11,5 +11,7 @@ const {heading: Heading, title, content, permalink} = {heading: 'h1', ...Astro.p
       <a href={permalink}>{title}</a>
     </Heading>
   </heading>
-  <Fragment set:html={content} />
+  <main>
+    <Fragment set:html={content} />
+  </main>
 </Card>
