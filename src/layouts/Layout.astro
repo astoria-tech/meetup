@@ -1,7 +1,7 @@
 ---
 import '../style.css'
 import copy from '../copy'
-import {getCssUrl} from '../components/Link.astro'
+import {getCssUrl, getLink} from '../components/Link.astro'
 
 type Props = {
   title?: string
@@ -24,6 +24,7 @@ const applyWavyBackground = useWavyBackground ? ['wavy-background'] : []
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for astoria.app" href={getLink('rss.xml')} />
     <link rel="icon" type="image/png" href="../design/symbol-black-logo.png" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" href="../design/symbol-white-logo.png" media="(prefers-color-scheme: dark)" />
     <meta name="viewport" content="width=device-width" />
