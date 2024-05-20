@@ -1,9 +1,9 @@
 //These color variables are the base for which theme variables can be assigned or referenced directly.
 
 export const linkPalette = {
-  base: '#4d86f7',
-  dark: '#3d6bc5',
-  light: '#709ef8',
+  base: '#0944BC',
+  dark: '#083CA7',
+  light: '#0A4CD1',
 }
 
 export const baseColors = {

@@ -25,10 +25,10 @@ import {colors, fontFamily} from '../../styles/themes/base'
         {
           Object.entries(colors).map(itemArr => (
             <li
-              class="w-full h-[50px] [&:not(:last-child)]:border-b-2 border-black border-solid first:text-white text-xl text-indigo-900 text-center leading-[50px]"
-              style={`background-color: ${itemArr[1]}`}
+              class="w-full h-[50px] [&:not(:last-child)]:border-b-2 border-black border-solid text-xl text-slate-200 text-center font-bold leading-[50px]"
+              style={`background-color: ${itemArr[1]}; -webkit-text-stroke: 1.25px #000000 `}
             >
-              <span class="font-bold mr-2">{itemArr[0]}:</span>
+              <span class="mr-2">{itemArr[0]}:</span>
               {itemArr[1]}
             </li>
           ))
