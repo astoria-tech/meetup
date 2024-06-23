@@ -4,7 +4,7 @@
   "description": "",
   "bin": "4.cli.ts",
   "scripts": {
-    "cli": "./4.cli.ts"
+    "cli": "./src/cli.ts"
   },
   "type": "module",
   "keywords": [],
