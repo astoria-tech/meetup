@@ -1,7 +1,7 @@
 import {compose} from '../../src/compose.js'
 import {SpeakersImageData, relativeDirectory, speakersImage} from '../../src/event-data.js'
-import {speakersSvg} from '../../src/speakers-svg.js'
-import {textSvg} from '../../src/text-svg+.js'
+import {speakerLayers} from '../../src/speaker-layers.js'
+import {textLayer} from '../../src/text-layer.js'
 
 export const type = speakersImage
 
@@ -10,7 +10,7 @@ export default ({date, speakers, day, month, time}: SpeakersImageData) =>
     outputPath: relativeDirectory(`./public/banners/${date}.png`),
     background: relativeDirectory(`./packages/image-generator/types/banner/template.png`),
     layers: [
-      textSvg({
+      textLayer({
         text: day,
         width: '250px',
         height: '300px',
@@ -19,7 +19,7 @@ export default ({date, speakers, day, month, time}: SpeakersImageData) =>
         top: 110,
         left: 806,
       }),
-      textSvg({
+      textLayer({
         text: month,
         width: '250px',
         height: '300px',
@@ -28,7 +28,7 @@ export default ({date, speakers, day, month, time}: SpeakersImageData) =>
         top: 175,
         left: 806,
       }),
-      textSvg({
+      textLayer({
         text: time,
         width: '250px',
         height: '300px',
@@ -37,7 +37,7 @@ export default ({date, speakers, day, month, time}: SpeakersImageData) =>
         top: 300,
         left: 896,
       }),
-      ...speakersSvg({
+      ...speakerLayers({
         speakers,
         imageSize: 275,
         fontSize: 31,

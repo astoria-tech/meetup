@@ -1,4 +1,4 @@
-import {SpeakerSvgProps as _SpeakerSvgProps, speakerSvg as _speakerSvg} from './speaker-svg+.js'
+import {SpeakerSvgProps, speakerSvg} from './speaker-svg.js'
 
 type CalculateSpeakerOffsetProps = {
   height: number
@@ -22,10 +22,10 @@ function calculateSpeakerOffset(props: CalculateSpeakerOffsetProps) {
   return {left, top}
 }
 
-export type SpeakerSvgProps = _SpeakerSvgProps & CalculateSpeakerOffsetProps
+export type SpeakerLayerProps = SpeakerSvgProps & CalculateSpeakerOffsetProps
 
-export const speakerSvg = async (props: SpeakerSvgProps) => {
-  const input = await _speakerSvg(props)
+export const speakerLayer = async (props: SpeakerLayerProps) => {
+  const input = await speakerSvg(props)
   const offset = calculateSpeakerOffset(props)
   return {input, ...offset}
 }

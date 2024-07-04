@@ -1,20 +1,20 @@
 import {Layer} from './compose.js'
-import {speakerSvg, SpeakerSvgProps} from './speaker-svg++.js'
+import {speakerLayer, SpeakerLayerProps} from './speaker-layer.js'
 
 export interface Speaker {
   image: string | Buffer
   name: string | string[]
 }
 
-type Core = Omit<SpeakerSvgProps, 'total' | 'height' | 'width' | 'index' | 'lines' | 'image'>
+type Core = Omit<SpeakerLayerProps, 'total' | 'height' | 'width' | 'index' | 'lines' | 'image'>
 
-export type SpeakersSvgProps = {speakers: Speaker[]} & Core
+export type SpeakerLayersProps = {speakers: Speaker[]} & Core
 
-export const speakersSvg = ({speakers, ...core}: SpeakersSvgProps): Layer[] =>
+export const speakerLayers = ({speakers, ...core}: SpeakerLayersProps): Layer[] =>
   speakers.map(
     (speaker, index, total) =>
       ({height, width}) =>
-        speakerSvg({
+        speakerLayer({
           total: total.length,
           height,
           width,
