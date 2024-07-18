@@ -1,6 +1,6 @@
 ---
 date: 2024-07-04
-slides: /presentations/2024-07-04-peter-valdez.pdf
+slidesSource: https://github.com/moonbeam-nyc/snorlax
 speaker: peter-valdez
 title: 'Snorlax: the Kubernetes sleep operator'
 ---

@@ -51,7 +51,7 @@ export async function getFeed(props: {site?: URL}): Promise<HydratedFeedItem[]> 
       data: {
         ...presentation.data,
         slides: presentation.data.slides && link(presentation.data.slides),
-        slidesSource: presentation.data.slides && link(presentation.data.slides),
+        slidesSource: presentation.data.slidesSource && presentation.data.slidesSource,
       },
       speaker,
     }
