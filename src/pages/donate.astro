@@ -16,6 +16,8 @@ const donors = [
   { name: "William Hutson" },
 ];
 
+donors.sort((a, b) => a.name.localeCompare(b.name));
+
 // Styles to cycle through for the donor list
 const donorStyles = [
   { emoji: "🌟", color: "yellow", rotate: "-rotate-1", size: "text-xl py-2 px-4" },
