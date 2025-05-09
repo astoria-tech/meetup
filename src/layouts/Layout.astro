@@ -24,6 +24,17 @@ const applyWavyBackground = useWavyBackground ? ['wavy-background'] : []
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.getItem('theme') === 'dark' ||
+        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for astoria.app" href={getLink('rss.xml')} />
     <link rel="icon" type="image/png" href="../design/symbol-black-logo.png" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" href="../design/symbol-white-logo.png" media="(prefers-color-scheme: dark)" />
