@@ -1,19 +1,25 @@
-import {Layer} from './compose.js'
-import {speakerLayer, SpeakerLayerProps} from './speaker-layer.js'
+import { Layer } from "./compose.js";
+import { speakerLayer, SpeakerLayerProps } from "./speaker-layer.js";
 
 export interface Speaker {
-  image: string | Buffer
-  name: string | string[]
+  image: string | Buffer;
+  name: string | string[];
 }
 
-type Core = Omit<SpeakerLayerProps, 'total' | 'height' | 'width' | 'index' | 'lines' | 'image'>
+type Core = Omit<
+  SpeakerLayerProps,
+  "total" | "height" | "width" | "index" | "lines" | "image"
+>;
 
-export type SpeakerLayersProps = {speakers: Speaker[]} & Core
+export type SpeakerLayersProps = { speakers: Speaker[] } & Core;
 
-export const speakerLayers = ({speakers, ...core}: SpeakerLayersProps): Layer[] =>
+export const speakerLayers = ({
+  speakers,
+  ...core
+}: SpeakerLayersProps): Layer[] =>
   speakers.map(
     (speaker, index, total) =>
-      ({height, width}) =>
+      ({ height, width }) =>
         speakerLayer({
           total: total.length,
           height,
@@ -23,4 +29,4 @@ export const speakerLayers = ({speakers, ...core}: SpeakerLayersProps): Layer[] 
           image: speaker.image,
           ...core,
         }),
-  )
+  );

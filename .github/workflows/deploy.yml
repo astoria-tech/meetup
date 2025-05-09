@@ -7,11 +7,11 @@ on:
     branches:
       - main
     paths-ignore:
-      - '.github/**'
-      - 'packages/**'
-      - 'script/**'
-      - 'design/**'
-      - '.vscode/**'
+      - ".github/**"
+      - "packages/**"
+      - "script/**"
+      - "design/**"
+      - ".vscode/**"
   workflow_dispatch:
 
 permissions:

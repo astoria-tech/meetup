@@ -1,37 +1,41 @@
 ---
-import Layout from './Layout.astro'
-import {getLink} from '../components/Link.astro'
-import ThemeToggle from '../components/ThemeToggle.astro'
+import Layout from "./Layout.astro";
+import { getLink } from "../components/Link.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 
 type Props = {
-  title?: string
-  bodyClass?: string[]
-}
-const {title, bodyClass = []} = Astro.props
+  title?: string;
+  bodyClass?: string[];
+};
+const { title, bodyClass = [] } = Astro.props;
 ---
 
-<Layout useWavyBackground title={title} bodyClass={['bg-zinc-100', 'mt-5', ...bodyClass]}>
+<Layout
+  useWavyBackground
+  title={title}
+  bodyClass={["bg-zinc-100", "mt-5", ...bodyClass]}
+>
   <div class="md:w-[700px] px-10 m-auto">
     <nav class="py-4 mb-6">
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-4 sm:space-x-6 md:space-x-8">
           <a
-            href={getLink('/')}
+            href={getLink("/")}
             class="text-lg text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
             >Home</a
           >
           <a
-            href={getLink('/links')}
+            href={getLink("/links")}
             class="text-lg text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
             >Links</a
           >
           <a
-            href={getLink('/donate')}
+            href={getLink("/donate")}
             class="text-lg text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
             >Donate</a
           >
           <a
-            href={getLink('rss.xml')}
+            href={getLink("rss.xml")}
             class="text-lg text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
             target="_blank">RSS</a
           >

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import {readContent, writeContent} from './utils.js'
+import { readContent, writeContent } from "./utils.js";
 
-const filePath = process.argv[2]
-const {frontMatter, content} = await readContent(filePath)
-await writeContent(filePath, frontMatter, content)
+const filePath = process.argv[2];
+const { frontMatter, content } = await readContent(filePath);
+await writeContent(filePath, frontMatter, content);

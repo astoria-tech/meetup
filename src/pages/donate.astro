@@ -1,46 +1,80 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro'
-import Card from '../components/Card.astro'
+import MainLayout from "../layouts/MainLayout.astro";
+import Card from "../components/Card.astro";
 
 const donors = [
-  {name: 'Camille Sato'},
-  {name: 'Carlos Campoy'},
-  {name: 'Fahad H'},
-  {name: 'Ian LeRoy'},
-  {name: 'Maria Pia'},
-  {name: 'Nancy Zhang'},
-  {name: 'Rachel Dean'},
-  {name: 'Robin Kwong'},
-  {name: 'Tatsuya E'},
-  {name: 'Tea Reggi'},
-  {name: 'William Hutson'},
-]
+  { name: "Camille Sato" },
+  { name: "Carlos Campoy" },
+  { name: "Fahad H" },
+  { name: "Ian LeRoy" },
+  { name: "Maria Pia" },
+  { name: "Nancy Zhang" },
+  { name: "Rachel Dean" },
+  { name: "Robin Kwong" },
+  { name: "Tatsuya E" },
+  { name: "Tea Reggi" },
+  { name: "William Hutson" },
+];
 
-donors.sort((a, b) => a.name.localeCompare(b.name))
+donors.sort((a, b) => a.name.localeCompare(b.name));
 
 // Styles to cycle through for the donor list
 const donorStyles = [
-  {emoji: '🌟', color: 'yellow', rotate: '-rotate-1', size: 'text-xl py-2 px-4'},
-  {emoji: '💖', color: 'green', rotate: 'rotate-1', size: 'text-xl py-2 px-4'},
-  {emoji: '🚀', color: 'blue', rotate: '-rotate-2', size: 'text-xl py-2 px-4'},
-  {emoji: '✨', color: 'purple', rotate: 'rotate-2', size: 'text-xl py-2 px-4'},
-  {emoji: '🎉', color: 'pink', rotate: '-rotate-1', size: 'text-xl py-2 px-4'},
-  {emoji: '💡', color: 'indigo', rotate: 'rotate-1', size: 'text-xl py-2 px-4'},
-  {emoji: '🏆', color: 'red', rotate: '-rotate-2', size: 'text-xl py-2 px-4'},
-  {emoji: '🎈', color: 'teal', rotate: 'rotate-2', size: 'text-xl py-2 px-4'},
-]
+  {
+    emoji: "🌟",
+    color: "yellow",
+    rotate: "-rotate-1",
+    size: "text-xl py-2 px-4",
+  },
+  {
+    emoji: "💖",
+    color: "green",
+    rotate: "rotate-1",
+    size: "text-xl py-2 px-4",
+  },
+  {
+    emoji: "🚀",
+    color: "blue",
+    rotate: "-rotate-2",
+    size: "text-xl py-2 px-4",
+  },
+  {
+    emoji: "✨",
+    color: "purple",
+    rotate: "rotate-2",
+    size: "text-xl py-2 px-4",
+  },
+  {
+    emoji: "🎉",
+    color: "pink",
+    rotate: "-rotate-1",
+    size: "text-xl py-2 px-4",
+  },
+  {
+    emoji: "💡",
+    color: "indigo",
+    rotate: "rotate-1",
+    size: "text-xl py-2 px-4",
+  },
+  { emoji: "🏆", color: "red", rotate: "-rotate-2", size: "text-xl py-2 px-4" },
+  { emoji: "🎈", color: "teal", rotate: "rotate-2", size: "text-xl py-2 px-4" },
+];
 
 // Helper to construct Tailwind classes dynamically (using fixed strings for the tool)
 const colorClassMap = {
-  yellow: 'bg-yellow-100 dark:bg-yellow-700 dark:bg-opacity-50 text-yellow-800 dark:text-yellow-200',
-  green: 'bg-green-100 dark:bg-green-700 dark:bg-opacity-50 text-green-800 dark:text-green-200',
-  blue: 'bg-blue-100 dark:bg-blue-700 dark:bg-opacity-50 text-blue-800 dark:text-blue-200',
-  purple: 'bg-purple-100 dark:bg-purple-700 dark:bg-opacity-50 text-purple-800 dark:text-purple-200',
-  pink: 'bg-pink-100 dark:bg-pink-700 dark:bg-opacity-50 text-pink-800 dark:text-pink-200',
-  indigo: 'bg-indigo-100 dark:bg-indigo-700 dark:bg-opacity-50 text-indigo-800 dark:text-indigo-200',
-  red: 'bg-red-100 dark:bg-red-700 dark:bg-opacity-50 text-red-800 dark:text-red-200',
-  teal: 'bg-teal-100 dark:bg-teal-700 dark:bg-opacity-50 text-teal-800 dark:text-teal-200',
-}
+  yellow:
+    "bg-yellow-100 dark:bg-yellow-700 dark:bg-opacity-50 text-yellow-800 dark:text-yellow-200",
+  green:
+    "bg-green-100 dark:bg-green-700 dark:bg-opacity-50 text-green-800 dark:text-green-200",
+  blue: "bg-blue-100 dark:bg-blue-700 dark:bg-opacity-50 text-blue-800 dark:text-blue-200",
+  purple:
+    "bg-purple-100 dark:bg-purple-700 dark:bg-opacity-50 text-purple-800 dark:text-purple-200",
+  pink: "bg-pink-100 dark:bg-pink-700 dark:bg-opacity-50 text-pink-800 dark:text-pink-200",
+  indigo:
+    "bg-indigo-100 dark:bg-indigo-700 dark:bg-opacity-50 text-indigo-800 dark:text-indigo-200",
+  red: "bg-red-100 dark:bg-red-700 dark:bg-opacity-50 text-red-800 dark:text-red-200",
+  teal: "bg-teal-100 dark:bg-teal-700 dark:bg-opacity-50 text-teal-800 dark:text-teal-200",
+};
 ---
 
 <MainLayout title="Donate - Astoria Tech Meetup">
@@ -50,7 +84,9 @@ const colorClassMap = {
     </header>
     <main>
       <div class="mb-10">
-        <div class="text-center mb-2 text-lg">Raised: $175 / $845 (costs to date)</div>
+        <div class="text-center mb-2 text-lg">
+          Raised: $175 / $845 (costs to date)
+        </div>
         <div class="w-full bg-gray-200 rounded-full h-6 dark:bg-gray-700">
           <div
             class="bg-purple-600 h-6 rounded-full text-xs font-medium text-blue-100 text-center p-0.5 leading-none"
@@ -64,38 +100,43 @@ const colorClassMap = {
         We deeply appreciate the incredible support from our community.
       </p>
       <p class="text-lg mb-4 text-center max-w-2xl mx-auto">
-        All donations go directly towards covering the operational costs of the Astoria Tech Meetup. This mainly covers
-        costs such as venue space and Meetup.com fees.
+        All donations go directly towards covering the operational costs of the
+        Astoria Tech Meetup. This mainly covers costs such as venue space and
+        Meetup.com fees.
       </p>
       <p class="text-lg mb-10 text-center max-w-2xl mx-auto">
-        Your contributions help us keep the meetups running smoothly and accessible to everyone, and are never used for
-        anything else.
+        Your contributions help us keep the meetups running smoothly and
+        accessible to everyone, and are never used for anything else.
       </p>
 
       <hr class="my-12 border-gray-300 dark:border-gray-700" />
 
       <h2 class="text-3xl font-bold mb-6 text-center">Our Community Heroes!</h2>
       <p class="mb-8 text-center text-gray-700 dark:text-gray-300">
-        A massive thank you to these amazing individuals for their generous contributions!
+        A massive thank you to these amazing individuals for their generous
+        contributions!
       </p>
 
-      <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 p-4">
+      <div
+        class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 p-4"
+      >
         {
           donors.map((donor, index) => {
-            const style = donorStyles[index % donorStyles.length]
-            const currentBgColorClass = colorClassMap[style.color] || colorClassMap.yellow // Fallback to yellow
+            const style = donorStyles[index % donorStyles.length];
+            const currentBgColorClass =
+              colorClassMap[style.color] || colorClassMap.yellow; // Fallback to yellow
             return (
               <span
                 class:list={[
                   currentBgColorClass,
                   style.size,
                   style.rotate,
-                  'rounded-lg shadow-sm hover:scale-105 transition-transform',
+                  "rounded-lg shadow-sm hover:scale-105 transition-transform",
                 ]}
               >
                 {style.emoji} {donor.name}
               </span>
-            )
+            );
           })
         }
       </div>

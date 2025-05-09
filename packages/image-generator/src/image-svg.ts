@@ -1,16 +1,16 @@
-import {svg} from './svg.js'
+import { svg } from "./svg.js";
 
 export type ImageSvgProps = {
-  imageSize: number
-  lines: string[]
-  image: string
-  fontSize: number
-  fontColor: string
-  lineHeight: number
-  xPadding?: number
-  bottomPadding?: number
-  imageBottomPadding?: number
-}
+  imageSize: number;
+  lines: string[];
+  image: string;
+  fontSize: number;
+  fontColor: string;
+  lineHeight: number;
+  xPadding?: number;
+  bottomPadding?: number;
+  imageBottomPadding?: number;
+};
 
 /** svg with rounded image and text under it */
 export async function imageSvg(props: ImageSvgProps) {
@@ -30,9 +30,9 @@ export async function imageSvg(props: ImageSvgProps) {
     lineHeight: 20,
     xPadding: 0,
     ...props,
-  }
-  const y = 0 // Top position for the image
-  const svgHeight = imageSize + y * 2 + lines.length * lineHeight // Calculate SVG height based on image and text
+  };
+  const y = 0; // Top position for the image
+  const svgHeight = imageSize + y * 2 + lines.length * lineHeight; // Calculate SVG height based on image and text
 
   // Generate text elements based on lines array
   const textElements = lines
@@ -40,7 +40,7 @@ export async function imageSvg(props: ImageSvgProps) {
       (line, index) =>
         `<tspan x="${imageSize / 2 + x}" y="${imageSize + y + lineHeight * (index + 1) + imageBottomPadding}">${line}</tspan>`,
     )
-    .join('')
+    .join("");
 
   return svg`
   <svg width="${imageSize + x * 2}" height="${svgHeight + bottomPadding + imageBottomPadding}" xmlns="http://www.w3.org/2000/svg">
@@ -51,5 +51,5 @@ export async function imageSvg(props: ImageSvgProps) {
     <text font-weight="bold" fill="${fontColor}" font-family="Helvetica" font-size="${fontSize}" text-anchor="middle">
       ${textElements}
     </text>
-  </svg>`
+  </svg>`;
 }

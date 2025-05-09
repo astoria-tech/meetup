@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       date:
-        description: 'Event Date (yyyy-mm-dd)'
+        description: "Event Date (yyyy-mm-dd)"
         required: true
         type: string
 

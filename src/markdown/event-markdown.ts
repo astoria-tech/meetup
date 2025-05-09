@@ -1,13 +1,22 @@
-import type {HydratedFeedItemPreHtml} from '../types'
-const optionsTime: Intl.DateTimeFormatOptions = {timeZone: 'UTC', hour: 'numeric', minute: 'numeric'}
-const optionsDate: Intl.DateTimeFormatOptions = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+import type { HydratedFeedItemPreHtml } from "../types";
+const optionsTime: Intl.DateTimeFormatOptions = {
+  timeZone: "UTC",
+  hour: "numeric",
+  minute: "numeric",
+};
+const optionsDate: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
 
-export default ({event, permalink}: HydratedFeedItemPreHtml) => `
+export default ({ event, permalink }: HydratedFeedItemPreHtml) => `
 # [${event.data.title}](${permalink})
 
-${event.data.meetupImage ? `![event banner for ${event.data.date}](${event.data.meetupImage})` : ''}
+${event.data.meetupImage ? `![event banner for ${event.data.date}](${event.data.meetupImage})` : ""}
 
-Our next Event will be on ${event.data.date.toLocaleDateString('en-US', optionsDate) + ', at ' + event.data.date.toLocaleTimeString('en-US', optionsTime)}
+Our next Event will be on ${event.data.date.toLocaleDateString("en-US", optionsDate) + ", at " + event.data.date.toLocaleTimeString("en-US", optionsTime)}
 
 Be sure to RSVP on meetup.
-`
+`;
