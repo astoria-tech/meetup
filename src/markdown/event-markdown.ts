@@ -3,6 +3,7 @@ const simplifiedDateOptions: Intl.DateTimeFormatOptions = {
   month: "long",
   day: "numeric",
   year: "numeric",
+  timeZone: "UTC",
 };
 
 export default ({ event, permalink }: HydratedFeedItemPreHtml) => `
