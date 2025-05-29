@@ -1,40 +1,40 @@
-import {defineCollection, reference, z} from 'astro:content'
+import { defineCollection, reference, z } from "astro:content";
 
 const eventsCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     banner: z.string().optional(),
     meetupImage: z.string().optional(),
     date: z.date(),
     meetup: z.string(),
-    presentations: z.array(reference('presentations')),
+    presentations: z.array(reference("presentations")),
     title: z.string(),
     googleCal: z.string().optional(),
     ical: z.string().optional(),
   }),
-})
+});
 
 const feedCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
-    event: reference('events'),
+    event: reference("events"),
     publishedAt: z.date(),
   }),
-})
+});
 
 const presentationsCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     date: z.date(),
     slides: z.string().optional(),
     slidesSource: z.string().optional(),
-    speaker: reference('speakers'),
+    speaker: reference("speakers"),
     title: z.string().optional(),
   }),
-})
+});
 
 const speakersCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     githubUsername: z.string().optional(),
     linkedin: z.string().optional(),
@@ -42,11 +42,11 @@ const speakersCollection = defineCollection({
     profileImage: z.string().optional(),
     website: z.string().optional(),
   }),
-})
+});
 
 export const collections = {
   events: eventsCollection,
   feed: feedCollection,
   presentations: presentationsCollection,
   speakers: speakersCollection,
-}
+};

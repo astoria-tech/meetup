@@ -1,0 +1,57 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Overview
+
+This is an Astro project for a tech meetup website.
+
+## Key Technologies
+
+*   **Astro:** Core framework for building the site.
+*   **Tailwind CSS:** For styling.
+*   **TypeScript:** For type checking and improved code quality.
+*   **Markdown:** Used for content within Astro's content collections.
+
+## Directory Structure
+
+*   `src/`: Contains the main source code.
+    *   [`src/components/`](mdc:src/components): Reusable Astro components.
+        *   [`src/components/FeedItem.astro`](mdc:src/components/FeedItem.astro)
+        *   [`src/components/ThemeToggle.astro`](mdc:src/components/ThemeToggle.astro)
+        *   [`src/components/Link.astro`](mdc:src/components/Link.astro)
+        *   [`src/components/Card.astro`](mdc:src/components/Card.astro)
+    *   [`src/content/`](mdc:src/content): Defines and stores content collections. Key file: [`src/content/config.ts`](mdc:src/content/config.ts) which defines the schemas for:
+        *   `events`
+        *   `feed`
+        *   `presentations`
+        *   `speakers`
+    *   [`src/layouts/`](mdc:src/layouts): Defines page layouts.
+        *   [`src/layouts/MainLayout.astro`](mdc:src/layouts/MainLayout.astro)
+        *   [`src/layouts/Layout.astro`](mdc:src/layouts/Layout.astro)
+    *   [`src/pages/`](mdc:src/pages): Defines the site's pages and routes.
+        *   [`src/pages/index.astro`](mdc:src/pages/index.astro) (Homepage)
+        *   [`src/pages/links.astro`](mdc:src/pages/links.astro)
+        *   [`src/pages/intake.astro`](mdc:src/pages/intake.astro)
+        *   [`src/pages/donate.astro`](mdc:src/pages/donate.astro)
+        *   [`src/pages/rss.xml.ts`](mdc:src/pages/rss.xml.ts) (RSS feed)
+    *   [`src/styles/`](mdc:src/styles): Contains global styles.
+*   `public/`: For static assets.
+*   `packages/`: Contains local packages.
+    *   [`packages/image-generator/`](mdc:packages/image-generator): Local package for image generation.
+*   `design/`: Contains design assets like fonts.
+
+## Key Configuration Files
+
+*   [`astro.config.mjs`](mdc:astro.config.mjs): Astro project configuration.
+*   [`tailwind.config.mjs`](mdc:tailwind.config.mjs): Tailwind CSS configuration.
+*   [`package.json`](mdc:package.json): Project dependencies and scripts.
+*   [`tsconfig.json`](mdc:tsconfig.json): TypeScript configuration.
+
+## Functionality
+
+*   The website displays information about tech meetup events, speakers, and presentations.
+*   It includes an RSS feed.
+*   There's a custom image generation capability via the `image-generator` package, likely used for social media banners or event visuals.
+*   The project uses linting and formatting tools (Prettier, sort-package-json) to maintain code quality. The main script for fixing linting and style issues is `npm run fix`.

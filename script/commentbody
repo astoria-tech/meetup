@@ -1,72 +1,75 @@
 #!/usr/bin/env node
-import {$} from 'zx'
-import * as changeCase from 'change-case'
-import {parseMdLink} from './utils.js'
-import fs from 'fs/promises'
+import { $ } from "zx";
+import * as changeCase from "change-case";
+import { parseMdLink } from "./utils.js";
+import fs from "fs/promises";
 
-const issue = process.argv[2]
+const issue = process.argv[2];
 
 if (!issue) {
-  throw new Error('Issue number is required')
+  throw new Error("Issue number is required");
 }
 
-const body = (await $`gh issue view ${issue} --json body`).stdout.trim()
+const body = (await $`gh issue view ${issue} --json body`).stdout.trim();
 
-const parsed = JSON.parse(body).body
+const parsed = JSON.parse(body).body;
 
 function parseContent(content) {
-  const segments = []
-  const splitContent = content.split('\n').filter(line => line.trim() !== '')
+  const segments = [];
+  const splitContent = content.split("\n").filter((line) => line.trim() !== "");
 
-  let currentLabel = ''
-  let currentContent = []
+  let currentLabel = "";
+  let currentContent = [];
 
-  splitContent.forEach(line => {
-    if (line.startsWith('###')) {
-      if (currentLabel !== '') {
-        segments.push({label: currentLabel, content: currentContent})
-        currentContent = []
+  splitContent.forEach((line) => {
+    if (line.startsWith("###")) {
+      if (currentLabel !== "") {
+        segments.push({ label: currentLabel, content: currentContent });
+        currentContent = [];
       }
-      currentLabel = line.substring(3).trim()
+      currentLabel = line.substring(3).trim();
     } else {
-      currentContent.push(line.trim())
+      currentContent.push(line.trim());
     }
-  })
+  });
 
-  if (currentLabel !== '') {
-    segments.push({label: currentLabel, content: currentContent})
+  if (currentLabel !== "") {
+    segments.push({ label: currentLabel, content: currentContent });
   }
 
-  return segments
+  return segments;
 }
 
-const content = parseContent(parsed)
-const noResponse = '_No response_'
-const setKey = v => changeCase.camelCase(v.trim().toLowerCase().replace('(optional)', ''))
+const content = parseContent(parsed);
+const noResponse = "_No response_";
+const setKey = (v) =>
+  changeCase.camelCase(v.trim().toLowerCase().replace("(optional)", ""));
 
 const data = Object.fromEntries(
   content
-    .map(value => {
-      const key = setKey(value.label)
-      const content = value.content.join('\n')
+    .map((value) => {
+      const key = setKey(value.label);
+      const content = value.content.join("\n");
       if (content === noResponse) {
-        return undefined
+        return undefined;
       }
-      return [key, content]
+      return [key, content];
     })
-    .filter(v => v),
-)
+    .filter((v) => v),
+);
 
 if (process.env.CI && process.env.GITHUB_OUTPUT) {
-  const dataEntires = Object.entries(data)
+  const dataEntires = Object.entries(data);
 
   if (dataEntires.length === 0) {
-    console.error('commentbody parser exited with no json fields parsed')
-    process.exit(1)
+    console.error("commentbody parser exited with no json fields parsed");
+    process.exit(1);
   }
 
-  const output = dataEntires.map(([key, value]) => `${key}=${value}`).join('\n')
-  await fs.writeFile(process.env.GITHUB_OUTPUT, output)
+  const output = dataEntires
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
+  await fs.writeFile(process.env.GITHUB_OUTPUT, output);
 } else {
-  process.stdout.write(JSON.stringify(object))
+  process.stdout.write(JSON.stringify(object));
 }

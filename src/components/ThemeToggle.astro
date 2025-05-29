@@ -1,0 +1,64 @@
+---
+// No server-side logic needed for this component's basic functionality
+---
+
+<button
+  id="theme-toggle"
+  class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+>
+  <span class="sr-only">Toggle theme</span>
+  <span id="theme-toggle-light-icon" class="hidden">☀️</span>
+  <span id="theme-toggle-dark-icon" class="hidden">🌙</span>
+</button>
+
+<script>
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  const themeToggleLightIcon = document.getElementById(
+    "theme-toggle-light-icon",
+  );
+  const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
+
+  function applyTheme(theme: "light" | "dark") {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      themeToggleLightIcon?.classList.add("hidden");
+      themeToggleDarkIcon?.classList.remove("hidden");
+    } else {
+      document.documentElement.classList.remove("dark");
+      themeToggleDarkIcon?.classList.add("hidden");
+      themeToggleLightIcon?.classList.remove("hidden");
+    }
+  }
+
+  // Check for saved theme in localStorage or use system preference
+  let currentTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+  if (!currentTheme) {
+    currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+  applyTheme(currentTheme);
+  // Update button text based on initial theme (if not server-rendered)
+  if (currentTheme === "dark") {
+    themeToggleDarkIcon?.classList.remove("hidden");
+  } else {
+    themeToggleLightIcon?.classList.remove("hidden");
+  }
+
+  themeToggleBtn?.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    const newTheme = isDark ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    applyTheme(newTheme);
+  });
+
+  // Listen for system theme changes if no preference is stored
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        const newTheme = e.matches ? "dark" : "light";
+        applyTheme(newTheme);
+      }
+    });
+</script>

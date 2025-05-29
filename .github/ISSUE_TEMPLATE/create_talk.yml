@@ -1,9 +1,9 @@
 name: Meetup - Submit / Edit a Talk
 description: As a first time speaker or a repeat speaker this is the form for you.
-title: '[Talk Submission] '
-labels: ['talk-submission', 'non-code']
+title: "[Talk Submission] "
+labels: ["talk-submission", "non-code"]
 assignees:
-  - 'reggi'
+  - "reggi"
 body:
   - type: markdown
     attributes:
@@ -70,7 +70,7 @@ body:
     id: presentationTitle
     attributes:
       label: presentationTitle
-      description: 'The title of your presentation.'
+      description: "The title of your presentation."
       placeholder:
     validations:
       required: false
@@ -79,8 +79,8 @@ body:
     id: date
     attributes:
       label: date
-      description: 'The date of the presentation (YYYY-MM-DD).'
-      placeholder: 'YYYY-MM-DD'
+      description: "The date of the presentation (YYYY-MM-DD)."
+      placeholder: "YYYY-MM-DD"
     validations:
       required: false
 
@@ -88,8 +88,8 @@ body:
     id: slides
     attributes:
       label: slides
-      description: 'Link to the presentation slides, (if available).'
-      placeholder: 'https://yoursite.com/slides.pdf'
+      description: "Link to the presentation slides, (if available)."
+      placeholder: "https://yoursite.com/slides.pdf"
     validations:
       required: false
 
@@ -97,7 +97,7 @@ body:
     id: slidesSource
     attributes:
       label: slidesSource
-      description: 'Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website).'
+      description: "Link to the source of the slides, if applicable (e.g., Google Drive, Your personal website)."
       placeholder:
     validations:
       required: false

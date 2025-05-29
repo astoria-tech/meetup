@@ -1,8 +1,8 @@
 ---
-import {initializeLink} from '../data/feed'
-export const getLink = initializeLink(Astro.site)
+import { initializeLink } from "../data/feed";
+export const getLink = initializeLink(Astro.site);
 
 export const getCssUrl = (asset: string) => {
-  return `url("${getLink(asset)}")`
-}
+  return `url("${getLink(asset)}")`;
+};
 ---

@@ -1,17 +1,63 @@
 ---
-import type {HydratedFeedItem} from '../types'
-import Card from '../components/Card.astro'
-type Props = HydratedFeedItem & {heading?: 'h1' | 'h2'}
-const {heading: Heading, title, content, permalink} = {heading: 'h1', ...Astro.props}
+import type { HydratedFeedItem } from "../types";
+import Card from "../components/Card.astro";
+
+type Props = HydratedFeedItem & { heading?: "h1" | "h2" };
+
+// Default heading to h2 if not provided, access event for links
+const {
+  heading: Heading,
+  title,
+  content,
+  permalink,
+  event,
+} = {
+  heading: "h2",
+  ...Astro.props,
+};
 ---
 
 <Card>
-  <heading>
-    <Heading>
-      <a href={permalink}>{title}</a>
+  <header class="mb-4">
+    <Heading class:list={["text-2xl", "font-semibold"]}>
+      <a
+        href={permalink}
+        class="hover:underline text-blue-600 dark:text-blue-400"
+      >
+        {title}
+      </a>
     </Heading>
-  </heading>
-  <main>
+  </header>
+
+  <main class="prose prose-sm dark:prose-invert max-w-none mb-6">
     <Fragment set:html={content} />
   </main>
+
+  {
+    (event.data.meetup || event.data.googleCal) && (
+      <footer class="flex flex-wrap gap-3 pt-4 border-t border-slate-200 dark:border-neutral-600">
+        {event.data.meetup && (
+          <a
+            href={event.data.meetup}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-purple-600 visited:bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white visited:text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-150 ease-in-out shadow-md hover:shadow-lg dark:border dark:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 dark:focus:ring-purple-400"
+          >
+            RSVP on Meetup
+          </a>
+        )}
+        {event.data.googleCal && (
+          <a
+            href={event.data.googleCal}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-blue-500 visited:bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white visited:text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-150 ease-in-out shadow-md hover:shadow-lg dark:border dark:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 dark:focus:ring-blue-400"
+          >
+            Add to Google Calendar
+          </a>
+        )}
+        {/* We can add iCal link here later if needed */}
+      </footer>
+    )
+  }
 </Card>

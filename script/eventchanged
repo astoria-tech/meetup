@@ -8,17 +8,17 @@
  * regenerating the images for a particular event
  */
 
-import {$} from 'zx'
-const diff = await $`git diff --name-only HEAD HEAD~1 -- 'src/content/events/'`
+import { $ } from "zx";
+const diff = await $`git diff --name-only HEAD HEAD~1 -- 'src/content/events/'`;
 const changes = diff.stdout
   .trim()
-  .split('\n')
-  .map(v => {
-    return v.replace('src/content/events/', '').replace('-event.md', '')
-  })
+  .split("\n")
+  .map((v) => {
+    return v.replace("src/content/events/", "").replace("-event.md", "");
+  });
 
 if (changes.length !== 1) {
-  throw new Error('Expected exactly one change')
+  throw new Error("Expected exactly one change");
 }
 
-process.stdout.write(changes[0])
+process.stdout.write(changes[0]);

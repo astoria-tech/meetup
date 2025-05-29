@@ -7,25 +7,25 @@ on:
     branches:
       - main
     paths:
-      - 'src/content/events/**'
+      - "src/content/events/**"
   workflow_call:
     inputs:
       date:
-        description: 'Event Date (YYYY-MM-DD)'
+        description: "Event Date (YYYY-MM-DD)"
         required: true
         type: string
       image:
-        description: 'Image Type (banner, meetup-image)'
+        description: "Image Type (banner, meetup-image)"
         default: banner, meetup-image
         type: string
   workflow_dispatch:
     inputs:
       date:
-        description: 'Event Date (YYYY-MM-DD)'
+        description: "Event Date (YYYY-MM-DD)"
         required: true
         type: string
       image:
-        description: 'Image Type (banner, meetup-image)'
+        description: "Image Type (banner, meetup-image)"
         default: banner, meetup-image
         type: string
 
@@ -95,4 +95,4 @@ jobs:
           commit-message: ${{ steps.MESSAGE.outputs.MESSAGE }}
           title: ${{ steps.MESSAGE.outputs.MESSAGE }}
           body: ${{ steps.MESSAGE.outputs.MESSAGE }}
-          branch: 'image-${{ github.run_id }}'
+          branch: "image-${{ github.run_id }}"
