@@ -1,55 +1,46 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import { getLink } from "../components/Link.astro";
-import Card from "../components/Card.astro";
 
-const darkmodeLogo = getLink("/design/symbol-white-astoria-tech-mark.png");
-const lightmodeLogo = getLink("/design/symbol-black-astoria-tech-mark.png");
-
-const data = [
-  { name: "Discord", href: "https://discord.gg/fSjneA8qwh" },
-  { name: "Instagram", href: "https://www.instagram.com/astoria.tech/" },
-  { name: "Meetup", href: "https://www.meetup.com/astoria-tech-meetup/" },
-  { name: "GitHub", href: "https://github.com/astoria-tech" },
-  {
-    name: "Community Posts",
-    href: "https://astoria-tech.github.io/subcurrent-astro/",
-  },
-  { name: "I'd like to present", href: "https://astoria.app/intake" },
-  {
-    name: "RSVP next event",
-    href: "https://www.meetup.com/astoria-tech-meetup/events/310333667/",
-  },
+const links = [
+  { name: "Meetup", href: "https://www.meetup.com/astoria-tech-meetup/", description: "RSVP to upcoming events" },
+  { name: "Discord", href: "https://discord.gg/fSjneA8qwh", description: "Join our community chat" },
+  { name: "Instagram", href: "https://www.instagram.com/astoria.tech/", description: "Follow us for updates and photos" },
+  { name: "GitHub", href: "https://github.com/astoria-tech", description: "Contribute to our projects" },
+  { name: "Community Posts", href: "https://astoria-tech.github.io/subcurrent-astro/", description: "Blog posts from our community members" },
 ];
 ---
 
 <MainLayout title="Links - Astoria Tech Meetup">
-  <Card>
-    <header>
-      <img
-        class="mx-auto w-70 p-10 hidden dark:inline-block"
-        src={darkmodeLogo}
-        alt="Astoria Tech Logo"
-      />
-      <img
-        class="mx-auto w-70 p-10 dark:hidden"
-        src={lightmodeLogo}
-        alt="Astoria Tech Logo"
-      />
-    </header>
-    <div class="flex flex-col items-center">
+  <!-- Page header -->
+  <section class="mb-10">
+    <div class="max-w-4xl">
+      <h1 class="text-3xl font-bold text-emerald-900 mb-4">Community Links</h1>
+      <p class="text-lg text-emerald-800 mb-6">
+        Connect with us across different platforms and stay up to date with the latest from our tech community.
+      </p>
+    </div>
+  </section>
+
+  <!-- Links grid -->
+  <section>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
-        data.map((item) => (
+        links.map((link) => (
           <a
-            class="no-underline w-80 bg-[#2d272e] dark:bg-[#f8fafc] bg-opacity-95 rounded-full p-3 lg:p-4 mb-5 text-center last:bg-[#846e8b] dark:last:bg-[#B7C7B3]"
-            href={item.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group bg-white rounded-lg border border-green-200 p-6 hover:shadow-md hover:border-emerald-300 transition-all duration-200"
           >
-            <span class="font-bold text-xl text-[#f8fafc] dark:text-[#1c1917] py-2 px-4">
-              {item.name}
-            </span>
+            <h3 class="text-xl font-semibold text-emerald-900 mb-2 group-hover:text-emerald-600 transition-colors duration-200">
+              {link.name}
+            </h3>
+            <p class="text-emerald-700 text-sm">
+              {link.description}
+            </p>
           </a>
         ))
       }
     </div>
-  </Card>
+  </section>
 </MainLayout>

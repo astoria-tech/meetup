@@ -10,19 +10,19 @@
   }
 
   a {
-    @apply text-link-base underline;
+    @apply text-emerald-700 no-underline;
   }
   a:hover {
-    @apply text-link-hover;
+    @apply text-emerald-600;
   }
   a:active {
-    @apply text-link-active;
+    @apply text-emerald-800;
   }
   a:visited {
-    @apply text-link-visited;
+    @apply text-emerald-700;
   }
   a:disabled {
-    @apply text-link-disabled;
+    @apply text-emerald-400;
   }
 
   ul,

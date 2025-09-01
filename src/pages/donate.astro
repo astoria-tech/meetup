@@ -1,6 +1,5 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import Card from "../components/Card.astro";
 
 const donors = [
   { name: "Camille Sato" },
@@ -65,94 +64,93 @@ const donorStyles = [
   { emoji: "🎈", color: "teal", rotate: "rotate-2", size: "text-xl py-2 px-4" },
 ];
 
-// Helper to construct Tailwind classes dynamically (using fixed strings for the tool)
-const colorClassMap = {
-  yellow:
-    "bg-yellow-100 dark:bg-yellow-700 dark:bg-opacity-50 text-yellow-800 dark:text-yellow-200",
-  green:
-    "bg-green-100 dark:bg-green-700 dark:bg-opacity-50 text-green-800 dark:text-green-200",
-  blue: "bg-blue-100 dark:bg-blue-700 dark:bg-opacity-50 text-blue-800 dark:text-blue-200",
-  purple:
-    "bg-purple-100 dark:bg-purple-700 dark:bg-opacity-50 text-purple-800 dark:text-purple-200",
-  pink: "bg-pink-100 dark:bg-pink-700 dark:bg-opacity-50 text-pink-800 dark:text-pink-200",
-  indigo:
-    "bg-indigo-100 dark:bg-indigo-700 dark:bg-opacity-50 text-indigo-800 dark:text-indigo-200",
-  red: "bg-red-100 dark:bg-red-700 dark:bg-opacity-50 text-red-800 dark:text-red-200",
-  teal: "bg-teal-100 dark:bg-teal-700 dark:bg-opacity-50 text-teal-800 dark:text-teal-200",
-};
+// Sage green color variations for donors
+const sageGreenVariations = [
+  "bg-emerald-50 text-emerald-800 border-emerald-200",
+  "bg-green-50 text-green-800 border-green-200",
+  "bg-teal-50 text-teal-800 border-teal-200",
+  "bg-lime-50 text-lime-800 border-lime-200",
+];
 ---
 
 <MainLayout title="Donate - Astoria Tech Meetup">
-  <Card>
-    <header class="text-center mb-8">
-      <h1 class="text-4xl font-bold">Support Astoria Tech Meetup</h1>
-    </header>
-    <main>
-      <div class="mb-10">
-        <div class="text-center mb-2 text-lg">
-          Raised: $340 / $1565 (costs to date)
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-6 dark:bg-gray-700">
-          <div
-            class="bg-purple-600 h-6 rounded-full text-xs font-medium text-blue-100 text-center p-0.5 leading-none"
-            style="width: 21.73%"
-          >
-            22%
-          </div>
+  <!-- Page header -->
+  <section class="mb-10">
+    <div class="max-w-4xl">
+      <h1 class="text-3xl font-bold text-emerald-900 mb-4">Support Astoria Tech Meetup</h1>
+      <p class="text-lg text-emerald-800 mb-6">
+        Help us keep our grassroots tech community thriving with your generous support.
+      </p>
+    </div>
+  </section>
+  <!-- Progress section -->
+  <section class="bg-white rounded-lg border border-green-200 p-6 mb-8">
+    <div class="mb-6">
+      <div class="text-center mb-3 text-lg text-emerald-900 font-semibold">
+        Raised: $340 / $1565 (costs to date)
+      </div>
+      <div class="w-full bg-emerald-100 rounded-full h-6">
+        <div
+          class="bg-emerald-600 h-6 rounded-full text-xs font-medium text-white text-center p-0.5 leading-none"
+          style="width: 21.73%"
+        >
+          22%
         </div>
       </div>
-      <p class="text-lg mb-4 text-center max-w-2xl mx-auto">
+    </div>
+    <div class="text-center max-w-2xl mx-auto">
+      <p class="text-emerald-700 mb-4">
         We deeply appreciate the incredible support from our community.
       </p>
-      <p class="text-lg mb-4 text-center max-w-2xl mx-auto">
+      <p class="text-emerald-700 mb-4">
         All donations go directly towards covering the operational costs of the
         Astoria Tech Meetup. This mainly covers costs such as venue space and
         Meetup.com fees.
       </p>
-      <p class="text-lg mb-10 text-center max-w-2xl mx-auto">
+      <p class="text-emerald-700">
         Your contributions help us keep the meetups running smoothly and
         accessible to everyone, and are never used for anything else.
       </p>
+    </div>
+  </section>
 
-      <hr class="my-12 border-gray-300 dark:border-gray-700" />
+  <!-- Community Heroes section -->
+  <section class="bg-white rounded-lg border border-green-200 p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4 text-center text-emerald-900">Our Community Heroes!</h2>
+    <p class="mb-6 text-center text-emerald-700">
+      A massive thank you to these amazing individuals for their generous contributions!
+    </p>
 
-      <h2 class="text-3xl font-bold mb-6 text-center">Our Community Heroes!</h2>
-      <p class="mb-8 text-center text-gray-700 dark:text-gray-300">
-        A massive thank you to these amazing individuals for their generous
-        contributions!
-      </p>
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      {
+        donors.map((donor, index) => {
+          const style = donorStyles[index % donorStyles.length];
+          const colorClass = sageGreenVariations[index % sageGreenVariations.length];
+          return (
+            <span
+              class:list={[
+                colorClass,
+                style.size,
+                style.rotate,
+                "rounded-lg border hover:scale-105 transition-transform shadow-sm",
+              ]}
+            >
+              {style.emoji} {donor.name}
+            </span>
+          );
+        })
+      }
+    </div>
+  </section>
 
-      <div
-        class="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 p-4"
-      >
-        {
-          donors.map((donor, index) => {
-            const style = donorStyles[index % donorStyles.length];
-            const currentBgColorClass =
-              colorClassMap[style.color] || colorClassMap.yellow; // Fallback to yellow
-            return (
-              <span
-                class:list={[
-                  currentBgColorClass,
-                  style.size,
-                  style.rotate,
-                  "rounded-lg shadow-sm hover:scale-105 transition-transform",
-                ]}
-              >
-                {style.emoji} {donor.name}
-              </span>
-            );
-          })
-        }
-      </div>
-
-      <p class="mt-12 text-center text-md text-gray-600 dark:text-gray-400">
-        Want to see your name up here and help support the community?
-        <br />
-        <em>Details on how to donate will be coming soon!</em>
-      </p>
-    </main>
-  </Card>
+  <!-- Call to action -->
+  <section class="text-center">
+    <p class="text-emerald-700">
+      Want to see your name up here and help support the community?
+      <br />
+      <em>Details on how to donate will be coming soon!</em>
+    </p>
+  </section>
 </MainLayout>
 
 <style>
