@@ -1,13 +1,44 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import { Calendar, MessageCircle, Instagram, Github, PenTool } from "lucide-astro";
+import {
+  Calendar,
+  MessageCircle,
+  Instagram,
+  Github,
+  PenTool,
+} from "lucide-astro";
 
 const links = [
-  { name: "Meetup", href: "https://www.meetup.com/astoria-tech-meetup/", description: "RSVP to upcoming events", icon: Calendar },
-  { name: "Discord", href: "https://discord.gg/fSjneA8qwh", description: "Join our community chat", icon: MessageCircle },
-  { name: "Instagram", href: "https://www.instagram.com/astoria.tech/", description: "Follow us for updates and photos", icon: Instagram },
-  { name: "GitHub", href: "https://github.com/astoria-tech", description: "Contribute to our projects", icon: Github },
-  { name: "Community Posts", href: "https://astoria-tech.github.io/subcurrent-astro/", description: "Blog posts from our community members", icon: PenTool },
+  {
+    name: "Meetup",
+    href: "https://www.meetup.com/astoria-tech-meetup/",
+    description: "RSVP to upcoming events",
+    icon: Calendar,
+  },
+  {
+    name: "Discord",
+    href: "https://discord.gg/fSjneA8qwh",
+    description: "Join our community chat",
+    icon: MessageCircle,
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/astoria.tech/",
+    description: "Follow us for updates and photos",
+    icon: Instagram,
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com/astoria-tech",
+    description: "Contribute to our projects",
+    icon: Github,
+  },
+  {
+    name: "Community Posts",
+    href: "https://astoria-tech.github.io/subcurrent-astro/",
+    description: "Blog posts from our community members",
+    icon: PenTool,
+  },
 ];
 ---
 
@@ -17,7 +48,8 @@ const links = [
     <div class="max-w-4xl">
       <h1 class="text-3xl font-bold text-emerald-900 mb-4">Community Links</h1>
       <p class="text-lg text-emerald-800 mb-6">
-        Connect with us across different platforms and stay up to date with the latest from our tech community.
+        Connect with us across different platforms and stay up to date with the
+        latest from our tech community.
       </p>
     </div>
   </section>
@@ -39,9 +71,7 @@ const links = [
                 {link.name}
               </h3>
             </div>
-            <p class="text-emerald-700 text-sm">
-              {link.description}
-            </p>
+            <p class="text-emerald-700 text-sm">{link.description}</p>
           </a>
         ))
       }

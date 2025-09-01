@@ -77,9 +77,12 @@ const sageGreenVariations = [
   <!-- Page header -->
   <section class="mb-10">
     <div class="max-w-4xl">
-      <h1 class="text-3xl font-bold text-emerald-900 mb-4">Support Astoria Tech Meetup</h1>
+      <h1 class="text-3xl font-bold text-emerald-900 mb-4">
+        Support Astoria Tech Meetup
+      </h1>
       <p class="text-lg text-emerald-800 mb-6">
-        Help us keep our grassroots tech community thriving with your generous support.
+        Help us keep our grassroots tech community thriving with your generous
+        support.
       </p>
     </div>
   </section>
@@ -116,16 +119,20 @@ const sageGreenVariations = [
 
   <!-- Community Heroes section -->
   <section class="bg-white rounded-lg border border-green-200 p-6 mb-8">
-    <h2 class="text-2xl font-bold mb-4 text-center text-emerald-900">Our Community Heroes!</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center text-emerald-900">
+      Our Community Heroes!
+    </h2>
     <p class="mb-6 text-center text-emerald-700">
-      A massive thank you to these amazing individuals for their generous contributions!
+      A massive thank you to these amazing individuals for their generous
+      contributions!
     </p>
 
     <div class="flex flex-wrap justify-center items-center gap-4">
       {
         donors.map((donor, index) => {
           const style = donorStyles[index % donorStyles.length];
-          const colorClass = sageGreenVariations[index % sageGreenVariations.length];
+          const colorClass =
+            sageGreenVariations[index % sageGreenVariations.length];
           return (
             <span
               class:list={[

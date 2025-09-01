@@ -8,7 +8,7 @@
 
 /* Background pattern */
 .bg-waves {
-  background-image: url('/css/subtle-waves.svg');
+  background-image: url("/css/subtle-waves.svg");
   background-repeat: repeat;
   background-size: 400px 100px;
   background-position: 0 0;

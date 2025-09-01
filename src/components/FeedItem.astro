@@ -17,7 +17,9 @@ const {
 };
 ---
 
-<div class="bg-white rounded-lg border border-green-200 p-6 hover:shadow-md transition-shadow duration-200">
+<div
+  class="bg-white rounded-lg border border-green-200 p-6 hover:shadow-md transition-shadow duration-200"
+>
   <header class="mb-4">
     <Heading class:list={["text-xl", "font-semibold", "mb-2"]}>
       <a
@@ -27,18 +29,20 @@ const {
         {title}
       </a>
     </Heading>
-    {event.data.date && (
-      <div class="text-emerald-600 text-sm">
-        {new Date(event.data.date).toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric',
-          hour: 'numeric',
-          minute: '2-digit'
-        })}
-      </div>
-    )}
+    {
+      event.data.date && (
+        <div class="text-emerald-600 text-sm">
+          {new Date(event.data.date).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </div>
+      )
+    }
   </header>
 
   <main class="prose prose-emerald prose-sm max-w-none mb-4 text-emerald-800">
