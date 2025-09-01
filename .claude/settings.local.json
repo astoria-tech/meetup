@@ -4,7 +4,9 @@
       "Bash(tree:*)",
       "Read(/Users/petervaldez/.claude/**)",
       "Bash(npm run dev:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

@@ -9,19 +9,19 @@
     @apply text-lg pb-2;
   }
 
-  a {
+  a:not([class*="bg-emerald"]) {
     @apply text-emerald-700 no-underline;
   }
-  a:hover {
+  a:not([class*="bg-emerald"]):hover {
     @apply text-emerald-600;
   }
-  a:active {
+  a:not([class*="bg-emerald"]):active {
     @apply text-emerald-800;
   }
-  a:visited {
+  a:not([class*="bg-emerald"]):visited {
     @apply text-emerald-700;
   }
-  a:disabled {
+  a:not([class*="bg-emerald"]):disabled {
     @apply text-emerald-400;
   }
 
