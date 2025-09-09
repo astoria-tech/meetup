@@ -6,7 +6,8 @@
       "Bash(npm run dev:*)",
       "WebSearch",
       "Bash(curl:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "WebFetch(domain:www.meetup.com)"
     ],
     "deny": [],
     "ask": []
