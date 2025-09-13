@@ -20,15 +20,15 @@ import MainLayout from "../layouts/MainLayout.astro";
         for a while, this cohort provides the accountability and community
         support to help you make real progress.
       </p>
-      <div class="flex justify-center">
-        <a
-          href="https://forms.gle/LSCjCf7TutgDyJ5Y8"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="bg-emerald-600 text-white p-3 rounded-lg hover:bg-emerald-700 hover:text-white active:text-white visited:text-white focus:text-white transition-colors duration-200 font-semibold text-lg shadow-sm"
-        >
-          Fill out interest form →
-        </a>
+      <div
+        class="text-center bg-emerald-50 rounded-lg border border-emerald-200 p-6"
+      >
+        <h2 class="text-xl font-bold text-emerald-900 mb-2">
+          First Cohort Set ✓
+        </h2>
+        <p class="text-emerald-700">
+          Submission requests are closed until the next cohort.
+        </p>
       </div>
     </div>
   </section>
@@ -74,17 +74,24 @@ import MainLayout from "../layouts/MainLayout.astro";
     <h2 class="text-2xl font-bold text-emerald-900 mb-6">Program Details</h2>
     <div class="space-y-6">
       <div>
-        <h3 class="font-semibold text-emerald-900 mb-2">📅 When</h3>
-        <p class="text-emerald-700">
-          Looking at starting the 2nd or 3rd week of September. We'll coordinate
-          precisely when and what weekly date/time works for the cohort.
+        <h3 class="font-semibold text-emerald-900 mb-2">📅 Schedule</h3>
+        <p class="text-emerald-700 mb-3">Thursdays from 6:30 to 7:30 PM:</p>
+        <ul class="text-emerald-700 space-y-1 ml-4">
+          <li>September 25th</li>
+          <li>October 2nd</li>
+          <li>October 9th</li>
+          <li>October 16th</li>
+          <li>October 23rd</li>
+        </ul>
+        <p class="text-emerald-700 mt-3 ml-4">
+          <strong>October 29th (Wednesday)</strong> - Evening meetup for optional
+          presentations
         </p>
       </div>
       <div>
         <h3 class="font-semibold text-emerald-900 mb-2">📍 Location</h3>
         <p class="text-emerald-700">
-          Tentatively a conference room at Astoria Coworking, by the 30th Ave
-          station.
+          Conference room at Astoria Coworking, by the 30th Ave station.
         </p>
       </div>
       <div>
@@ -144,26 +151,16 @@ import MainLayout from "../layouts/MainLayout.astro";
     </div>
   </section>
 
-  <!-- Call to action -->
+  <!-- Next cohort info -->
   <section
     class="text-center bg-emerald-50 rounded-lg border border-emerald-200 p-10"
   >
     <div class="max-w-lg mx-auto">
-      <h2 class="text-2xl font-bold text-emerald-900 mb-6">
-        Interested in joining?
-      </h2>
-      <p class="text-emerald-700 mb-8">
-        This form is a soft commitment to help us gauge interest and plan the
-        program.
+      <h2 class="text-2xl font-bold text-emerald-900 mb-6">Next Cohort</h2>
+      <p class="text-emerald-700">
+        The first build cohort is underway! Stay tuned for announcements about
+        future cohorts at our monthly meetups.
       </p>
-      <a
-        href="https://forms.gle/LSCjCf7TutgDyJ5Y8"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-block bg-emerald-600 text-white p-3 rounded-lg hover:bg-emerald-700 hover:text-white active:text-white visited:text-white focus:text-white transition-colors duration-200 font-semibold text-lg shadow-sm"
-      >
-        Fill out interest form →
-      </a>
     </div>
   </section>
 </MainLayout>

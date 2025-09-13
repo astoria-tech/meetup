@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
 import {
   Calendar,
   MessageCircle,
@@ -7,6 +8,13 @@ import {
   Github,
   PenTool,
 } from "lucide-astro";
+
+// Get the latest event
+const events = await getCollection("events");
+const sortedEvents = events.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+const latestEvent = sortedEvents[0];
 
 const links = [
   {
@@ -57,6 +65,35 @@ const links = [
   <!-- Links grid -->
   <section>
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Latest Event RSVP (featured) -->
+      {
+        latestEvent && latestEvent.data.meetup && (
+          <a
+            href={latestEvent.data.meetup}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group bg-emerald-50 rounded-lg border-2 border-emerald-300 p-6 hover:shadow-md hover:border-emerald-400 transition-all duration-200"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <Calendar class="w-6 h-6 text-emerald-700 group-hover:text-emerald-600 transition-colors duration-200 flex-shrink-0" />
+              <h3 class="text-xl font-semibold text-emerald-900 group-hover:text-emerald-600 transition-colors duration-200">
+                RSVP to Next Event
+              </h3>
+            </div>
+            <p class="text-emerald-700 text-sm">
+              {latestEvent.data.title} -{" "}
+              {new Date(latestEvent.data.date).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                timeZone: "America/New_York",
+              })}
+            </p>
+          </a>
+        )
+      }
+
+      <!-- Regular links -->
       {
         links.map((link) => (
           <a
