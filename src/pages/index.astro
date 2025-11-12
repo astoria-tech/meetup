@@ -220,7 +220,7 @@ function getEventColors(eventType: string) {
                       </div>
                       <div class="description-full hidden">
                         <div
-                          class="prose prose-emerald prose-sm max-w-none"
+                          class="prose prose-emerald prose-sm max-w-none [&>p]:my-3 [&>ul]:my-3 [&>ol]:my-3 [&>li]:my-1"
                           set:html={renderMarkdown(event.description)}
                         />
                       </div>
