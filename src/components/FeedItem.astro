@@ -15,6 +15,10 @@ const {
   heading: "h2",
   ...Astro.props,
 };
+
+// Check if event has passed
+const eventDate = event.data.date ? new Date(event.data.date) : null;
+const isPastEvent = eventDate ? eventDate < new Date() : false;
 ---
 
 <div
@@ -53,26 +57,39 @@ const {
 
   {
     (event.data.meetup || event.data.googleCal) && (
-      <footer class="flex flex-wrap gap-3">
-        {event.data.meetup && (
-          <a
-            href={event.data.meetup}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors duration-200 border border-emerald-200"
-          >
-            RSVP on Meetup
-          </a>
-        )}
-        {event.data.googleCal && (
-          <a
-            href={event.data.googleCal}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors duration-200 border border-green-200"
-          >
-            Add to Google Calendar
-          </a>
+      <footer class="flex flex-wrap items-center gap-3">
+        {isPastEvent ? (
+          <>
+            <span class="inline-flex items-center gap-2 font-semibold py-2.5 px-4 rounded-lg text-sm border bg-gray-100 text-gray-500 border-gray-200">
+              RSVP Closed
+            </span>
+            <span class="text-emerald-700 text-sm italic">
+              Thanks for coming!
+            </span>
+          </>
+        ) : (
+          <>
+            {event.data.meetup && (
+              <a
+                href={event.data.meetup}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors duration-200 border border-emerald-200"
+              >
+                RSVP on Meetup
+              </a>
+            )}
+            {event.data.googleCal && (
+              <a
+                href={event.data.googleCal}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors duration-200 border border-green-200"
+              >
+                Add to Google Calendar
+              </a>
+            )}
+          </>
         )}
       </footer>
     )

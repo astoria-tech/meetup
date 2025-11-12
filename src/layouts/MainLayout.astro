@@ -52,22 +52,55 @@ const { title, bodyClass = [] } = Astro.props;
           >
             <a
               href={getLink("/")}
-              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base"
+              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base border-b-2 border-transparent hover:border-emerald-300"
               >Home</a
             >
+            <!-- Events dropdown -->
+            <div class="relative group">
+              <a
+                href={getLink("/events")}
+                class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base border-b-2 border-transparent hover:border-emerald-300 cursor-pointer"
+                >Events</a
+              >
+              <!-- Dropdown menu -->
+              <div class="absolute left-0 mt-2 w-56 bg-white border border-emerald-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <a
+                    href={getLink("/events")}
+                    class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
+                    >Weekly Mornings</a
+                  >
+                  <a
+                    href={getLink("/")}
+                    class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
+                    >Monthly Evenings</a
+                  >
+                  <a
+                    href={getLink("/events")}
+                    class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
+                    >Hackathons</a
+                  >
+                  <a
+                    href={getLink("/project-project")}
+                    class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
+                    >Project: Project</a
+                  >
+                </div>
+              </div>
+            </div>
             <a
-              href={getLink("/project-project")}
-              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base"
-              >Project: Project</a
+              href={getLink("/sponsors")}
+              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base border-b-2 border-transparent hover:border-emerald-300"
+              >Sponsors</a
             >
             <a
               href={getLink("/links")}
-              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base"
+              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base border-b-2 border-transparent hover:border-emerald-300"
               >Links</a
             >
             <a
               href={getLink("/donate")}
-              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base"
+              class="text-emerald-700 hover:text-emerald-900 transition-colors duration-200 text-sm sm:text-base border-b-2 border-transparent hover:border-emerald-300"
               >Donate</a
             >
             <a

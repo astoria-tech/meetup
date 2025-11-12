@@ -1,0 +1,221 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout title="Event Types - Astoria Tech Meetup">
+  <!-- Page Header -->
+  <section class="mb-12">
+    <div class="text-center max-w-3xl mx-auto">
+      <h1 class="text-4xl font-bold text-emerald-900 mb-4">Our Events</h1>
+      <div class="mt-6 bg-emerald-50 border border-emerald-200 rounded-lg p-5 text-emerald-800">
+        <div class="space-y-2">
+          <p class="text-sm">
+            <strong>RSVP to events on <a href="https://www.meetup.com/astoria-tech-meetup/" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:text-emerald-700 underline font-semibold">Meetup.com</a></strong>
+          </p>
+          <p class="text-sm">
+            <strong>For early announcements and all event updates, <a href="/links" class="text-emerald-600 hover:text-emerald-700 underline font-semibold">join us on Discord</a></strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Grid -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12">
+    <!-- Weekly Mornings -->
+    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-amber-200" id="morning-coffee">
+      <div
+        class="absolute top-0 left-0 border-l-4 border-t-4 border-amber-500 rounded-tl-lg"
+        style="width: 80px; height: 80px;"
+      >
+      </div>
+      <div class="flex items-baseline gap-3 mb-3">
+        <h2 class="text-2xl font-bold text-amber-900">Weekly Mornings</h2>
+      </div>
+
+      <p class="text-amber-800 text-sm mb-4">
+        Weekly Thursday morning coffee chats. Discuss careers, tech topics,
+        local events, and side projects over breakfast. Posted on the Meetup page.
+      </p>
+
+      <div class="space-y-3 text-amber-800">
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1">
+            When
+          </div>
+          <div class="text-sm font-medium">Every Thursday, 8:30-9:30am</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1">
+            Where
+          </div>
+          <div class="text-sm font-medium">NYC Bagel & Coffee House</div>
+          <div class="text-xs text-amber-600">
+            29th Ave & Broadway, Astoria
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Evenings -->
+    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-slate-200" id="evening-meetups">
+      <div
+        class="absolute top-0 left-0 border-l-4 border-t-4 border-slate-700 rounded-tl-lg"
+        style="width: 80px; height: 80px;"
+      >
+      </div>
+      <div class="flex items-baseline gap-3 mb-3">
+        <h2 class="text-2xl font-bold text-slate-900">Monthly Evenings</h2>
+      </div>
+
+      <p class="text-slate-800 text-sm mb-4">
+        Monthly technical presentations, live demos, and open discussion. Usually on
+        the last or second-to-last Wednesday of each month. Posted on the Meetup page.
+      </p>
+
+      <div class="space-y-3 text-slate-800 mb-4">
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+            When
+          </div>
+          <div class="text-sm font-medium">
+            Usually last or second-to-last Wednesday, 6:30-8:30pm
+          </div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+            Where
+          </div>
+          <div class="text-sm font-medium">Our House Queens</div>
+          <div class="text-xs text-slate-600">23-71 31st St, Astoria</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 border-l-2 border-slate-300 pl-3 py-2">
+        <div class="space-y-1 text-slate-800 text-xs">
+          <div class="flex gap-2">
+            <span class="font-semibold min-w-20">6:30-7:15pm</span>
+            <span>Open discussion and mingling</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold min-w-20">7:15-8:00pm</span>
+            <span>Presentations and rapid demos</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold min-w-20">8:00-8:30pm</span>
+            <span>Continued discussion and networking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hackathons -->
+    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-purple-200" id="hackathons">
+      <div
+        class="absolute top-0 left-0 border-l-4 border-t-4 border-purple-600 rounded-tl-lg"
+        style="width: 80px; height: 80px;"
+      >
+      </div>
+      <div class="flex items-baseline gap-3 mb-3">
+        <h2 class="text-2xl font-bold text-purple-900">Hackathons</h2>
+      </div>
+
+      <p class="text-purple-800 text-sm mb-4">
+        Focused 5-hour building sessions at local Astoria venues. Bring an
+        idea or join a team on the spot. Typically posted in the #hacking channel on Discord.
+      </p>
+
+      <div class="space-y-3 text-purple-800">
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1">
+            When
+          </div>
+          <div class="text-sm font-medium">
+            Announced periodically
+          </div>
+          <div class="text-xs text-purple-600">Typically 5 hours</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1">
+            Where
+          </div>
+          <div class="text-sm font-medium">Various Astoria locations</div>
+          <div class="text-xs text-purple-600">Announced per event</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project: Project -->
+    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-teal-200" id="project-project">
+      <div
+        class="absolute top-0 left-0 border-l-4 border-t-4 border-teal-600 rounded-tl-lg"
+        style="width: 80px; height: 80px;"
+      >
+      </div>
+      <div class="flex items-baseline gap-3 mb-3">
+        <h2 class="text-2xl font-bold text-teal-900">Project: Project</h2>
+      </div>
+
+      <p class="text-teal-800 text-sm mb-4">
+        5-week cohort-based build program. Work on your project with weekly
+        accountability, peer feedback, and optional mentorship. We plan and gather
+        interest for the next cohort in the #hacking or #general channel on Discord.
+      </p>
+
+      <div class="space-y-3 text-teal-800 mb-4">
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1">
+            When
+          </div>
+          <div class="text-sm font-medium">5 weekly sessions</div>
+          <div class="text-xs text-teal-600">
+            Cohort dates announced on Discord
+          </div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1">
+            Where
+          </div>
+          <div class="text-sm font-medium">Astoria Coworking</div>
+          <div class="text-xs text-teal-600">
+            Conference room, by 30th Ave station
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-teal-50 border-l-2 border-teal-300 pl-3 py-2">
+        <p class="text-teal-800 text-xs">
+          <strong>Learn more:</strong> Visit our
+          <a
+            href="/project-project"
+            class="text-teal-600 hover:text-teal-800 underline"
+            >Project: Project page</a
+          > for complete program details.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="text-center bg-emerald-600 text-white rounded-lg p-10">
+    <h2 class="text-3xl font-bold mb-4">Join Us!</h2>
+    <p class="text-lg mb-6 text-emerald-50">
+      New to Astoria Tech? Come to any event—no RSVP required, though it helps
+      us plan!
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a
+        href="/"
+        class="inline-block bg-white text-emerald-700 font-semibold py-3 px-8 rounded-lg hover:bg-emerald-50 transition-colors duration-200"
+      >
+        View Upcoming Events
+      </a>
+      <a
+        href="/links"
+        class="inline-block bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-emerald-800 transition-colors duration-200 border-2 border-white"
+      >
+        Connect With Us
+      </a>
+    </div>
+  </section>
+</MainLayout>

@@ -8,7 +8,20 @@
       "Bash(curl:*)",
       "Bash(npm install:*)",
       "WebFetch(domain:www.meetup.com)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(chmod:*)",
+      "Bash(pip3 install:*)",
+      "Bash(python3:*)",
+      "Bash(make help:*)",
+      "Bash(make clean:*)",
+      "Bash(make:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run fix:*)",
+      "Bash(prettier --write:*)",
+      "Bash(msgfmt:*)",
+      "WebFetch(domain:mlh.io)",
+      "WebFetch(domain:brandfetch.com)",
+      "Bash(wget:*)"
     ],
     "deny": [],
     "ask": []
