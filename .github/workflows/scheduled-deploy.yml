@@ -1,0 +1,19 @@
+name: Scheduled Deploy
+
+# Runs the deploy workflow every 2 hours to keep the site updated with latest Meetup API data
+
+on:
+  schedule:
+    # Run every 2 hours
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
