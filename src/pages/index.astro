@@ -1,10 +1,131 @@
 ---
-import { getFeed } from "../data/feed";
-import FeedItem from "../components/FeedItem.astro";
 import MainLayout from "../layouts/MainLayout.astro";
-import Card from "../components/Card.astro";
+import { getUpcomingEvents, getEventTypeLabel } from "../utils/meetupApi";
+import MarkdownIt from "markdown-it";
 
-const feed = await getFeed({ site: Astro.site });
+const md = new MarkdownIt({ html: true, linkify: true, breaks: true });
+const upcomingEvents = await getUpcomingEvents();
+
+// Function to check if event just passed (within last 7 days)
+function isRecentlyPassed(dateTime: string): boolean {
+  const eventDate = new Date(dateTime);
+  const now = new Date();
+  const daysDiff =
+    (now.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24);
+  return daysDiff > 0 && daysDiff <= 7;
+}
+
+// Format date in compact style: "Wed 9/28/25"
+function formatCompactDate(dateTime: string): string {
+  const date = new Date(dateTime);
+  const weekday = date.toLocaleDateString("en-US", {
+    weekday: "short",
+    timeZone: "America/New_York",
+  });
+  const month = date.toLocaleDateString("en-US", {
+    month: "numeric",
+    timeZone: "America/New_York",
+  });
+  const day = date.toLocaleDateString("en-US", {
+    day: "numeric",
+    timeZone: "America/New_York",
+  });
+  const year = date.toLocaleDateString("en-US", {
+    year: "2-digit",
+    timeZone: "America/New_York",
+  });
+  return `${weekday} ${month}/${day}/${year}`;
+}
+
+// Format time: "6:30 PM"
+function formatTime(dateTime: string): string {
+  const date = new Date(dateTime);
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  });
+}
+
+// Generate Google Calendar link
+function getGoogleCalendarLink(event: any): string {
+  const startDate = new Date(event.dateTime);
+  const endDate = new Date(event.endTime);
+
+  // Format dates for Google Calendar (YYYYMMDDTHHmmss in local time)
+  const formatForGoogle = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+  };
+
+  const start = formatForGoogle(startDate);
+  const end = formatForGoogle(endDate);
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${start}/${end}`,
+    details: event.description,
+    location: `${event.location.name}, ${event.location.address}, ${event.location.city}, ${event.location.state}`,
+    ctz: "America/New_York",
+  });
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+// Render markdown description
+function renderMarkdown(text: string): string {
+  return md.render(text);
+}
+
+// Get preview text (first paragraph)
+function getPreviewText(text: string): string {
+  const firstPara = text.split("\n\n")[0];
+  return md.renderInline(firstPara);
+}
+
+// Get color scheme based on event type
+function getEventColors(eventType: string) {
+  switch (eventType) {
+    case "mornings":
+      return {
+        border: "border-amber-200",
+        badge: "bg-amber-600",
+        badgeText: "text-white",
+        typeLabel: "bg-amber-100 text-amber-700",
+        text: "text-amber-800",
+      };
+    case "evenings":
+      return {
+        border: "border-slate-200",
+        badge: "bg-slate-700",
+        badgeText: "text-white",
+        typeLabel: "bg-slate-100 text-slate-700",
+        text: "text-slate-800",
+      };
+    case "hackathons":
+      return {
+        border: "border-purple-200",
+        badge: "bg-purple-600",
+        badgeText: "text-white",
+        typeLabel: "bg-purple-100 text-purple-700",
+        text: "text-purple-800",
+      };
+    default:
+      return {
+        border: "border-green-200",
+        badge: "bg-emerald-600",
+        badgeText: "text-white",
+        typeLabel: "bg-emerald-100 text-emerald-700",
+        text: "text-emerald-800",
+      };
+  }
+}
 ---
 
 <MainLayout>
@@ -42,8 +163,115 @@ const feed = await getFeed({ site: Astro.site });
   <section>
     <h2 class="text-2xl font-bold text-emerald-900 mb-6">Upcoming Events</h2>
 
-    <div class="space-y-6">
-      {feed.map((feedItem) => <FeedItem {...feedItem} heading="h3" />)}
-    </div>
+    {
+      upcomingEvents.length === 0 ? (
+        <div class="bg-white rounded-lg border border-green-200 p-8 text-center">
+          <p class="text-emerald-700 text-lg">
+            No upcoming events at this time. Check back soon!
+          </p>
+        </div>
+      ) : (
+        <div class="space-y-4">
+          {upcomingEvents.map((event) => {
+            const colors = getEventColors(event.eventType);
+            return (
+              <div
+                class={`bg-white rounded-lg border ${colors.border} hover:shadow-md transition-shadow duration-200 relative overflow-hidden`}
+              >
+                {/* Date/Time Badge */}
+                <div
+                  class={`absolute top-0 left-0 ${colors.badge} ${colors.badgeText} px-4 py-2.5 rounded-br-xl shadow-lg`}
+                >
+                  <div class="text-sm font-bold leading-tight">
+                    {formatCompactDate(event.dateTime)}
+                  </div>
+                  <div class="text-sm font-semibold mt-0.5">
+                    {formatTime(event.dateTime)}
+                  </div>
+                </div>
+
+                {/* Event Type Badge */}
+                <div class="absolute top-3 right-3">
+                  <span
+                    class={`inline-block ${colors.typeLabel} text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap`}
+                  >
+                    {getEventTypeLabel(event.eventType)}
+                  </span>
+                </div>
+
+                <div class="pl-36 pr-4 py-4">
+                  <header class="mb-3">
+                    <h3 class="text-lg font-semibold text-emerald-900 mb-2">
+                      {event.title}
+                    </h3>
+                    <div class="flex flex-wrap gap-3 text-xs text-emerald-600">
+                      <span>📍 {event.location.name}</span>
+                      {event.going > 0 && <span>👥 {event.going} going</span>}
+                    </div>
+                  </header>
+
+                  <main class="mb-3">
+                    <div
+                      class="description-container text-emerald-800 text-sm"
+                      data-full-description={event.description}
+                    >
+                      <div class="description-preview line-clamp-2">
+                        <div set:html={getPreviewText(event.description)} />
+                      </div>
+                      <div class="description-full hidden">
+                        <div
+                          class="prose prose-emerald prose-sm max-w-none"
+                          set:html={renderMarkdown(event.description)}
+                        />
+                      </div>
+                      {event.description.length > 120 && (
+                        <button
+                          class="show-more-btn text-emerald-600 hover:text-emerald-800 text-xs font-medium mt-1 flex items-center gap-1"
+                          onclick="this.closest('.description-container').querySelector('.description-preview').classList.toggle('hidden'); this.closest('.description-container').querySelector('.description-full').classList.toggle('hidden'); this.querySelector('.caret').classList.toggle('rotate-180'); this.querySelector('.btn-text').textContent = this.querySelector('.btn-text').textContent === 'Show more' ? 'Show less' : 'Show more';"
+                        >
+                          <span class="btn-text">Show more</span>
+                          <svg
+                            class="caret w-3 h-3 transition-transform"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </main>
+
+                  <footer class="flex flex-wrap gap-2">
+                    <a
+                      href={event.eventUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold py-2 px-3 rounded-lg text-xs transition-colors duration-200 border border-emerald-200"
+                    >
+                      RSVP on Meetup
+                    </a>
+                    <a
+                      href={getGoogleCalendarLink(event)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold py-2 px-3 rounded-lg text-xs transition-colors duration-200 border border-blue-200"
+                    >
+                      📅 Add to Calendar
+                    </a>
+                  </footer>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )
+    }
   </section>
 </MainLayout>

@@ -63,20 +63,22 @@ const { title, bodyClass = [] } = Astro.props;
                 >Events</a
               >
               <!-- Dropdown menu -->
-              <div class="absolute left-0 mt-2 w-56 bg-white border border-emerald-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div
+                class="absolute left-0 mt-2 w-56 bg-white border border-emerald-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+              >
                 <div class="py-2">
                   <a
-                    href={getLink("/events")}
+                    href={getLink("/events/mornings")}
                     class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
                     >Weekly Mornings</a
                   >
                   <a
-                    href={getLink("/")}
+                    href={getLink("/events/evenings")}
                     class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
                     >Monthly Evenings</a
                   >
                   <a
-                    href={getLink("/events")}
+                    href={getLink("/events/hackathons")}
                     class="block px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 transition-colors duration-150"
                     >Hackathons</a
                   >

@@ -7,13 +7,29 @@ import MainLayout from "../layouts/MainLayout.astro";
   <section class="mb-12">
     <div class="text-center max-w-3xl mx-auto">
       <h1 class="text-4xl font-bold text-emerald-900 mb-4">Our Events</h1>
-      <div class="mt-6 bg-emerald-50 border border-emerald-200 rounded-lg p-5 text-emerald-800">
+      <div
+        class="mt-6 bg-emerald-50 border border-emerald-200 rounded-lg p-5 text-emerald-800"
+      >
         <div class="space-y-2">
           <p class="text-sm">
-            <strong>RSVP to events on <a href="https://www.meetup.com/astoria-tech-meetup/" target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:text-emerald-700 underline font-semibold">Meetup.com</a></strong>
+            <strong
+              >RSVP to events on <a
+                href="https://www.meetup.com/astoria-tech-meetup/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-emerald-600 hover:text-emerald-700 underline font-semibold"
+                >Meetup.com</a
+              ></strong
+            >
           </p>
           <p class="text-sm">
-            <strong>For early announcements and all event updates, <a href="/links" class="text-emerald-600 hover:text-emerald-700 underline font-semibold">join us on Discord</a></strong>
+            <strong
+              >For early announcements and all event updates, <a
+                href="/links"
+                class="text-emerald-600 hover:text-emerald-700 underline font-semibold"
+                >join us on Discord</a
+              ></strong
+            >
           </p>
         </div>
       </div>
@@ -23,7 +39,11 @@ import MainLayout from "../layouts/MainLayout.astro";
   <!-- Events Grid -->
   <section class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12">
     <!-- Weekly Mornings -->
-    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-amber-200" id="morning-coffee">
+    <a
+      href="/events/mornings"
+      class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer block"
+      id="morning-coffee"
+    >
       <div
         class="absolute top-0 left-0 border-l-4 border-t-4 border-amber-500 rounded-tl-lg"
         style="width: 80px; height: 80px;"
@@ -35,30 +55,37 @@ import MainLayout from "../layouts/MainLayout.astro";
 
       <p class="text-amber-800 text-sm mb-4">
         Weekly Thursday morning coffee chats. Discuss careers, tech topics,
-        local events, and side projects over breakfast. Posted on the Meetup page.
+        local events, and side projects over breakfast. Posted on the Meetup
+        page.
       </p>
 
       <div class="space-y-3 text-amber-800">
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1"
+          >
             When
           </div>
           <div class="text-sm font-medium">Every Thursday, 8:30-9:30am</div>
         </div>
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-amber-700 mb-1"
+          >
             Where
           </div>
           <div class="text-sm font-medium">NYC Bagel & Coffee House</div>
-          <div class="text-xs text-amber-600">
-            29th Ave & Broadway, Astoria
-          </div>
+          <div class="text-xs text-amber-600">29th Ave & Broadway, Astoria</div>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- Monthly Evenings -->
-    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-slate-200" id="evening-meetups">
+    <a
+      href="/events/evenings"
+      class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-slate-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer block"
+      id="evening-meetups"
+    >
       <div
         class="absolute top-0 left-0 border-l-4 border-t-4 border-slate-700 rounded-tl-lg"
         style="width: 80px; height: 80px;"
@@ -69,13 +96,16 @@ import MainLayout from "../layouts/MainLayout.astro";
       </div>
 
       <p class="text-slate-800 text-sm mb-4">
-        Monthly technical presentations, live demos, and open discussion. Usually on
-        the last or second-to-last Wednesday of each month. Posted on the Meetup page.
+        Monthly technical presentations, live demos, and open discussion.
+        Usually on the last or second-to-last Wednesday of each month. Posted on
+        the Meetup page.
       </p>
 
       <div class="space-y-3 text-slate-800 mb-4">
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1"
+          >
             When
           </div>
           <div class="text-sm font-medium">
@@ -83,7 +113,9 @@ import MainLayout from "../layouts/MainLayout.astro";
           </div>
         </div>
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-slate-700 mb-1"
+          >
             Where
           </div>
           <div class="text-sm font-medium">Our House Queens</div>
@@ -107,10 +139,14 @@ import MainLayout from "../layouts/MainLayout.astro";
           </div>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- Hackathons -->
-    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-purple-200" id="hackathons">
+    <a
+      href="/events/hackathons"
+      class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-purple-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer block"
+      id="hackathons"
+    >
       <div
         class="absolute top-0 left-0 border-l-4 border-t-4 border-purple-600 rounded-tl-lg"
         style="width: 80px; height: 80px;"
@@ -121,32 +157,39 @@ import MainLayout from "../layouts/MainLayout.astro";
       </div>
 
       <p class="text-purple-800 text-sm mb-4">
-        Focused 5-hour building sessions at local Astoria venues. Bring an
-        idea or join a team on the spot. Typically posted in the #hacking channel on Discord.
+        Focused 5-hour building sessions at local Astoria venues. Bring an idea
+        or join a team on the spot. Typically posted in the #hacking channel on
+        Discord.
       </p>
 
       <div class="space-y-3 text-purple-800">
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1"
+          >
             When
           </div>
-          <div class="text-sm font-medium">
-            Announced periodically
-          </div>
+          <div class="text-sm font-medium">Announced periodically</div>
           <div class="text-xs text-purple-600">Typically 5 hours</div>
         </div>
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-purple-700 mb-1"
+          >
             Where
           </div>
           <div class="text-sm font-medium">Various Astoria locations</div>
           <div class="text-xs text-purple-600">Announced per event</div>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- Project: Project -->
-    <div class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-teal-200" id="project-project">
+    <a
+      href="/project-project"
+      class="relative pt-8 pl-8 pr-8 pb-6 bg-white rounded-lg border border-teal-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer block"
+      id="project-project"
+    >
       <div
         class="absolute top-0 left-0 border-l-4 border-t-4 border-teal-600 rounded-tl-lg"
         style="width: 80px; height: 80px;"
@@ -158,13 +201,16 @@ import MainLayout from "../layouts/MainLayout.astro";
 
       <p class="text-teal-800 text-sm mb-4">
         5-week cohort-based build program. Work on your project with weekly
-        accountability, peer feedback, and optional mentorship. We plan and gather
-        interest for the next cohort in the #hacking or #general channel on Discord.
+        accountability, peer feedback, and optional mentorship. We plan and
+        gather interest for the next cohort in the #hacking or #general channel
+        on Discord.
       </p>
 
       <div class="space-y-3 text-teal-800 mb-4">
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1"
+          >
             When
           </div>
           <div class="text-sm font-medium">5 weekly sessions</div>
@@ -173,7 +219,9 @@ import MainLayout from "../layouts/MainLayout.astro";
           </div>
         </div>
         <div>
-          <div class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1">
+          <div
+            class="text-xs uppercase tracking-wider font-bold text-teal-700 mb-1"
+          >
             Where
           </div>
           <div class="text-sm font-medium">Astoria Coworking</div>
@@ -185,15 +233,11 @@ import MainLayout from "../layouts/MainLayout.astro";
 
       <div class="bg-teal-50 border-l-2 border-teal-300 pl-3 py-2">
         <p class="text-teal-800 text-xs">
-          <strong>Learn more:</strong> Visit our
-          <a
-            href="/project-project"
-            class="text-teal-600 hover:text-teal-800 underline"
-            >Project: Project page</a
-          > for complete program details.
+          <strong>Learn more:</strong> Click to view complete program details on
+          our Project: Project page.
         </p>
       </div>
-    </div>
+    </a>
   </section>
 
   <!-- CTA Section -->
