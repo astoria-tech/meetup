@@ -49,9 +49,11 @@ const description = getEventTypeDescription(type);
 
 // Separate upcoming and past events
 const now = new Date();
-const upcomingEvents = events.filter(
-  (event) => new Date(event.dateTime) >= now,
-);
+const upcomingEvents = events
+  .filter((event) => new Date(event.dateTime) >= now)
+  .sort(
+    (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime(),
+  );
 const pastEvents = events.filter((event) => new Date(event.dateTime) < now);
 
 // Pagination for past events
