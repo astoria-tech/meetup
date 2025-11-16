@@ -219,12 +219,14 @@ Centralized utilities for event display:
 #### Homepage (`src/pages/index.astro`)
 
 - **Hero Section**: Completely redesigned with larger, bolder typography
+
   - Large centered title: "Astoria Tech Meetup" (5xl-6xl responsive)
   - Simplified tagline: "Grassroots tech community"
   - Prominent CTAs for Meetup.com and Discord with icon animations
   - Removed verbose welcome text in favor of concise messaging
 
 - **Terminal Component**: Interactive terminal-style animation
+
   - macOS-style window controls (close, minimize, expand)
   - Typewriter effect showing community values via `cat` commands
   - Files displayed: community.txt, skills.txt, projects.txt, network.txt
@@ -240,11 +242,13 @@ Centralized utilities for event display:
 Complete redesign with modern, vibrant aesthetic:
 
 - **Responsive Layout**:
+
   - Mobile: Stacked layout with badge and date in top row
   - Desktop: Date and badge positioned absolutely in top-right corner
   - Emoji badges positioned outside card on desktop (absolute positioning)
 
 - **Visual Design**:
+
   - White cards with subtle border and hover shadow effects
   - Event type badges with vibrant colors:
     - Morning events: Orange (☀️)
@@ -254,6 +258,7 @@ Complete redesign with modern, vibrant aesthetic:
   - Clean typography hierarchy
 
 - **Event Information Display**:
+
   - Title in large, bold emerald text
   - Compact date format: "Wed, Nov 13"
   - Time display: "6:30 PM" format
@@ -261,6 +266,7 @@ Complete redesign with modern, vibrant aesthetic:
   - Collapsible full description section
 
 - **Action Buttons**:
+
   - Primary: "RSVP on Meetup" (external link)
   - Secondary: "Add to Calendar" (Google Calendar integration)
   - Tertiary: "Read More" (expands full description)
