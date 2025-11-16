@@ -159,11 +159,11 @@ export async function getUpcomingEvents(): Promise<CategorizedEvent[]> {
 export function getEventTypeLabel(type: EventType): string {
   switch (type) {
     case "mornings":
-      return "Weekly Mornings";
+      return "☀️ Weekly Mornings";
     case "evenings":
-      return "Monthly Evenings";
+      return "🌙 Monthly Evenings";
     case "hackathons":
-      return "Hackathons";
+      return "🚀 Hackathons";
   }
 }
 
@@ -173,10 +173,10 @@ export function getEventTypeLabel(type: EventType): string {
 export function getEventTypeDescription(type: EventType): string {
   switch (type) {
     case "mornings":
-      return "Weekly Thursday morning coffee chats. Discuss careers, tech topics, local events, and side projects over breakfast.";
+      return "Weekly Thursday morning coffee chats.\nDiscuss careers, tech topics, local events, and side projects over breakfast.";
     case "evenings":
-      return "Monthly technical presentations, live demos, and open discussion. Usually on the last or second-to-last Wednesday of each month.";
+      return "Monthly technical presentations, live demos, and open discussion.\nUsually on the last or second-to-last Wednesday of each month.";
     case "hackathons":
-      return "Focused 5-hour building sessions at local Astoria venues. Bring an idea or join a team on the spot.";
+      return "Focused 5-hour building sessions at local Astoria venues.\nBring an idea or join a team on the spot.";
   }
 }

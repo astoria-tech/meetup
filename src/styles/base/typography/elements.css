@@ -9,19 +9,19 @@
     @apply text-lg pb-2;
   }
 
-  a:not([class*="bg-emerald"]) {
+  a:not([class*="bg-"]) {
     @apply text-emerald-700 no-underline;
   }
-  a:not([class*="bg-emerald"]):hover {
+  a:not([class*="bg-"]):hover {
     @apply text-emerald-600;
   }
-  a:not([class*="bg-emerald"]):active {
+  a:not([class*="bg-"]):active {
     @apply text-emerald-800;
   }
-  a:not([class*="bg-emerald"]):visited {
+  a:not([class*="bg-"]):visited {
     @apply text-emerald-700;
   }
-  a:not([class*="bg-emerald"]):disabled {
+  a:not([class*="bg-"]):disabled {
     @apply text-emerald-400;
   }
 

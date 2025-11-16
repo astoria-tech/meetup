@@ -1,275 +1,532 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import { getUpcomingEvents, getEventTypeLabel } from "../utils/meetupApi";
-import MarkdownIt from "markdown-it";
+import { getUpcomingEvents } from "../utils/meetupApi";
+import EventCard from "../components/EventCard.astro";
 
-const md = new MarkdownIt({ html: true, linkify: true, breaks: true });
 const upcomingEvents = await getUpcomingEvents();
-
-// Function to check if event just passed (within last 7 days)
-function isRecentlyPassed(dateTime: string): boolean {
-  const eventDate = new Date(dateTime);
-  const now = new Date();
-  const daysDiff =
-    (now.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24);
-  return daysDiff > 0 && daysDiff <= 7;
-}
-
-// Format date in compact style: "Wed 9/28/25"
-function formatCompactDate(dateTime: string): string {
-  const date = new Date(dateTime);
-  const weekday = date.toLocaleDateString("en-US", {
-    weekday: "short",
-    timeZone: "America/New_York",
-  });
-  const month = date.toLocaleDateString("en-US", {
-    month: "numeric",
-    timeZone: "America/New_York",
-  });
-  const day = date.toLocaleDateString("en-US", {
-    day: "numeric",
-    timeZone: "America/New_York",
-  });
-  const year = date.toLocaleDateString("en-US", {
-    year: "2-digit",
-    timeZone: "America/New_York",
-  });
-  return `${weekday} ${month}/${day}/${year}`;
-}
-
-// Format time: "6:30 PM"
-function formatTime(dateTime: string): string {
-  const date = new Date(dateTime);
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/New_York",
-  });
-}
-
-// Generate Google Calendar link
-function getGoogleCalendarLink(event: any): string {
-  const startDate = new Date(event.dateTime);
-  const endDate = new Date(event.endTime);
-
-  // Format dates for Google Calendar (YYYYMMDDTHHmmss in local time)
-  const formatForGoogle = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-    return `${year}${month}${day}T${hours}${minutes}${seconds}`;
-  };
-
-  const start = formatForGoogle(startDate);
-  const end = formatForGoogle(endDate);
-
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: event.title,
-    dates: `${start}/${end}`,
-    details: event.description,
-    location: `${event.location.name}, ${event.location.address}, ${event.location.city}, ${event.location.state}`,
-    ctz: "America/New_York",
-  });
-
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
-}
-
-// Render markdown description
-function renderMarkdown(text: string): string {
-  return md.render(text);
-}
-
-// Get preview text (first paragraph)
-function getPreviewText(text: string): string {
-  const firstPara = text.split("\n\n")[0];
-  return md.renderInline(firstPara);
-}
-
-// Get color scheme based on event type
-function getEventColors(eventType: string) {
-  switch (eventType) {
-    case "mornings":
-      return {
-        border: "border-amber-200",
-        badge: "bg-amber-600",
-        badgeText: "text-white",
-        typeLabel: "bg-amber-100 text-amber-700",
-        text: "text-amber-800",
-      };
-    case "evenings":
-      return {
-        border: "border-slate-200",
-        badge: "bg-slate-700",
-        badgeText: "text-white",
-        typeLabel: "bg-slate-100 text-slate-700",
-        text: "text-slate-800",
-      };
-    case "hackathons":
-      return {
-        border: "border-purple-200",
-        badge: "bg-purple-600",
-        badgeText: "text-white",
-        typeLabel: "bg-purple-100 text-purple-700",
-        text: "text-purple-800",
-      };
-    default:
-      return {
-        border: "border-green-200",
-        badge: "bg-emerald-600",
-        badgeText: "text-white",
-        typeLabel: "bg-emerald-100 text-emerald-700",
-        text: "text-emerald-800",
-      };
-  }
-}
 ---
 
 <MainLayout>
-  <!-- Community description -->
-  <section class="mb-10">
-    <div class="max-w-4xl">
-      <div class="flex items-baseline gap-3 mb-4">
-        <h1 class="text-3xl font-bold text-emerald-900">
-          Welcome to Astoria Tech
+  <!-- Hero Section -->
+  <section class="mb-16">
+    <div class="max-w-4xl mx-auto">
+      <!-- Hero Title -->
+      <div class="text-center mb-12 mt-8 sm:mt-0">
+        <h1 class="text-5xl sm:text-6xl font-bold mb-6">
+          <span class="text-emerald-900">Astoria Tech</span>
+          <span class="text-emerald-600"> Meetup</span>
         </h1>
-        <span class="text-sm text-emerald-600 font-medium">est. 2014</span>
-      </div>
-      <div class="text-lg text-emerald-800 space-y-4 mb-6">
-        <p>We're a grassroots tech community based in Astoria, Queens, NYC.</p>
-        <p>
-          We meet to share knowledge, learn new things, and build cool projects
-          together.
+        <p class="text-xl font-semibold text-slate-700 mb-2">
+          Grassroots tech community.
         </p>
-        <p>
-          Join us for our <strong>monthly evening meetups</strong> with talks and
-          demos,
-          <strong>weekly morning coffee chats</strong> for casual networking, and
-          <strong>hackathons</strong> where we collaborate on interesting projects.
+        <p class="text-xl font-semibold text-slate-700 mb-6">
+          Morning & evening meetups, hackathons, & more.
         </p>
+
+        <!-- Community CTAs -->
+        <div class="flex justify-center gap-3 flex-wrap">
+          <a
+            href="https://www.meetup.com/astoria-tech-meetup/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 text-sm group"
+          >
+            <svg
+              class="w-4 h-4 group-hover:scale-110 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>See events on Meetup</span>
+          </a>
+          <a
+            href="/links"
+            class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 text-sm group"
+          >
+            <svg
+              class="w-4 h-4 group-hover:scale-110 transition-transform"
+              viewBox="0 0 71 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0)">
+                <path
+                  d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"
+                  fill="currentColor"></path>
+              </g>
+              <defs>
+                <clipPath id="clip0">
+                  <rect width="71" height="55" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>Join us on Discord</span>
+          </a>
+        </div>
       </div>
-      <div class="flex flex-wrap gap-4 text-emerald-600">
-        <span class="text-sm font-medium"> 🌙 #MonthlyEveningMeetups </span>
-        <span class="text-sm font-medium"> ☕ #WeeklyMorningCoffee </span>
-        <span class="text-sm font-medium"> 🚀 #Hackathons </span>
+
+      <!-- Terminal -->
+      <div
+        id="terminal-window"
+        class="bg-slate-900 rounded-lg px-6 py-5 font-mono shadow-lg border border-slate-700 transition-all duration-300"
+      >
+        <div class="flex items-center gap-2 mb-3">
+          <div class="flex gap-1.5">
+            <button
+              id="close-btn"
+              class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 cursor-pointer transition-colors group relative"
+              aria-label="Close terminal"
+            >
+              <span
+                class="absolute inset-0 flex items-center justify-center text-red-900 text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                >×</span
+              >
+            </button>
+            <button
+              id="minimize-btn"
+              class="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer transition-colors group relative"
+              aria-label="Minimize terminal"
+            >
+              <span
+                class="absolute inset-0 flex items-center justify-center text-yellow-900 text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                >−</span
+              >
+            </button>
+            <button
+              id="expand-btn"
+              class="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 cursor-pointer transition-colors group relative"
+              aria-label="Expand terminal"
+            >
+              <span
+                class="absolute inset-0 flex items-center justify-center text-green-900 text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity leading-none"
+                >+</span
+              >
+            </button>
+          </div>
+        </div>
+        <div
+          class="text-white text-sm sm:text-base min-h-[18rem] leading-relaxed transition-all duration-300"
+          id="typewriter"
+          style="font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;"
+        >
+          <span class="cursor">|</span>
+        </div>
       </div>
     </div>
   </section>
 
+  <style is:global>
+    /* Hide header logo initially on home page */
+    .home-page-logo-target {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms;
+    }
+
+    /* Terminal window animations */
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      10%,
+      30%,
+      50%,
+      70%,
+      90% {
+        transform: translateX(-2px);
+      }
+      20%,
+      40%,
+      60%,
+      80% {
+        transform: translateX(2px);
+      }
+    }
+
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .terminal-minimized {
+      padding-bottom: 1.25rem !important;
+    }
+
+    .terminal-minimized #typewriter {
+      min-height: 0 !important;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      overflow: hidden;
+      transition:
+        min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.25s ease-out,
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #typewriter {
+      transition:
+        max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.25s ease-in,
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .terminal-closed {
+      opacity: 0;
+      transform: scale(0.95);
+      max-height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* On mobile, smooth height transition */
+    @media (max-width: 640px) {
+      .home-page-logo-target {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          max-height 400ms ease-out,
+          opacity 300ms ease-out;
+      }
+
+      .home-page-logo-target.show-on-scroll {
+        max-height: 100px;
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  </style>
+
+  <style>
+    #typewriter {
+      letter-spacing: 0.02em;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .cursor {
+      color: white;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      50% {
+        opacity: 1;
+      }
+      51%,
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+
+  <script>
+    const typewriterElement = document.getElementById("typewriter");
+    let currentStep = 0;
+    let charIndex = 0;
+    let terminalContent = [];
+
+    const files = [
+      "community.txt",
+      "skills.txt",
+      "projects.txt",
+      "network.txt",
+    ];
+    const fileContents = {
+      "community.txt": "Connect with local technologists and makers.",
+      "skills.txt": "Learn through presentations and workshops.",
+      "projects.txt": "Build at hackathons and cohorts.",
+      "network.txt": "Grow your local tech network.",
+    };
+
+    // Build the sequence of terminal steps
+    const sequence = [
+      { type: "command", text: "ls" },
+      {
+        type: "output",
+        text: "events/  projects/  community.txt  skills.txt  projects.txt  network.txt",
+      },
+      ...files.flatMap((file) => [
+        { type: "command", text: `cat ${file}` },
+        { type: "output", text: fileContents[file] },
+      ]),
+      { type: "command", text: "clear" },
+      { type: "clear" },
+    ];
+
+    // Generate human-like typing speed
+    function getTypingDelay() {
+      return Math.random() * 90 + 30; // Random between 30-120ms
+    }
+
+    function render() {
+      const lines = terminalContent
+        .map((line, idx) => {
+          const isLast = idx === terminalContent.length - 1;
+          if (line.type === "command") {
+            return `<div><span class="text-emerald-400 opacity-60">$</span> <span class="text-slate-400 opacity-70">${line.text}</span>${isLast ? '<span class="cursor">|</span>' : ""}</div>`;
+          } else {
+            // Colorize directories (ending in /) as blue, .txt files as gray
+            let colorizedText = line.text
+              .replace(
+                /(\S+\/)/g,
+                '<span class="text-cyan-400 opacity-60">$1</span>',
+              )
+              .replace(
+                /(\S+\.txt)/g,
+                '<span class="text-slate-400 opacity-70">$1</span>',
+              );
+
+            // Make content lines bold if they're the file content (not ls output)
+            const isFileContent =
+              !line.text.includes(".txt") && !line.text.includes("/");
+            if (isFileContent) {
+              return `<div class="text-white font-bold text-base">${colorizedText}</div>`;
+            }
+            return `<div class="text-slate-400 opacity-70">${colorizedText}</div>`;
+          }
+        })
+        .join("");
+
+      typewriterElement.innerHTML = lines;
+    }
+
+    function typeStep() {
+      const step = sequence[currentStep];
+
+      if (step.type === "clear") {
+        // Immediately clear terminal and restart
+        terminalContent = [];
+        currentStep = 0;
+        charIndex = 0;
+        // Push the first command line before rendering
+        terminalContent.push({ type: "command", text: "" });
+        render();
+        setTimeout(typeStep, 500);
+        return;
+      }
+
+      const fullText = step.text;
+
+      // For commands, type character by character with variable speed
+      if (step.type === "command") {
+        if (charIndex < fullText.length) {
+          charIndex++;
+          terminalContent[terminalContent.length - 1] = {
+            type: "command",
+            text: fullText.substring(0, charIndex),
+          };
+          render();
+          setTimeout(typeStep, getTypingDelay());
+        } else {
+          // Finished typing command
+          if (step.text === "clear") {
+            // Execute clear immediately
+            setTimeout(() => {
+              currentStep++;
+              charIndex = 0;
+              typeStep();
+            }, 200);
+          } else {
+            // Move to output
+            setTimeout(() => {
+              currentStep++;
+              charIndex = 0;
+              const nextStep = sequence[currentStep];
+              if (nextStep) {
+                terminalContent.push({ type: nextStep.type, text: "" });
+              }
+              typeStep();
+            }, 300);
+          }
+        }
+      } else {
+        // For output, display instantly
+        terminalContent[terminalContent.length - 1] = {
+          type: "output",
+          text: fullText,
+        };
+
+        // Immediately show the next prompt
+        currentStep++;
+        charIndex = 0;
+        const nextStep = sequence[currentStep];
+        if (nextStep && nextStep.type !== "clear") {
+          terminalContent.push({ type: nextStep.type, text: "" });
+        }
+        render();
+
+        // Brief pause before starting to type the next command
+        // Linger much longer before the clear command (~10x original)
+        const isBeforeClear =
+          nextStep && nextStep.type === "command" && nextStep.text === "clear";
+        setTimeout(
+          () => {
+            typeStep();
+          },
+          isBeforeClear ? 15000 : 1500,
+        );
+      }
+    }
+
+    // Start the animation
+    terminalContent.push({ type: "command", text: "" });
+    typeStep();
+  </script>
+
+  <!-- Terminal window controls -->
+  <script>
+    const terminal = document.getElementById("terminal-window");
+    const closeBtn = document.getElementById("close-btn");
+    const minimizeBtn = document.getElementById("minimize-btn");
+    const expandBtn = document.getElementById("expand-btn");
+    const typewriter = document.getElementById("typewriter");
+
+    let isMinimized = false;
+
+    // Close button - hides terminal with macOS-style animation
+    closeBtn?.addEventListener("click", () => {
+      terminal?.classList.add("terminal-closed");
+      setTimeout(() => {
+        if (terminal) terminal.style.display = "none";
+      }, 300);
+    });
+
+    // Minimize button - smooth slide-up minimize like macOS
+    minimizeBtn?.addEventListener("click", () => {
+      if (isMinimized) {
+        // Restore - remove minimized state
+        terminal?.classList.remove("terminal-minimized");
+        isMinimized = false;
+      } else {
+        // Minimize - add minimized state
+        terminal?.classList.add("terminal-minimized");
+        isMinimized = true;
+      }
+    });
+
+    // Expand button - restore if minimized, otherwise shake
+    expandBtn?.addEventListener("click", () => {
+      if (isMinimized) {
+        // Restore from minimized state
+        terminal?.classList.remove("terminal-minimized");
+        isMinimized = false;
+      } else {
+        // Already expanded - shake to indicate not available
+        terminal?.classList.add("shake");
+        setTimeout(() => {
+          terminal?.classList.remove("shake");
+        }, 400);
+      }
+    });
+  </script>
+
+  <!-- Scroll behavior for header -->
+  <script>
+    // Show header logo when scrolling down past hero (mobile and desktop)
+    console.log("[Header Logo] Script loading...");
+
+    // Try multiple selectors to find the logo
+    let logo = document.querySelector('header a[href="/"]');
+    console.log('[Header Logo] Tried href="/" selector:', logo);
+
+    if (!logo) {
+      logo = document.querySelector("header nav a");
+      console.log("[Header Logo] Tried first nav link:", logo);
+    }
+
+    if (!logo) {
+      // Find by looking for the Astoria Tech text
+      const links = document.querySelectorAll("header a");
+      console.log("[Header Logo] All header links:", links);
+      for (const link of links) {
+        if (link.textContent.includes("Astoria Tech")) {
+          logo = link;
+          console.log("[Header Logo] Found by text content:", logo);
+          break;
+        }
+      }
+    }
+
+    console.log("[Header Logo] Final logo element:", logo);
+
+    if (logo) {
+      // Add class for CSS targeting
+      logo.classList.add("home-page-logo-target");
+      console.log("[Header Logo] Added home-page-logo-target class");
+
+      // Check if mobile
+      const isMobile = window.innerWidth <= 640;
+
+      // Add scroll behavior for both mobile and desktop
+      function handleScroll() {
+        const scrollY = window.scrollY;
+
+        if (scrollY > 100) {
+          if (isMobile) {
+            // On mobile, use class to override display:none
+            logo.classList.add("show-on-scroll");
+          } else {
+            // On desktop, use inline styles
+            logo.style.opacity = "1";
+            logo.style.visibility = "visible";
+          }
+        } else {
+          if (isMobile) {
+            // On mobile, remove class to hide
+            logo.classList.remove("show-on-scroll");
+          } else {
+            // On desktop, use inline styles
+            logo.style.opacity = "0";
+            logo.style.visibility = "hidden";
+          }
+        }
+      }
+
+      window.addEventListener("scroll", handleScroll);
+      console.log("[Header Logo] Scroll listener attached");
+    } else {
+      console.error("[Header Logo] Logo element still not found!");
+    }
+  </script>
+
   <!-- Events Section -->
   <section>
-    <h2 class="text-2xl font-bold text-emerald-900 mb-6">Upcoming Events</h2>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-slate-900">Upcoming Events</h2>
+      <a
+        href="/events"
+        class="inline-flex items-center gap-2 text-slate-700 hover:text-slate-900 font-semibold border-b-2 border-slate-400 hover:border-slate-600 transition-colors pb-0.5"
+      >
+        See all events →
+      </a>
+    </div>
 
     {
       upcomingEvents.length === 0 ? (
-        <div class="bg-white rounded-lg border border-green-200 p-8 text-center">
-          <p class="text-emerald-700 text-lg">
+        <div class="bg-slate-50 rounded-lg border border-slate-300 p-8 text-center">
+          <p class="text-slate-700 text-lg">
             No upcoming events at this time. Check back soon!
           </p>
         </div>
       ) : (
         <div class="space-y-4">
-          {upcomingEvents.map((event) => {
-            const colors = getEventColors(event.eventType);
-            return (
-              <div
-                class={`bg-white rounded-lg border ${colors.border} hover:shadow-md transition-shadow duration-200 relative overflow-hidden`}
-              >
-                {/* Date/Time Badge */}
-                <div
-                  class={`absolute top-0 left-0 ${colors.badge} ${colors.badgeText} px-4 py-2.5 rounded-br-xl shadow-lg`}
-                >
-                  <div class="text-sm font-bold leading-tight">
-                    {formatCompactDate(event.dateTime)}
-                  </div>
-                  <div class="text-sm font-semibold mt-0.5">
-                    {formatTime(event.dateTime)}
-                  </div>
-                </div>
-
-                {/* Event Type Badge */}
-                <div class="absolute top-3 right-3">
-                  <span
-                    class={`inline-block ${colors.typeLabel} text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap`}
-                  >
-                    {getEventTypeLabel(event.eventType)}
-                  </span>
-                </div>
-
-                <div class="pl-36 pr-4 py-4">
-                  <header class="mb-3">
-                    <h3 class="text-lg font-semibold text-emerald-900 mb-2">
-                      {event.title}
-                    </h3>
-                    <div class="flex flex-wrap gap-3 text-xs text-emerald-600">
-                      <span>📍 {event.location.name}</span>
-                      {event.going > 0 && <span>👥 {event.going} going</span>}
-                    </div>
-                  </header>
-
-                  <main class="mb-3">
-                    <div
-                      class="description-container text-emerald-800 text-sm"
-                      data-full-description={event.description}
-                    >
-                      <div class="description-preview line-clamp-2">
-                        <div set:html={getPreviewText(event.description)} />
-                      </div>
-                      <div class="description-full hidden">
-                        <div
-                          class="prose prose-emerald prose-sm max-w-none [&>p]:my-3 [&>ul]:my-3 [&>ol]:my-3 [&>li]:my-1"
-                          set:html={renderMarkdown(event.description)}
-                        />
-                      </div>
-                      {event.description.length > 120 && (
-                        <button
-                          class="show-more-btn text-emerald-600 hover:text-emerald-800 text-xs font-medium mt-1 flex items-center gap-1"
-                          onclick="this.closest('.description-container').querySelector('.description-preview').classList.toggle('hidden'); this.closest('.description-container').querySelector('.description-full').classList.toggle('hidden'); this.querySelector('.caret').classList.toggle('rotate-180'); this.querySelector('.btn-text').textContent = this.querySelector('.btn-text').textContent === 'Show more' ? 'Show less' : 'Show more';"
-                        >
-                          <span class="btn-text">Show more</span>
-                          <svg
-                            class="caret w-3 h-3 transition-transform"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  </main>
-
-                  <footer class="flex flex-wrap gap-2">
-                    <a
-                      href={event.eventUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold py-2 px-3 rounded-lg text-xs transition-colors duration-200 border border-emerald-200"
-                    >
-                      RSVP on Meetup
-                    </a>
-                    <a
-                      href={getGoogleCalendarLink(event)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold py-2 px-3 rounded-lg text-xs transition-colors duration-200 border border-blue-200"
-                    >
-                      📅 Add to Calendar
-                    </a>
-                  </footer>
-                </div>
-              </div>
-            );
-          })}
+          {upcomingEvents.map((event) => (
+            <EventCard event={event} />
+          ))}
         </div>
       )
     }
