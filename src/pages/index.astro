@@ -319,6 +319,7 @@ const upcomingEvents = await getUpcomingEvents();
         return;
       }
 
+      if (!("text" in step)) return;
       const fullText = step.text;
 
       // For commands, type character by character with variable speed
@@ -333,7 +334,7 @@ const upcomingEvents = await getUpcomingEvents();
           setTimeout(typeStep, getTypingDelay());
         } else {
           // Finished typing command
-          if (step.text === "clear") {
+          if ("text" in step && step.text === "clear") {
             // Execute clear immediately
             setTimeout(() => {
               currentStep++;
@@ -372,7 +373,10 @@ const upcomingEvents = await getUpcomingEvents();
         // Brief pause before starting to type the next command
         // Linger much longer before the clear command (~10x original)
         const isBeforeClear =
-          nextStep && nextStep.type === "command" && nextStep.text === "clear";
+          nextStep &&
+          nextStep.type === "command" &&
+          "text" in nextStep &&
+          nextStep.text === "clear";
         setTimeout(
           () => {
             typeStep();
@@ -393,7 +397,6 @@ const upcomingEvents = await getUpcomingEvents();
     const closeBtn = document.getElementById("close-btn");
     const minimizeBtn = document.getElementById("minimize-btn");
     const expandBtn = document.getElementById("expand-btn");
-    const typewriter = document.getElementById("typewriter");
 
     let isMinimized = false;
 
@@ -440,7 +443,7 @@ const upcomingEvents = await getUpcomingEvents();
     console.log("[Header Logo] Script loading...");
 
     // Try multiple selectors to find the logo
-    let logo = document.querySelector('header a[href="/"]');
+    let logo: HTMLElement | null = document.querySelector('header a[href="/"]');
     console.log('[Header Logo] Tried href="/" selector:', logo);
 
     if (!logo) {
@@ -450,10 +453,10 @@ const upcomingEvents = await getUpcomingEvents();
 
     if (!logo) {
       // Find by looking for the Astoria Tech text
-      const links = document.querySelectorAll("header a");
+      const links = document.querySelectorAll<HTMLElement>("header a");
       console.log("[Header Logo] All header links:", links);
       for (const link of links) {
-        if (link.textContent.includes("Astoria Tech")) {
+        if (link.textContent?.includes("Astoria Tech")) {
           logo = link;
           console.log("[Header Logo] Found by text content:", logo);
           break;
@@ -474,6 +477,7 @@ const upcomingEvents = await getUpcomingEvents();
       // Add scroll behavior for both mobile and desktop
       function handleScroll() {
         const scrollY = window.scrollY;
+        if (!logo) return;
 
         if (scrollY > 100) {
           if (isMobile) {
