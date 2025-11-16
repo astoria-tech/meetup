@@ -1,0 +1,525 @@
+---
+// Interactive terminal component - simulates bash without WebAssembly
+---
+
+<style is:global>
+  @import "@xterm/xterm/css/xterm.css";
+
+  #xterm-container {
+    display: none;
+  }
+
+  #xterm-container.active {
+    display: block;
+  }
+
+  #typewriter.hidden-for-terminal {
+    display: none !important;
+  }
+
+  /* Hide scrollbar in xterm */
+  #xterm-container .xterm-viewport {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  #xterm-container .xterm-viewport::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+</style>
+
+<script>
+  // This script runs on the client side
+  let terminalInitialized = false;
+  let terminal: any = null;
+  let currentLine = "";
+  let commandHistory: string[] = [];
+  let historyIndex = -1;
+
+  // Simple file system simulation
+  const fileSystem: Record<string, any> = {
+    "/": {
+      type: "dir",
+      contents: {
+        home: {
+          type: "dir",
+          contents: {
+            astoria: {
+              type: "dir",
+              contents: {
+                "welcome.txt": {
+                  type: "file",
+                  content:
+                    "Welcome to Astoria Tech Meetup!\r\n\r\nWe are a grassroots tech community in Western Queens, NYC.\r\n\r\nJoin us for:\r\n- Weekly morning coffee chats\r\n- Monthly evening meetups\r\n- Hackathons and project cohorts\r\n\r\nVisit astoria.app to learn more!",
+                },
+                "events.txt": {
+                  type: "file",
+                  content:
+                    "Upcoming Events:\r\n- Weekly Mornings: Every Thursday 8:30-9:30am\r\n- Monthly Evenings: Last Wednesday of the month 6:30-8:30pm\r\n- Hackathons: Announced periodically\r\n- Project: Project: 5-week cohort program",
+                },
+                "links.txt": {
+                  type: "file",
+                  content:
+                    "Connect with us:\r\nMeetup: meetup.com/astoria-tech-meetup\r\nDiscord: discord.gg/fSjneA8qwh\r\nGitHub: github.com/astoria-tech",
+                },
+              },
+            },
+          },
+        },
+        usr: { type: "dir", contents: {} },
+        tmp: { type: "dir", contents: {} },
+      },
+    },
+  };
+
+  let currentPath = "/home/astoria";
+
+  function parsePath(path: string): string[] {
+    if (path.startsWith("/")) {
+      return path.split("/").filter((p) => p && p !== ".");
+    }
+    const parts = currentPath.split("/").filter((p) => p);
+    const newParts = path.split("/").filter((p) => p && p !== ".");
+    for (const part of newParts) {
+      if (part === "..") {
+        parts.pop();
+      } else {
+        parts.push(part);
+      }
+    }
+    return parts;
+  }
+
+  function getNode(path: string) {
+    const parts = parsePath(path);
+    let node = fileSystem["/"];
+    for (const part of parts) {
+      if (!node.contents || !node.contents[part]) {
+        return null;
+      }
+      node = node.contents[part];
+    }
+    return node;
+  }
+
+  function executeCommand(cmd: string): string {
+    const parts = cmd.trim().split(/\s+/);
+    const command = parts[0];
+    const args = parts.slice(1);
+
+    switch (command) {
+      case "":
+        return "";
+
+      case "help":
+        return "Available commands:\r\n  ls, cd, pwd, cat, echo, clear, help, reset, exit\r\n\r\nTry: cat welcome.txt";
+
+      case "pwd":
+        return currentPath || "/";
+
+      case "ls":
+        const lsPath = args[0] || currentPath;
+        const lsNode = getNode(lsPath);
+        if (!lsNode) {
+          return `ls: cannot access '${args[0]}': No such file or directory`;
+        }
+        if (lsNode.type !== "dir") {
+          return lsPath;
+        }
+        return Object.keys(lsNode.contents || {}).join("  ");
+
+      case "cd":
+        if (!args[0]) {
+          currentPath = "/home/astoria";
+          return "";
+        }
+        const cdNode = getNode(args[0]);
+        if (!cdNode) {
+          return `cd: no such file or directory: ${args[0]}`;
+        }
+        if (cdNode.type !== "dir") {
+          return `cd: not a directory: ${args[0]}`;
+        }
+        const newPath = parsePath(args[0]);
+        currentPath = "/" + newPath.join("/");
+        return "";
+
+      case "cat":
+        if (!args[0]) {
+          return "cat: missing file operand";
+        }
+        const catNode = getNode(args[0]);
+        if (!catNode) {
+          return `cat: ${args[0]}: No such file or directory`;
+        }
+        if (catNode.type !== "file") {
+          return `cat: ${args[0]}: Is a directory`;
+        }
+        return catNode.content || "";
+
+      case "echo":
+        return args.join(" ");
+
+      case "clear":
+        // Don't return anything - we'll handle clearing after the command executes
+        return "__CLEAR__";
+
+      case "whoami":
+        return "astoria-tech-member";
+
+      case "date":
+        return new Date().toString();
+
+      case "uname":
+        return "Astoria Tech Terminal (Browser Edition)";
+
+      case "reset":
+        return "__RESET__";
+
+      case "exit":
+        return "__RESET__";
+
+      default:
+        return `${command}: command not found`;
+    }
+  }
+
+  function prompt() {
+    const simplePath = currentPath === "/home/astoria" ? "~" : currentPath;
+    return `\x1b[1;32mastoria-tech\x1b[0m:\x1b[1;34m${simplePath}\x1b[0m$ `;
+  }
+
+  function handleTabCompletion(): string | null {
+    const parts = currentLine.split(/\s+/);
+    const commands = [
+      "ls",
+      "cd",
+      "pwd",
+      "cat",
+      "echo",
+      "clear",
+      "help",
+      "whoami",
+      "date",
+      "uname",
+    ];
+
+    // If we're completing the first word (command)
+    if (parts.length === 1) {
+      const matches = commands.filter((cmd) => cmd.startsWith(parts[0]));
+      if (matches.length === 1) {
+        return matches[0];
+      } else if (matches.length > 1) {
+        // Show all matches
+        terminal.write("\r\n");
+        terminal.writeln(matches.join("  "));
+        terminal.write(prompt() + currentLine);
+        return null;
+      }
+    }
+    // If we're completing an argument (likely a file/dir name)
+    else if (parts.length >= 2) {
+      const lastPart = parts[parts.length - 1];
+      const currentDir = getNode(currentPath);
+
+      if (currentDir && currentDir.type === "dir") {
+        const entries = Object.keys(currentDir.contents || {});
+        const matches = entries.filter((entry) => entry.startsWith(lastPart));
+
+        if (matches.length === 1) {
+          // Complete the match
+          parts[parts.length - 1] = matches[0];
+          return parts.join(" ");
+        } else if (matches.length > 1) {
+          // Show all matches
+          terminal.write("\r\n");
+          terminal.writeln(matches.join("  "));
+          terminal.write(prompt() + currentLine);
+          return null;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  async function initializeTerminal() {
+    if (terminalInitialized) {
+      return;
+    }
+
+    const container = document.getElementById("xterm-container");
+    const typewriter = document.getElementById("typewriter");
+
+    if (!container) {
+      console.error("Terminal container not found");
+      return;
+    }
+
+    try {
+      // Show loading message
+      if (typewriter) {
+        typewriter.innerHTML =
+          '<div class="text-emerald-400">Loading terminal...</div>';
+      }
+
+      // Dynamic imports
+      const { Terminal } = await import("@xterm/xterm");
+      const { FitAddon } = await import("@xterm/addon-fit");
+
+      // Create terminal with same styling as animated terminal
+      terminal = new Terminal({
+        cursorBlink: true,
+        fontFamily:
+          "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        fontSize: 13,
+        lineHeight: 1.5,
+        theme: {
+          background: "#0f172a",
+          foreground: "#cbd5e1",
+          cursor: "#10b981",
+          cursorAccent: "#0f172a",
+        },
+        cols: 80,
+        rows: 12,
+      });
+
+      const fitAddon = new FitAddon();
+      terminal.loadAddon(fitAddon);
+
+      // Hide typewriter, show xterm
+      if (typewriter) {
+        typewriter.classList.add("hidden-for-terminal");
+      }
+      container.classList.add("active");
+
+      terminal.open(container);
+      fitAddon.fit();
+
+      // Show loading message while we fetch IP
+      terminal.writeln("Loading...");
+
+      // Fetch user's IP address
+      fetch("https://api.ipify.org?format=json")
+        .then((res) => res.json())
+        .then((data) => data.ip)
+        .catch(() => "unknown")
+        .then((userIP) => {
+          // Clear loading message
+          terminal.reset();
+
+          // SSH-style login banner
+          const now = new Date();
+          const lastLogin = new Date(
+            now.getTime() - Math.random() * 7 * 24 * 60 * 60 * 1000,
+          );
+          const loginDay = lastLogin.toLocaleDateString("en-US", {
+            weekday: "short",
+          });
+          const loginMonth = lastLogin.toLocaleDateString("en-US", {
+            month: "short",
+          });
+          const loginDate = lastLogin.getDate();
+          const loginTime = lastLogin.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          });
+          const loginYear = lastLogin.getFullYear();
+
+          terminal.writeln("\x1b[1mWelcome to Astoria Tech\x1b[0m");
+          terminal.writeln("");
+          terminal.writeln(" * Website:   https://astoria.app");
+          terminal.writeln(" * Instagram: https://instagram.com/astoriatech");
+          terminal.writeln(" * GitHub:    https://github.com/astoria-tech");
+          terminal.writeln("");
+          terminal.writeln(
+            "\x1b[90mRun \x1b[1;33mhelp\x1b[0m\x1b[90m for available commands\x1b[0m",
+          );
+          terminal.writeln("");
+          terminal.writeln(
+            "Last login: " +
+              loginDay +
+              " " +
+              loginMonth +
+              " " +
+              loginDate +
+              " " +
+              loginTime +
+              " " +
+              loginYear +
+              " from " +
+              userIP,
+          );
+          terminal.write(prompt());
+        });
+
+      // Handle input
+      terminal.onData((data: string) => {
+        const code = data.charCodeAt(0);
+
+        // Handle Tab (completion)
+        if (code === 9) {
+          const completion = handleTabCompletion();
+          if (completion !== null) {
+            // Clear current line
+            terminal.write("\r" + prompt());
+            for (let i = 0; i < currentLine.length; i++) {
+              terminal.write(" ");
+            }
+            terminal.write("\r" + prompt());
+
+            // Write completed line
+            currentLine = completion;
+            terminal.write(currentLine);
+          }
+          return;
+        }
+        // Handle Enter
+        else if (code === 13) {
+          terminal.write("\r\n");
+          const output = executeCommand(currentLine);
+
+          // Special handling for clear command
+          if (output === "__CLEAR__") {
+            if (currentLine.trim()) {
+              commandHistory.push(currentLine);
+              historyIndex = commandHistory.length;
+            }
+            currentLine = "";
+            terminal.reset();
+            terminal.write(prompt());
+          }
+          // Special handling for reset/exit command
+          else if (output === "__RESET__") {
+            if (currentLine.trim()) {
+              commandHistory.push(currentLine);
+              historyIndex = commandHistory.length;
+            }
+            restoreAnimatedTerminal();
+          } else {
+            if (output) {
+              terminal.writeln(output);
+            }
+            if (currentLine.trim()) {
+              commandHistory.push(currentLine);
+              historyIndex = commandHistory.length;
+            }
+            currentLine = "";
+            terminal.write(prompt());
+          }
+        }
+        // Handle Backspace
+        else if (code === 127) {
+          if (currentLine.length > 0) {
+            currentLine = currentLine.slice(0, -1);
+            terminal.write("\b \b");
+          }
+        }
+        // Handle Arrow Up (history)
+        else if (data === "\x1b[A") {
+          if (historyIndex > 0) {
+            // Clear current line
+            terminal.write("\r" + prompt());
+            for (let i = 0; i < currentLine.length; i++) {
+              terminal.write(" ");
+            }
+            terminal.write("\r" + prompt());
+
+            historyIndex--;
+            currentLine = commandHistory[historyIndex];
+            terminal.write(currentLine);
+          }
+        }
+        // Handle Arrow Down (history)
+        else if (data === "\x1b[B") {
+          if (historyIndex < commandHistory.length) {
+            // Clear current line
+            terminal.write("\r" + prompt());
+            for (let i = 0; i < currentLine.length; i++) {
+              terminal.write(" ");
+            }
+            terminal.write("\r" + prompt());
+
+            historyIndex++;
+            currentLine =
+              historyIndex < commandHistory.length
+                ? commandHistory[historyIndex]
+                : "";
+            terminal.write(currentLine);
+          }
+        }
+        // Handle Ctrl+C
+        else if (code === 3) {
+          terminal.write("^C\r\n");
+          currentLine = "";
+          terminal.write(prompt());
+        }
+        // Handle Ctrl+L (clear)
+        else if (code === 12) {
+          // Clear the screen properly by resetting the terminal
+          terminal.reset();
+          currentLine = "";
+          terminal.write(prompt());
+          return;
+        }
+        // Regular characters
+        else if (code >= 32 && code < 127) {
+          currentLine += data;
+          terminal.write(data);
+        }
+      });
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        fitAddon.fit();
+      });
+
+      terminalInitialized = true;
+      terminal.focus();
+    } catch (error) {
+      console.error("Failed to initialize terminal:", error);
+      if (typewriter) {
+        typewriter.innerHTML = `
+          <div class="text-red-400 mb-2">Error: Failed to initialize terminal</div>
+          <div class="text-slate-400 text-xs">${(error as Error).message}</div>
+          <div class="text-slate-500 text-xs mt-2">Click the red button to restore the animated terminal</div>
+        `;
+      }
+    }
+  }
+
+  function restoreAnimatedTerminal() {
+    const container = document.getElementById("xterm-container");
+    const typewriter = document.getElementById("typewriter");
+
+    if (container) {
+      container.classList.remove("active");
+    }
+    if (typewriter) {
+      typewriter.classList.remove("hidden-for-terminal");
+    }
+
+    // Dispose of terminal if it exists
+    if (terminal) {
+      terminal.dispose();
+      terminal = null;
+    }
+
+    terminalInitialized = false;
+    currentLine = "";
+    commandHistory = [];
+    historyIndex = -1;
+
+    // Reload the page to restart the animation
+    window.location.reload();
+  }
+
+  // Set up event listeners when DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    // Make the functions globally available
+    (window as any).openInteractiveTerminal = initializeTerminal;
+    (window as any).restoreAnimatedTerminal = restoreAnimatedTerminal;
+  });
+</script>

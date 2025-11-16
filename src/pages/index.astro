@@ -2,6 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import { getUpcomingEvents } from "../utils/meetupApi";
 import EventCard from "../components/EventCard.astro";
+import InteractiveTerminal from "../components/InteractiveTerminal.astro";
 
 const upcomingEvents = await getUpcomingEvents();
 ---
@@ -78,7 +79,9 @@ const upcomingEvents = await getUpcomingEvents();
       <!-- Terminal -->
       <div
         id="terminal-window"
-        class="bg-slate-900 rounded-lg px-6 py-5 font-mono shadow-lg border border-slate-700 transition-all duration-300"
+        class="bg-slate-900 rounded-lg px-6 py-5 font-mono shadow-lg border border-slate-700 transition-all duration-300 cursor-pointer hover:border-emerald-500"
+        onclick="window.openInteractiveTerminal?.()"
+        title="Click to open interactive terminal"
       >
         <div class="flex items-center gap-2 mb-3">
           <div class="flex gap-1.5">
@@ -121,6 +124,8 @@ const upcomingEvents = await getUpcomingEvents();
         >
           <span class="cursor">|</span>
         </div>
+        <!-- Interactive Terminal Container (hidden by default) -->
+        <div id="xterm-container" class="min-h-[18rem]"></div>
       </div>
     </div>
   </section>
@@ -402,16 +407,25 @@ const upcomingEvents = await getUpcomingEvents();
 
     let isMinimized = false;
 
-    // Close button - hides terminal with macOS-style animation
-    closeBtn?.addEventListener("click", () => {
-      terminal?.classList.add("terminal-closed");
-      setTimeout(() => {
-        if (terminal) terminal.style.display = "none";
-      }, 300);
+    // Close button - restores animated terminal if interactive terminal is active
+    closeBtn?.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering the terminal window click
+      const xtermContainer = document.getElementById("xterm-container");
+      if (xtermContainer?.classList.contains("active")) {
+        // Interactive terminal is active, restore animation
+        (window as any).restoreAnimatedTerminal?.();
+      } else {
+        // Just close the animated terminal
+        terminal?.classList.add("terminal-closed");
+        setTimeout(() => {
+          if (terminal) terminal.style.display = "none";
+        }, 300);
+      }
     });
 
     // Minimize button - smooth slide-up minimize like macOS
-    minimizeBtn?.addEventListener("click", () => {
+    minimizeBtn?.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering the terminal window click
       if (isMinimized) {
         // Restore - remove minimized state
         terminal?.classList.remove("terminal-minimized");
@@ -424,7 +438,8 @@ const upcomingEvents = await getUpcomingEvents();
     });
 
     // Expand button - restore if minimized, otherwise shake
-    expandBtn?.addEventListener("click", () => {
+    expandBtn?.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering the terminal window click
       if (isMinimized) {
         // Restore from minimized state
         terminal?.classList.remove("terminal-minimized");
@@ -537,4 +552,7 @@ const upcomingEvents = await getUpcomingEvents();
       )
     }
   </section>
+
+  <!-- Interactive Terminal Component -->
+  <InteractiveTerminal />
 </MainLayout>

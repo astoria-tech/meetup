@@ -6,6 +6,18 @@ import path from "path";
 export default defineConfig({
   integrations: [tailwind()],
   vite: {
+    server: {
+      headers: {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp",
+      },
+      fs: {
+        allow: [".."],
+      },
+    },
+    optimizeDeps: {
+      exclude: ["@wasmer/sdk"],
+    },
     resolve: {
       alias: {
         "@notosans-medium.otf": path.join(
