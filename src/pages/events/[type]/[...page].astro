@@ -44,6 +44,21 @@ const events = await getEventsByType(type);
 const label = getEventTypeLabel(type);
 const description = getEventTypeDescription(type);
 
+// Get emoji for event type
+function getEventEmoji(eventType: EventType): string {
+  switch (eventType) {
+    case "mornings":
+      return "☀️";
+    case "evenings":
+      return "🌙";
+    case "hackathons":
+      return "🚀";
+    default:
+      return "💡";
+  }
+}
+const emoji = getEventEmoji(type);
+
 // Separate upcoming and past events
 const now = new Date();
 const upcomingEvents = events
@@ -83,7 +98,12 @@ const pastDateRange = getDateRange(paginatedPastEvents);
   <!-- Page Header -->
   <section class="mb-12">
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-4xl font-bold text-emerald-900 mb-4">{label}</h1>
+      <h1
+        class="text-4xl font-bold text-emerald-900 mb-4 flex items-center gap-3"
+      >
+        <span>{label.replace(/^[^\s]+\s/, "")}</span>
+        <span>{emoji}</span>
+      </h1>
       <div class="text-lg text-emerald-700 space-y-1">
         {
           description

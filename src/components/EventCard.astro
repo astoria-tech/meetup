@@ -28,68 +28,98 @@ const day = date.toLocaleDateString("en-US", {
   timeZone: "America/New_York",
 });
 
-// Get colors based on event type - simplified
-const getEventColors = (eventType: string, isPast: boolean) => {
-  if (isPast) {
-    return {
-      bg: "bg-slate-100",
-      text: "text-slate-700",
-    };
-  }
-
+// Get colors based on event type - vibrant badges
+const getEventColors = (eventType: string) => {
   switch (eventType) {
     case "mornings":
       return {
-        bg: "bg-orange-50",
-        text: "text-orange-700",
+        badgeBg: "bg-orange-500",
+        badgeText: "text-white",
+        emoji: "☀️",
       };
     case "evenings":
       return {
-        bg: "bg-slate-100",
-        text: "text-slate-700",
+        badgeBg: "bg-slate-700",
+        badgeText: "text-white",
+        emoji: "🌙",
       };
     case "hackathons":
       return {
-        bg: "bg-purple-50",
-        text: "text-purple-700",
+        badgeBg: "bg-purple-600",
+        badgeText: "text-white",
+        emoji: "🚀",
       };
     default:
       return {
-        bg: "bg-emerald-50",
-        text: "text-emerald-700",
+        badgeBg: "bg-emerald-600",
+        badgeText: "text-white",
+        emoji: "💡",
       };
   }
 };
 
-const eventColors = getEventColors(event.eventType, isPast);
+const eventColors = getEventColors(event.eventType);
 ---
 
 <div
   class={`bg-white rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-200 ${isPast ? "opacity-60" : ""}`}
 >
-  <div class="p-6 relative">
-    {/* Right Side - Unified Info Block - Absolutely positioned */}
-    <div
-      class={`absolute top-6 right-6 ${eventColors.bg} rounded-lg px-4 py-3`}
-    >
-      <div class="text-center mb-2">
-        <div class={`text-xs font-semibold ${eventColors.text}`}>
-          {getEventTypeLabel(event.eventType)}
-        </div>
+  <div class="p-6 sm:relative">
+    {/* Mobile: Top row with badge and date side-by-side */}
+    <div class="flex justify-between items-start gap-3 mb-4 sm:hidden">
+      <div class="flex items-center gap-2">
+        <span
+          class={`${eventColors.badgeBg} ${eventColors.badgeText} text-sm font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap w-[140px] text-center`}
+        >
+          {getEventTypeLabel(event.eventType).replace(/^[^\s]+\s/, "")}
+        </span>
+        <span class="text-2xl">{eventColors.emoji}</span>
       </div>
-      <div class="text-center border-t border-current/20 pt-2">
-        <div class={`text-xs font-semibold uppercase ${eventColors.text}`}>
+      <div class="flex flex-col text-right">
+        <div
+          class="text-sm font-bold text-slate-900 uppercase whitespace-nowrap"
+        >
           {weekday}, {month}
           {day}
         </div>
-        <div class={`text-xs font-semibold ${eventColors.text}`}>
+        <div class="text-sm font-semibold text-slate-700">
           {formatTime(event.dateTime)}
         </div>
       </div>
     </div>
 
-    {/* Left content flows naturally */}
-    <div class="pr-40">
+    {/* Desktop: Badge and date on right side */}
+    <div
+      class="hidden sm:flex sm:absolute sm:top-6 sm:right-6 flex-col items-end gap-2"
+    >
+      {/* Badge with emoji */}
+      <div class="relative">
+        <span class="absolute -left-9 top-1/2 -translate-y-1/2 text-2xl"
+          >{eventColors.emoji}</span
+        >
+        <span
+          class={`${eventColors.badgeBg} ${eventColors.badgeText} text-sm font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap w-[155px] text-center inline-block`}
+        >
+          {getEventTypeLabel(event.eventType).replace(/^[^\s]+\s/, "")}
+        </span>
+      </div>
+
+      {/* Date box underneath */}
+      <div
+        class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-center w-[155px]"
+      >
+        <div class="text-sm font-bold text-slate-900 uppercase">
+          {weekday}, {month}
+          {day}
+        </div>
+        <div class="text-sm font-semibold text-slate-700 mt-0.5">
+          {formatTime(event.dateTime)}
+        </div>
+      </div>
+    </div>
+
+    {/* Content */}
+    <div class="sm:pr-40">
       <h3 class="text-xl font-bold text-slate-900 mb-3">
         {event.title}
       </h3>
