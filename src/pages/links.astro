@@ -1,6 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import { getCollection } from "astro:content";
+import { getUpcomingEvents } from "../utils/meetupApi";
 import {
   Calendar,
   MessageCircle,
@@ -9,12 +9,11 @@ import {
   PenTool,
 } from "lucide-astro";
 
-// Get the latest event
-const events = await getCollection("events");
-const sortedEvents = events.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+// Get the next monthly evening meetup from Meetup.com API
+const upcomingEvents = await getUpcomingEvents();
+const nextMonthlyMeetup = upcomingEvents.find(
+  (event) => event.eventType === "evenings",
 );
-const latestEvent = sortedEvents[0];
 
 const links = [
   {
@@ -65,30 +64,46 @@ const links = [
   <!-- Links grid -->
   <section>
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Latest Event RSVP (featured) -->
+      <!-- Next Monthly Evening Meetup RSVP (featured) -->
       {
-        latestEvent && latestEvent.data.meetup && (
+        nextMonthlyMeetup && (
           <a
-            href={latestEvent.data.meetup}
+            href={nextMonthlyMeetup.eventUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="group bg-emerald-50 rounded-lg border-2 border-emerald-300 p-6 hover:shadow-md hover:border-emerald-400 transition-all duration-200"
           >
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex items-center gap-3 mb-4">
               <Calendar class="w-6 h-6 text-emerald-700 group-hover:text-emerald-600 transition-colors duration-200 flex-shrink-0" />
               <h3 class="text-xl font-semibold text-emerald-900 group-hover:text-emerald-600 transition-colors duration-200">
-                RSVP to Next Event
+                RSVP to Next Meetup
               </h3>
             </div>
-            <p class="text-emerald-700 text-sm">
-              {latestEvent.data.title} -{" "}
-              {new Date(latestEvent.data.date).toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                timeZone: "America/New_York",
-              })}
-            </p>
+            <div class="space-y-2">
+              <p class="text-emerald-900 font-medium text-base leading-snug">
+                {nextMonthlyMeetup.title}
+              </p>
+              <p class="text-emerald-700 text-sm">
+                {new Date(nextMonthlyMeetup.dateTime).toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    timeZone: "America/New_York",
+                  },
+                )}
+                {" • "}
+                {new Date(nextMonthlyMeetup.dateTime).toLocaleTimeString(
+                  "en-US",
+                  {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    timeZone: "America/New_York",
+                  },
+                )}
+              </p>
+            </div>
           </a>
         )
       }
