@@ -1,12 +1,14 @@
 ---
 import Layout from "./Layout.astro";
 import { getLink } from "../components/Link.astro";
+import Footer from "../components/Footer.astro";
 
 type Props = {
   title?: string;
   bodyClass?: string[];
+  wide?: boolean;
 };
-const { title, bodyClass = [] } = Astro.props;
+const { title, bodyClass = [], wide = false } = Astro.props;
 ---
 
 <Layout
@@ -16,6 +18,8 @@ const { title, bodyClass = [] } = Astro.props;
     "from-green-50",
     "to-emerald-50",
     "min-h-screen",
+    "flex",
+    "flex-col",
     ...bodyClass,
   ]}
 >
@@ -128,7 +132,15 @@ const { title, bodyClass = [] } = Astro.props;
   </header>
 
   <!-- Main content -->
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6 relative z-10">
+  <main
+    class:list={[
+      "mx-auto px-4 sm:px-6 py-4 sm:py-8 md:py-12 relative z-10 flex-1 w-full",
+      wide ? "max-w-7xl" : "max-w-4xl",
+    ]}
+  >
     <slot />
   </main>
+
+  <!-- Footer -->
+  <Footer />
 </Layout>

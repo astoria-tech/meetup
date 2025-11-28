@@ -1,0 +1,8 @@
+# Archived content - no longer actively maintained
+src/_archive/
+src/content/_archive/
+src/pages/_archive/
+
+# Build outputs
+dist/
+.astro/

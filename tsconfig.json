@@ -1,4 +1,9 @@
 {
   "extends": "astro/tsconfigs/base",
-  "exclude": ["packages"]
+  "exclude": [
+    "packages",
+    "src/_archive",
+    "src/content/_archive",
+    "src/pages/_archive"
+  ]
 }

@@ -1,3 +1,10 @@
+// Content collections config
+// Note: The static event/speaker/presentation/feed collections have been archived
+// to src/content/_archive/ since we now use the Meetup API for event data.
+
+// If you need to re-enable static content collections, uncomment the code below:
+
+/*
 import { defineCollection, reference, z } from "astro:content";
 
 const eventsCollection = defineCollection({
@@ -50,3 +57,7 @@ export const collections = {
   presentations: presentationsCollection,
   speakers: speakersCollection,
 };
+*/
+
+// Currently no active collections - all content comes from Meetup API
+export const collections = {};
