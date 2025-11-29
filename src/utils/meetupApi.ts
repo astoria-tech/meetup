@@ -159,9 +159,9 @@ export async function getUpcomingEvents(): Promise<CategorizedEvent[]> {
 export function getEventTypeLabel(type: EventType): string {
   switch (type) {
     case "mornings":
-      return "☀️ Weekly Mornings";
+      return "☀️ Morning Coffee";
     case "evenings":
-      return "🌙 Monthly Evenings";
+      return "🌙 Monthly Meetup";
     case "hackathons":
       return "🚀 Hackathons";
   }
