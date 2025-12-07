@@ -1,0 +1,253 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+
+// Get all carousel images at build time
+const carouselDir = path.join(process.cwd(), "public/images/carousel");
+const allImages = fs
+  .readdirSync(carouselDir)
+  .filter((file) => /\.(jpg|jpeg|png|webp)$/i.test(file))
+  .map((file) => `/images/carousel/${file}`);
+
+// Shuffle images at build time (Fisher-Yates)
+const images = [...allImages];
+for (let i = images.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [images[i], images[j]] = [images[j], images[i]];
+}
+
+// No duplication needed - we'll have bounds
+const displayImages = images.slice(0, 16);
+---
+
+<div class="film-strip-wrapper">
+  <div class="film-strip">
+    {
+      displayImages.map((src, i) => (
+        <div class="film-frame">
+          <img
+            src={src}
+            alt={`Astoria Tech Meetup community photo`}
+            loading={i < 6 ? "eager" : "lazy"}
+            decoding="async"
+            draggable="false"
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .film-strip-wrapper {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    overflow: hidden;
+  }
+
+  .film-strip {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    cursor: grab;
+    will-change: transform;
+  }
+
+  .film-strip.dragging {
+    cursor: grabbing;
+  }
+
+  .film-strip.at-start {
+    /* Visual indicator at left bound */
+  }
+
+  .film-strip.at-end {
+    /* Visual indicator at right bound */
+  }
+
+  .film-frame {
+    flex-shrink: 0;
+    width: calc((100vw - 3rem) / 3);
+    aspect-ratio: 4 / 3;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  /* 4 visible on xl */
+  @media (min-width: 1280px) {
+    .film-frame {
+      width: calc((100vw - 3.75rem) / 4);
+    }
+  }
+
+  /* 2 visible on mobile */
+  @media (max-width: 640px) {
+    .film-frame {
+      width: calc((100vw - 1.5rem) / 2);
+    }
+    .film-strip {
+      gap: 0.5rem;
+    }
+  }
+
+  .film-frame img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+</style>
+
+<script>
+  const strip = document.querySelector(".film-strip") as HTMLElement | null;
+  const wrapper = document.querySelector(
+    ".film-strip-wrapper",
+  ) as HTMLElement | null;
+
+  if (strip && wrapper) {
+    let position = 0; // Current scroll position (negative = scrolled right)
+    let velocity = 0; // Current velocity for momentum
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartPos = 0;
+    let lastDragX = 0;
+    let lastDragTime = 0;
+    let animationId: number | null = null;
+    let isAutoScrolling = true; // Auto-scroll when not interacting
+    let autoScrollDirection = -1; // -1 = scrolling right (showing more), 1 = scrolling left
+
+    // Speed: pixels per frame (constant across devices)
+    const speed = 30 / 60;
+
+    function getMinPosition(): number {
+      // Can scroll until last image is at right edge of viewport
+      const stripWidth = strip.scrollWidth;
+      const viewportWidth = wrapper.clientWidth;
+      return -(stripWidth - viewportWidth);
+    }
+
+    function clampPosition(pos: number): number {
+      const minPos = getMinPosition();
+      return Math.max(minPos, Math.min(0, pos));
+    }
+
+    function updateTransform() {
+      strip.style.transform = `translateX(${position}px)`;
+
+      // Update boundary classes
+      strip.classList.toggle("at-start", position >= 0);
+      strip.classList.toggle("at-end", position <= getMinPosition());
+    }
+
+    function animate() {
+      if (!isDragging) {
+        if (isAutoScrolling) {
+          position += speed * autoScrollDirection;
+
+          // Reverse direction at bounds
+          const minPos = getMinPosition();
+          if (position <= minPos) {
+            position = minPos;
+            autoScrollDirection = 1; // Start scrolling left
+          } else if (position >= 0) {
+            position = 0;
+            autoScrollDirection = -1; // Start scrolling right
+          }
+        } else if (Math.abs(velocity) > 0.5) {
+          // Apply momentum from drag
+          position += velocity;
+          velocity *= 0.95; // Friction
+          position = clampPosition(position);
+        }
+      }
+
+      updateTransform();
+      animationId = requestAnimationFrame(animate);
+    }
+
+    function startDrag(x: number) {
+      isDragging = true;
+      isAutoScrolling = false;
+      dragStartX = x;
+      dragStartPos = position;
+      lastDragX = x;
+      lastDragTime = performance.now();
+      velocity = 0;
+      strip.classList.add("dragging");
+    }
+
+    function moveDrag(x: number) {
+      if (!isDragging) return;
+
+      const diff = x - dragStartX;
+      position = clampPosition(dragStartPos + diff);
+
+      // Track velocity for momentum
+      const now = performance.now();
+      const dt = now - lastDragTime;
+      if (dt > 0) {
+        velocity = ((x - lastDragX) / dt) * 16; // Normalize to ~60fps
+      }
+      lastDragX = x;
+      lastDragTime = now;
+    }
+
+    function endDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      strip.classList.remove("dragging");
+
+      // Resume auto-scroll after a short delay (let momentum settle)
+      setTimeout(() => {
+        if (!isDragging) {
+          isAutoScrolling = true;
+        }
+      }, 1000);
+    }
+
+    // Mouse events
+    strip.addEventListener("mousedown", (e: MouseEvent) => {
+      e.preventDefault();
+      startDrag(e.clientX);
+    });
+
+    window.addEventListener("mousemove", (e: MouseEvent) => {
+      moveDrag(e.clientX);
+    });
+
+    window.addEventListener("mouseup", endDrag);
+
+    // Touch events
+    strip.addEventListener(
+      "touchstart",
+      (e: TouchEvent) => {
+        startDrag(e.touches[0].clientX);
+      },
+      { passive: true },
+    );
+
+    strip.addEventListener(
+      "touchmove",
+      (e: TouchEvent) => {
+        moveDrag(e.touches[0].clientX);
+      },
+      { passive: true },
+    );
+
+    strip.addEventListener("touchend", endDrag);
+
+    // Start animation loop
+    animationId = requestAnimationFrame(animate);
+
+    // Cleanup on page leave
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      } else if (!document.hidden && !animationId) {
+        animationId = requestAnimationFrame(animate);
+      }
+    });
+  }
+</script>

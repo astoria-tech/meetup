@@ -2,7 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import { getUpcomingEvents } from "../utils/meetupApi";
 import EventCard from "../components/EventCard.astro";
-import InteractiveTerminal from "../components/InteractiveTerminal.astro";
+import ImageCarousel from "../components/ImageCarousel.astro";
 
 const upcomingEvents = await getUpcomingEvents();
 ---
@@ -76,57 +76,8 @@ const upcomingEvents = await getUpcomingEvents();
         </div>
       </div>
 
-      <!-- Terminal -->
-      <div
-        id="terminal-window"
-        class="bg-slate-900 rounded-lg px-6 py-5 font-mono shadow-lg border border-slate-700 transition-all duration-300 cursor-pointer hover:border-emerald-500"
-        onclick="window.openInteractiveTerminal?.()"
-        title="Click to open interactive terminal"
-      >
-        <div class="flex items-center gap-2 mb-3">
-          <div class="flex gap-1.5">
-            <button
-              id="close-btn"
-              class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 cursor-pointer transition-colors group relative"
-              aria-label="Close terminal"
-            >
-              <span
-                class="absolute inset-0 flex items-center justify-center text-red-900 text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
-                >×</span
-              >
-            </button>
-            <button
-              id="minimize-btn"
-              class="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer transition-colors group relative"
-              aria-label="Minimize terminal"
-            >
-              <span
-                class="absolute inset-0 flex items-center justify-center text-yellow-900 text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
-                >−</span
-              >
-            </button>
-            <button
-              id="expand-btn"
-              class="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 cursor-pointer transition-colors group relative"
-              aria-label="Expand terminal"
-            >
-              <span
-                class="absolute inset-0 flex items-center justify-center text-green-900 text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity leading-none"
-                >+</span
-              >
-            </button>
-          </div>
-        </div>
-        <div
-          class="text-white text-sm sm:text-base min-h-[18rem] leading-relaxed transition-all duration-300"
-          id="typewriter"
-          style="font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;"
-        >
-          <span class="cursor">|</span>
-        </div>
-        <!-- Interactive Terminal Container (hidden by default) -->
-        <div id="xterm-container" class="min-h-[18rem]"></div>
-      </div>
+      <!-- Community Photo Carousel -->
+      <ImageCarousel />
     </div>
   </section>
 
@@ -136,64 +87,6 @@ const upcomingEvents = await getUpcomingEvents();
       opacity: 0;
       visibility: hidden;
       transition: opacity 300ms;
-    }
-
-    /* Terminal window animations */
-    @keyframes shake {
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-      10%,
-      30%,
-      50%,
-      70%,
-      90% {
-        transform: translateX(-2px);
-      }
-      20%,
-      40%,
-      60%,
-      80% {
-        transform: translateX(2px);
-      }
-    }
-
-    .shake {
-      animation: shake 0.4s ease-in-out;
-    }
-
-    .terminal-minimized {
-      padding-bottom: 1.25rem !important;
-    }
-
-    .terminal-minimized #typewriter {
-      min-height: 0 !important;
-      max-height: 0;
-      opacity: 0;
-      transform: translateY(-10px);
-      overflow: hidden;
-      transition:
-        min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.25s ease-out,
-        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    #typewriter {
-      transition:
-        max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.25s ease-in,
-        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .terminal-closed {
-      opacity: 0;
-      transform: scale(0.95);
-      max-height: 0;
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
     }
 
     /* On mobile, smooth height transition */
@@ -215,302 +108,44 @@ const upcomingEvents = await getUpcomingEvents();
     }
   </style>
 
-  <style>
-    #typewriter {
-      letter-spacing: 0.02em;
-      font-weight: 400;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .cursor {
-      color: white;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%,
-      50% {
-        opacity: 1;
-      }
-      51%,
-      100% {
-        opacity: 0;
-      }
-    }
-  </style>
-
-  <script>
-    const typewriterElement = document.getElementById("typewriter");
-    let currentStep = 0;
-    let charIndex = 0;
-    let terminalContent = [];
-
-    const files = [
-      "community.txt",
-      "skills.txt",
-      "projects.txt",
-      "network.txt",
-    ];
-    const fileContents = {
-      "community.txt": "Connect with local technologists and makers.",
-      "skills.txt": "Learn through presentations and workshops.",
-      "projects.txt": "Build at hackathons and cohorts.",
-      "network.txt": "Grow your local tech network.",
-    };
-
-    // Build the sequence of terminal steps
-    const sequence = [
-      { type: "command", text: "ls" },
-      {
-        type: "output",
-        text: "events/  projects/  community.txt  skills.txt  projects.txt  network.txt",
-      },
-      ...files.flatMap((file) => [
-        { type: "command", text: `cat ${file}` },
-        { type: "output", text: fileContents[file] },
-      ]),
-      { type: "command", text: "clear" },
-      { type: "clear" },
-    ];
-
-    // Generate human-like typing speed
-    function getTypingDelay() {
-      return Math.random() * 90 + 30; // Random between 30-120ms
-    }
-
-    function render() {
-      const lines = terminalContent
-        .map((line, idx) => {
-          const isLast = idx === terminalContent.length - 1;
-          if (line.type === "command") {
-            return `<div><span class="text-emerald-400 opacity-60">$</span> <span class="text-slate-400 opacity-70">${line.text}</span>${isLast ? '<span class="cursor">|</span>' : ""}</div>`;
-          } else {
-            // Colorize directories (ending in /) as blue, .txt files as gray
-            let colorizedText = line.text
-              .replace(
-                /(\S+\/)/g,
-                '<span class="text-cyan-400 opacity-60">$1</span>',
-              )
-              .replace(
-                /(\S+\.txt)/g,
-                '<span class="text-slate-400 opacity-70">$1</span>',
-              );
-
-            // Make content lines bold if they're the file content (not ls output)
-            const isFileContent =
-              !line.text.includes(".txt") && !line.text.includes("/");
-            if (isFileContent) {
-              return `<div class="text-white font-bold text-base">${colorizedText}</div>`;
-            }
-            return `<div class="text-slate-400 opacity-70">${colorizedText}</div>`;
-          }
-        })
-        .join("");
-
-      typewriterElement.innerHTML = lines;
-    }
-
-    function typeStep() {
-      const step = sequence[currentStep];
-
-      if (step.type === "clear") {
-        // Immediately clear terminal and restart
-        terminalContent = [];
-        currentStep = 0;
-        charIndex = 0;
-        // Push the first command line before rendering
-        terminalContent.push({ type: "command", text: "" });
-        render();
-        setTimeout(typeStep, 500);
-        return;
-      }
-
-      if (!("text" in step)) return;
-      const fullText = step.text;
-
-      // For commands, type character by character with variable speed
-      if (step.type === "command") {
-        if (charIndex < fullText.length) {
-          charIndex++;
-          terminalContent[terminalContent.length - 1] = {
-            type: "command",
-            text: fullText.substring(0, charIndex),
-          };
-          render();
-          setTimeout(typeStep, getTypingDelay());
-        } else {
-          // Finished typing command
-          if ("text" in step && step.text === "clear") {
-            // Execute clear immediately
-            setTimeout(() => {
-              currentStep++;
-              charIndex = 0;
-              typeStep();
-            }, 200);
-          } else {
-            // Move to output
-            setTimeout(() => {
-              currentStep++;
-              charIndex = 0;
-              const nextStep = sequence[currentStep];
-              if (nextStep) {
-                terminalContent.push({ type: nextStep.type, text: "" });
-              }
-              typeStep();
-            }, 300);
-          }
-        }
-      } else {
-        // For output, display instantly
-        terminalContent[terminalContent.length - 1] = {
-          type: "output",
-          text: fullText,
-        };
-
-        // Immediately show the next prompt
-        currentStep++;
-        charIndex = 0;
-        const nextStep = sequence[currentStep];
-        if (nextStep && nextStep.type !== "clear") {
-          terminalContent.push({ type: nextStep.type, text: "" });
-        }
-        render();
-
-        // Brief pause before starting to type the next command
-        // Linger much longer before the clear command (~10x original)
-        const isBeforeClear =
-          nextStep &&
-          nextStep.type === "command" &&
-          "text" in nextStep &&
-          nextStep.text === "clear";
-        setTimeout(
-          () => {
-            typeStep();
-          },
-          isBeforeClear ? 15000 : 1500,
-        );
-      }
-    }
-
-    // Start the animation
-    terminalContent.push({ type: "command", text: "" });
-    typeStep();
-  </script>
-
-  <!-- Terminal window controls -->
-  <script>
-    const terminal = document.getElementById("terminal-window");
-    const closeBtn = document.getElementById("close-btn");
-    const minimizeBtn = document.getElementById("minimize-btn");
-    const expandBtn = document.getElementById("expand-btn");
-
-    let isMinimized = false;
-
-    // Close button - restores animated terminal if interactive terminal is active
-    closeBtn?.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent triggering the terminal window click
-      const xtermContainer = document.getElementById("xterm-container");
-      if (xtermContainer?.classList.contains("active")) {
-        // Interactive terminal is active, restore animation
-        (window as any).restoreAnimatedTerminal?.();
-      } else {
-        // Just close the animated terminal
-        terminal?.classList.add("terminal-closed");
-        setTimeout(() => {
-          if (terminal) terminal.style.display = "none";
-        }, 300);
-      }
-    });
-
-    // Minimize button - smooth slide-up minimize like macOS
-    minimizeBtn?.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent triggering the terminal window click
-      if (isMinimized) {
-        // Restore - remove minimized state
-        terminal?.classList.remove("terminal-minimized");
-        isMinimized = false;
-      } else {
-        // Minimize - add minimized state
-        terminal?.classList.add("terminal-minimized");
-        isMinimized = true;
-      }
-    });
-
-    // Expand button - restore if minimized, otherwise shake
-    expandBtn?.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent triggering the terminal window click
-      if (isMinimized) {
-        // Restore from minimized state
-        terminal?.classList.remove("terminal-minimized");
-        isMinimized = false;
-      } else {
-        // Already expanded - shake to indicate not available
-        terminal?.classList.add("shake");
-        setTimeout(() => {
-          terminal?.classList.remove("shake");
-        }, 400);
-      }
-    });
-  </script>
-
   <!-- Scroll behavior for header -->
   <script>
     // Show header logo when scrolling down past hero (mobile and desktop)
-    console.log("[Header Logo] Script loading...");
-
-    // Try multiple selectors to find the logo
     let logo: HTMLElement | null = document.querySelector('header a[href="/"]');
-    console.log('[Header Logo] Tried href="/" selector:', logo);
 
     if (!logo) {
       logo = document.querySelector("header nav a");
-      console.log("[Header Logo] Tried first nav link:", logo);
     }
 
     if (!logo) {
-      // Find by looking for the Astoria Tech text
       const links = document.querySelectorAll<HTMLElement>("header a");
-      console.log("[Header Logo] All header links:", links);
       for (const link of links) {
         if (link.textContent?.includes("Astoria Tech")) {
           logo = link;
-          console.log("[Header Logo] Found by text content:", logo);
           break;
         }
       }
     }
 
-    console.log("[Header Logo] Final logo element:", logo);
-
     if (logo) {
-      // Add class for CSS targeting
       logo.classList.add("home-page-logo-target");
-      console.log("[Header Logo] Added home-page-logo-target class");
-
-      // Check if mobile
       const isMobile = window.innerWidth <= 640;
 
-      // Add scroll behavior for both mobile and desktop
       function handleScroll() {
         const scrollY = window.scrollY;
         if (!logo) return;
 
         if (scrollY > 100) {
           if (isMobile) {
-            // On mobile, use class to override display:none
             logo.classList.add("show-on-scroll");
           } else {
-            // On desktop, use inline styles
             logo.style.opacity = "1";
             logo.style.visibility = "visible";
           }
         } else {
           if (isMobile) {
-            // On mobile, remove class to hide
             logo.classList.remove("show-on-scroll");
           } else {
-            // On desktop, use inline styles
             logo.style.opacity = "0";
             logo.style.visibility = "hidden";
           }
@@ -518,9 +153,6 @@ const upcomingEvents = await getUpcomingEvents();
       }
 
       window.addEventListener("scroll", handleScroll);
-      console.log("[Header Logo] Scroll listener attached");
-    } else {
-      console.error("[Header Logo] Logo element still not found!");
     }
   </script>
 
@@ -552,7 +184,4 @@ const upcomingEvents = await getUpcomingEvents();
       )
     }
   </section>
-
-  <!-- Interactive Terminal Component -->
-  <InteractiveTerminal />
 </MainLayout>
