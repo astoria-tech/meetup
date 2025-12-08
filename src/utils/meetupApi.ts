@@ -154,6 +154,22 @@ export async function getUpcomingEvents(): Promise<CategorizedEvent[]> {
 }
 
 /**
+ * Get past events (across all types), sorted by most recent first
+ */
+export async function getPastEvents(
+  limit?: number,
+): Promise<CategorizedEvent[]> {
+  const allEvents = await fetchMeetupEvents();
+  const pastEvents = allEvents
+    .filter((event) => event.status === "PAST")
+    .sort(
+      (a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime(),
+    );
+
+  return limit ? pastEvents.slice(0, limit) : pastEvents;
+}
+
+/**
  * Get event type display name
  */
 export function getEventTypeLabel(type: EventType): string {
