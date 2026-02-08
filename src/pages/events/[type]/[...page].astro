@@ -129,138 +129,50 @@ const pastDateRange = getDateRange(paginatedPastEvents);
   }
 
   <!-- Past Events -->
-  {
-    pastEvents.length > 0 && (
-      <section>
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <h2 class="text-2xl font-bold text-emerald-900">Past</h2>
-            {pastDateRange && (
-              <p class="text-sm text-emerald-600 mt-1">
-                {pastDateRange.latest.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}{" "}
-                -{" "}
-                {pastDateRange.earliest.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            )}
-          </div>
+  <section>
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-emerald-900">Past</h2>
+        {
+          pastDateRange && (
+            <p class="text-sm text-emerald-600 mt-1">
+              {pastDateRange.latest.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}{" "}
+              -{" "}
+              {pastDateRange.earliest.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
+          )
+        }
+      </div>
+      {
+        pastEvents.length > 0 && (
           <div class="text-sm text-emerald-600">
             Page {currentPage} of {totalPastPages} • {pastEvents.length} total
             events
           </div>
-        </div>
+        )
+      }
+    </div>
+    {
+      paginatedPastEvents.length > 0 ? (
         <div class="space-y-4">
           {paginatedPastEvents.map((event) => (
             <EventCard event={event} isPast={true} />
           ))}
         </div>
-
-        {/* Pagination Controls */}
-        {totalPastPages > 1 && (
-          <div class="mt-8 flex items-center justify-center gap-2">
-            {currentPage > 1 && (
-              <a
-                href={getPageUrl(currentPage - 1)}
-                class="px-4 py-2 text-sm font-medium text-emerald-700 bg-white border border-emerald-300 rounded-lg hover:bg-emerald-50 transition-colors"
-              >
-                ← Previous
-              </a>
-            )}
-
-            <div class="flex gap-1">
-              {/* First page */}
-              <a
-                href={getPageUrl(1)}
-                class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  currentPage === 1
-                    ? "bg-emerald-600 text-white"
-                    : "text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
-                }`}
-              >
-                1
-              </a>
-
-              {/* Ellipsis after first page */}
-              {currentPage > 3 && (
-                <span class="px-2 text-emerald-600 flex items-center">...</span>
-              )}
-
-              {/* Previous page */}
-              {currentPage > 2 && (
-                <a
-                  href={getPageUrl(currentPage - 1)}
-                  class="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
-                >
-                  {currentPage - 1}
-                </a>
-              )}
-
-              {/* Current page (if not first or last) */}
-              {currentPage > 1 && currentPage < totalPastPages && (
-                <span class="px-3 py-2 text-sm font-medium rounded-lg bg-emerald-600 text-white">
-                  {currentPage}
-                </span>
-              )}
-
-              {/* Next page */}
-              {currentPage < totalPastPages - 1 && (
-                <a
-                  href={getPageUrl(currentPage + 1)}
-                  class="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
-                >
-                  {currentPage + 1}
-                </a>
-              )}
-
-              {/* Ellipsis before last page */}
-              {currentPage < totalPastPages - 2 && (
-                <span class="px-2 text-emerald-600 flex items-center">...</span>
-              )}
-
-              {/* Last page */}
-              {totalPastPages > 1 && (
-                <a
-                  href={getPageUrl(totalPastPages)}
-                  class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    currentPage === totalPastPages
-                      ? "bg-emerald-600 text-white"
-                      : "text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
-                  }`}
-                >
-                  {totalPastPages}
-                </a>
-              )}
-            </div>
-
-            {currentPage < totalPastPages && (
-              <a
-                href={getPageUrl(currentPage + 1)}
-                class="px-4 py-2 text-sm font-medium text-emerald-700 bg-white border border-emerald-300 rounded-lg hover:bg-emerald-50 transition-colors"
-              >
-                Next →
-              </a>
-            )}
-          </div>
-        )}
-      </section>
-    )
-  }
-
-  {
-    events.length === 0 && (
-      <section class="text-center py-12">
-        <div class="bg-white rounded-lg border border-green-200 p-8">
+      ) : (
+        <div class="bg-white rounded-lg border border-green-200 p-8 text-center">
           <p class="text-emerald-700 text-lg mb-2">
             {type === "hackathons"
               ? "Check back soon for upcoming hackathons!"
-              : `No ${label.toLowerCase()} scheduled at this time.`}
+              : `No past ${label.replace(/^[^\s]+\s/, "").toLowerCase()} events yet.`}
           </p>
           <p class="text-emerald-600 text-sm">
             Join us on{" "}
@@ -275,7 +187,97 @@ const pastDateRange = getDateRange(paginatedPastEvents);
             for the latest updates.
           </p>
         </div>
-      </section>
-    )
-  }
+      )
+    }
+
+    {/* Pagination Controls */}
+    {
+      totalPastPages > 1 && (
+        <div class="mt-8 flex items-center justify-center gap-2">
+          {currentPage > 1 && (
+            <a
+              href={getPageUrl(currentPage - 1)}
+              class="px-4 py-2 text-sm font-medium text-emerald-700 bg-white border border-emerald-300 rounded-lg hover:bg-emerald-50 transition-colors"
+            >
+              ← Previous
+            </a>
+          )}
+
+          <div class="flex gap-1">
+            {/* First page */}
+            <a
+              href={getPageUrl(1)}
+              class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                currentPage === 1
+                  ? "bg-emerald-600 text-white"
+                  : "text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
+              }`}
+            >
+              1
+            </a>
+
+            {/* Ellipsis after first page */}
+            {currentPage > 3 && (
+              <span class="px-2 text-emerald-600 flex items-center">...</span>
+            )}
+
+            {/* Previous page */}
+            {currentPage > 2 && (
+              <a
+                href={getPageUrl(currentPage - 1)}
+                class="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
+              >
+                {currentPage - 1}
+              </a>
+            )}
+
+            {/* Current page (if not first or last) */}
+            {currentPage > 1 && currentPage < totalPastPages && (
+              <span class="px-3 py-2 text-sm font-medium rounded-lg bg-emerald-600 text-white">
+                {currentPage}
+              </span>
+            )}
+
+            {/* Next page */}
+            {currentPage < totalPastPages - 1 && (
+              <a
+                href={getPageUrl(currentPage + 1)}
+                class="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
+              >
+                {currentPage + 1}
+              </a>
+            )}
+
+            {/* Ellipsis before last page */}
+            {currentPage < totalPastPages - 2 && (
+              <span class="px-2 text-emerald-600 flex items-center">...</span>
+            )}
+
+            {/* Last page */}
+            {totalPastPages > 1 && (
+              <a
+                href={getPageUrl(totalPastPages)}
+                class={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  currentPage === totalPastPages
+                    ? "bg-emerald-600 text-white"
+                    : "text-emerald-700 bg-white border border-emerald-300 hover:bg-emerald-50"
+                }`}
+              >
+                {totalPastPages}
+              </a>
+            )}
+          </div>
+
+          {currentPage < totalPastPages && (
+            <a
+              href={getPageUrl(currentPage + 1)}
+              class="px-4 py-2 text-sm font-medium text-emerald-700 bg-white border border-emerald-300 rounded-lg hover:bg-emerald-50 transition-colors"
+            >
+              Next →
+            </a>
+          )}
+        </div>
+      )
+    }
+  </section>
 </MainLayout>

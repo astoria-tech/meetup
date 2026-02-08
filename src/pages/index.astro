@@ -187,24 +187,30 @@ const recentPastEvents = await getPastEvents(3);
   </section>
 
   <!-- Recent Past Events Section -->
-  {
-    recentPastEvents.length > 0 && (
-      <section class="mt-12">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-slate-900">Recent Events</h2>
-          <a
-            href="/events"
-            class="inline-flex items-center gap-2 text-slate-700 hover:text-slate-900 font-semibold border-b-2 border-slate-400 hover:border-slate-600 transition-colors pb-0.5"
-          >
-            See all events →
-          </a>
-        </div>
+  <section class="mt-12">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-slate-900">Recent Events</h2>
+      <a
+        href="/events"
+        class="inline-flex items-center gap-2 text-slate-700 hover:text-slate-900 font-semibold border-b-2 border-slate-400 hover:border-slate-600 transition-colors pb-0.5"
+      >
+        See all events →
+      </a>
+    </div>
+    {
+      recentPastEvents.length > 0 ? (
         <div class="space-y-4">
           {recentPastEvents.map((event) => (
             <EventCard event={event} isPast={true} />
           ))}
         </div>
-      </section>
-    )
-  }
+      ) : (
+        <div class="bg-slate-50 rounded-lg border border-slate-300 p-8 text-center">
+          <p class="text-slate-700 text-lg">
+            No recent events to show right now.
+          </p>
+        </div>
+      )
+    }
+  </section>
 </MainLayout>
