@@ -1,302 +1,128 @@
-# Astoria Tech Meetup Website - Architecture & Knowledge Base
+# Astoria Tech Meetup Website
 
 ## Overview
 
-This is an Astro-based static site for the Astoria Tech Meetup community. The website showcases events, presentations, and speakers while maintaining a clean, performant architecture.
+Astro-based static site for the Astoria Tech Meetup community, deployed at `astoria.app`. Showcases upcoming and past events fetched from the Meetup API.
 
 ## Tech Stack
 
 - **Framework**: Astro 4.7.0 (Static Site Generator)
 - **Styling**: TailwindCSS with custom themes
 - **Typography**: Noto Sans + Playfair Display fonts
-- **Content Management**: Astro Content Collections
-- **Build Optimization**: Jampack for optimization
+- **Content Source**: Meetup API (`meetup-api.astoria.app`) — no static content collections
+- **Build Optimization**: Jampack for post-build optimization
 - **Package Management**: npm with workspaces
 
 ## Project Structure
 
-### Core Directories
-
 ```
 ├── src/
 │   ├── components/         # Reusable Astro components
-│   ├── content/           # Content collections (events, speakers, presentations, feed)
-│   ├── data/              # Data processing logic
-│   ├── layouts/           # Page layouts
-│   ├── pages/             # Route pages
-│   ├── styles/            # CSS styling system
-│   └── types.ts           # TypeScript type definitions
-├── public/                # Static assets
-├── design/                # Design files and fonts
-├── packages/              # Workspace packages (image-generator)
-├── script/                # Build and utility scripts
-└── .specstory/            # Project documentation history
+│   ├── content/            # Archived content collections (unused, all data from API)
+│   │   └── _archive/       # Old static events, speakers, presentations, feed
+│   ├── layouts/            # Page layouts (Layout.astro, MainLayout.astro)
+│   ├── pages/              # Route pages
+│   ├── styles/             # CSS styling system
+│   └── utils/              # Meetup API client, event formatting helpers
+├── public/                 # Static assets (images, fonts, etc.)
+├── design/                 # Design files and fonts
+├── packages/               # Workspace packages (image-generator)
+└── script/                 # Build and utility scripts
 ```
 
-### Content Architecture
+## Data Architecture
 
-#### Content Collections (src/content/)
+### Meetup API (`src/utils/meetupApi.ts`)
 
-1. **Events** (`events/`)
+All event data comes from `meetup-api.astoria.app`:
 
-   - Event metadata and details
-   - Links to presentations and meetup pages
-   - Banner images and meetup links
+- **`fetchMeetupEvents()`**: Fetches all upcoming + paginated past events, categorizes them
+- **`getUpcomingEvents()`**: Returns future events sorted by date ascending
+- **`getPastEvents(limit?)`**: Returns past events sorted by most recent first
+- **`getEventsByType(type)`**: Filters events by category
+- **`categorizeEvent()`**: Categorizes by title matching ("morning tech" → mornings, "meetup #" → evenings, "hackathon" → hackathons)
 
-2. **Speakers** (`speakers/`)
+### Event Types
 
-   - Speaker profiles and contact information
-   - GitHub usernames, LinkedIn, websites
-   - Profile images
+Three event categories with distinct visual styling:
 
-3. **Presentations** (`presentations/`)
+- **Mornings** (☀️): Weekly Thursday morning coffee chats — orange theme
+- **Evenings** (🌙): Monthly technical presentations — slate theme
+- **Hackathons** (🚀): Focused building sessions — purple theme
 
-   - Slides and presentation metadata
-   - Links to speakers and source code
-   - PDF slide files
+### MeetupEvent Interface
 
-4. **Feed** (`feed/`)
-   - Timeline posts for events
-   - References to events
-   - Publication dates
+```ts
+{
+  id, title, description, dateTime, endTime,
+  location: { name, address, city, state },
+  eventUrl, going, status: "ACTIVE" | "PAST"
+}
+```
 
-#### Data Relationships
+## Components
 
-- Events → Multiple Presentations
-- Presentations → Single Speaker
-- Feed Items → Single Event
-- Complex data hydration in `src/data/feed.ts`
-
-### Component Architecture
-
-#### Core Components
-
+- **EventCard.astro**: Main event display card with responsive layout, type badges, collapsible descriptions, RSVP/calendar buttons
+- **ImageCarousel.astro**: Draggable photo film strip on homepage hero, auto-scrolls with momentum physics
 - **Card.astro**: Base card layout wrapper
-- **EventCard.astro**: Reusable event card component with responsive design, emoji badges, and collapsible details
-- **FeedItem.astro**: Event/post display component
-- **Link.astro**: URL handling with base path support
+- **Footer.astro**: Site footer
+- **Link.astro**: URL handling with base path support (`getLink()` helper)
 - **ThemeToggle.astro**: Dark/light mode switcher
+- **InteractiveTerminal.astro**: Legacy terminal animation (replaced by ImageCarousel)
 
-#### Layout System
+## Pages
 
-- **Layout.astro**: Base HTML layout
-- **MainLayout.astro**: Main site layout with navigation
+- **`/`** — Homepage: hero section + image carousel + upcoming events + recent past events
+- **`/events`** — Event types grid (mornings, evenings, hackathons, Project: Project)
+- **`/events/[type]`** — Paginated event listing by type
+- **`/sponsors`** — Sponsor information
+- **`/links`** — Community links
+- **`/donate`** — Donation page
+- **`/discord`** — Discord redirect
+- **`/project-project`** — Project: Project program details
+- **`/intake`** — Speaker/talk intake form
+- **`/styleguide`** — Design system reference
 
-### Utility Functions
+## Utility Functions (`src/utils/`)
 
-#### Event Formatting (`src/utils/eventFormatting.ts`)
+### `eventFormatting.ts`
 
-Centralized utilities for event display:
+- **formatCompactDate()**: "Wed 9/28/25" format
+- **formatTime()**: "6:30 PM" in America/New_York timezone
+- **getGoogleCalendarLink()**: Google Calendar "Add to Calendar" URLs
+- **renderMarkdown()**: Markdown → HTML via MarkdownIt
+- **getPreviewText()**: First paragraph extraction
+- **getEventEmoji()** / **getEventColors()**: Visual theming per event type
 
-- **formatCompactDate()**: Formats dates as "Wed 9/28/25"
-- **formatTime()**: Formats time as "6:30 PM" in America/New_York timezone
-- **getGoogleCalendarLink()**: Generates Google Calendar "Add to Calendar" links
-- **renderMarkdown()**: Renders markdown descriptions to HTML
-- **getPreviewText()**: Extracts first paragraph for previews
-- **getEventEmoji()**: Returns emoji for event type (☀️ mornings, 🌙 evenings, 🚀 hackathons)
-- **getEventColors()**: Returns color scheme object for event types with warm, cohesive palette
+### `link.ts`
 
-### Styling System
+- Base path URL resolution
 
-#### Theme Support
+## Styling
 
-- Light/dark mode toggle functionality
-- TailwindCSS-based responsive design
-- Custom font integration via Astro aliases
-- Wavy background SVG graphics
+- Green/emerald gradient background with wavy SVG pattern
+- White/90 frosted glass header with sticky positioning
+- Event cards: white with hover shadows, color-coded by type
+- Mobile-first responsive design
+- Noto Sans (body) + Playfair Display (headings)
 
-#### Font System
+## Development
 
-- **Noto Sans**: Primary body text (medium, bold)
-- **Playfair Display**: Headings and accents (regular, bold)
-- Multiple format support (.otf, .woff, .woff2)
-
-### Build & Optimization
-
-#### Scripts & Automation
-
-- **Build Pipeline**: TypeScript checking → Astro build → Jampack optimization
-- **Content Scripts**: Event creation, speaker management, presentation handling
-- **Style Management**: Prettier + sort-package-json
-- **YAML Linting**: Custom script for content validation
-
-#### Performance Optimizations
-
-- Static site generation
-- Jampack post-build optimization
-- Font preloading with multiple formats
-- Image optimization pipeline
-
-### Development Workflow
-
-#### Key Commands
-
-- `npm run dev`: Local development server
-- `npm run build`: Production build with optimization
-- `npm run check`: Full linting and type checking
-- `npm run fix`: Auto-fix formatting and linting issues
-
-#### Content Management Workflow
-
-1. Create speaker profiles (`script/mkspeaker`)
-2. Add presentations (`script/mkpresentation`)
-3. Generate events (`script/mkevent`)
-4. Automated feed generation
-5. Image generation via workspace package
-
-### Static Assets Structure
-
-#### Public Directory Organization
-
-- `banners/`: Event banner images
-- `css/`: SVG graphics and icons
-- `design/`: Logo variations and branding assets
-- `meetup-images/`: Social media images
-- `presentations/`: PDF presentation files
-- `speakers/`: Speaker profile photos
-- `photos/community/`: Community photos for highlighting the meetup experience
-  - 6 high-quality community images available (hero-1.jpg, hero-2.jpg, hero-3.jpg, morning-coffee.jpg, hackathon.jpg, evening-presentation.jpg)
-  - These showcase actual meetup events, networking, and presentations
-  - **Future enhancement**: Add image gallery or carousel to homepage to showcase community
-
-### RSS & Feed System
-
-- Dynamic RSS generation (`src/pages/rss.xml.ts`)
-- Feed processing with markdown rendering
-- Chronological sorting by publication date
-- HTML content extraction for RSS descriptions
-
-### GitHub Integration
-
-- Issue templates for event and talk creation
-- GitHub Actions for CI/CD, deployment, and automation
-- Automated style fixing workflows
-- Image processing pipelines
-
-## Key Features
-
-### Content Management
-
-- Structured content via Astro Collections
-- Type-safe data relationships
-- Automated content processing
-- RSS feed generation
-
-### User Experience
-
-- Responsive design
-- Dark/light theme support
-- Fast static site performance
-- SEO-optimized structure
-
-### Developer Experience
-
-- Strong TypeScript integration
-- Automated formatting and linting
-- Modular component architecture
-- Workspace-based package management
+```bash
+npm run dev       # Local dev server
+npm run build     # check + astro build + jampack optimization
+npm run check     # Lint packages + prettier + astro check
+npm run fix       # Auto-fix formatting
+```
 
 ## Deployment
 
 - Static site hosted at `astoria.app`
-- GitHub Actions deployment pipeline
-- Environment-based configuration
-- Jampack optimization for production
+- GitHub Actions CI/CD pipeline
+- Build: TypeScript check → Astro build → Jampack optimization
 
-## Documentation & History
+## Git Conventions
 
-- `.specstory/` contains detailed development history
-- GitHub issue templates for event and talk creation
-- Comprehensive README with development instructions
-- CONTRIBUTING.md for community guidelines
-
-## Recent Updates (November 2025)
-
-### Homepage Redesign
-
-**Major refresh of homepage styling and event cards** (Commits: 3abf3ee, d89f8fe, 5193238, ba4c890)
-
-#### Homepage (`src/pages/index.astro`)
-
-- **Hero Section**: Completely redesigned with larger, bolder typography
-
-  - Large centered title: "Astoria Tech Meetup" (5xl-6xl responsive)
-  - Simplified tagline: "Grassroots tech community"
-  - Prominent CTAs for Meetup.com and Discord with icon animations
-  - Removed verbose welcome text in favor of concise messaging
-
-- **Terminal Component**: Interactive terminal-style animation
-
-  - macOS-style window controls (close, minimize, expand)
-  - Typewriter effect showing community values via `cat` commands
-  - Files displayed: community.txt, skills.txt, projects.txt, network.txt
-  - Auto-loops after delay with `clear` command
-  - Smooth animations and transitions
-
-- **Upcoming Events Section**: Streamlined display using EventCard component
-  - Clean "See all events →" link
-  - Empty state messaging when no events scheduled
-
-#### Event Cards (`src/components/EventCard.astro`)
-
-Complete redesign with modern, vibrant aesthetic:
-
-- **Responsive Layout**:
-
-  - Mobile: Stacked layout with badge and date in top row
-  - Desktop: Date and badge positioned absolutely in top-right corner
-  - Emoji badges positioned outside card on desktop (absolute positioning)
-
-- **Visual Design**:
-
-  - White cards with subtle border and hover shadow effects
-  - Event type badges with vibrant colors:
-    - Morning events: Orange (☀️)
-    - Evening events: Slate (🌙)
-    - Hackathons: Purple (🚀)
-  - Large emoji icons for visual interest
-  - Clean typography hierarchy
-
-- **Event Information Display**:
-
-  - Title in large, bold emerald text
-  - Compact date format: "Wed, Nov 13"
-  - Time display: "6:30 PM" format
-  - Preview of first paragraph from description
-  - Collapsible full description section
-
-- **Action Buttons**:
-
-  - Primary: "RSVP on Meetup" (external link)
-  - Secondary: "Add to Calendar" (Google Calendar integration)
-  - Tertiary: "Read More" (expands full description)
-  - Color-coded to match event type theme
-
-- **Props**:
-  - `event`: Event object with all metadata
-  - `isPast`: Boolean to show past event state (reduced opacity)
-
-#### Event Formatting Utilities
-
-Created `src/utils/eventFormatting.ts` to centralize all event-related formatting:
-
-- Moved date/time formatting from inline code to reusable functions
-- Consistent timezone handling (America/New_York)
-- Google Calendar link generation
-- Markdown rendering with MarkdownIt
-- Event color schemes for all event types
-
-#### Design Philosophy
-
-- **Community-focused**: Emphasis on what the meetup offers (learning, networking, building)
-- **Clean and modern**: Removed clutter, increased whitespace
-- **Vibrant but professional**: Colorful event badges while maintaining readability
-- **Mobile-first**: Responsive design that works great on all devices
-- **Interactive**: Terminal animation, hover effects, collapsible content
-
-#### Future Enhancements
-
-- **Community Photo Gallery**: Showcase the 6 community photos from `public/photos/community/`
-  - Could be carousel on homepage
-  - Could be scattered background images
-  - Main goal: Highlight community and actual meetup experiences
+- Simple present tense one-line commit messages
+- Use gitconfig identity (no overrides)
+- Don't commit/push unless explicitly asked
