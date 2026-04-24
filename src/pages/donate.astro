@@ -1,5 +1,11 @@
 ---
-return Astro.redirect(
-  "https://www.zeffy.com/en-US/donation-form/donate-to-astoria-tech-meetup",
-);
+import Layout from "../layouts/Layout.astro";
 ---
+
+<Layout>
+  <script>
+    window.location.replace(
+      "https://www.zeffy.com/en-US/donation-form/donate-to-astoria-tech-meetup",
+    );
+  </script>
+</Layout>
