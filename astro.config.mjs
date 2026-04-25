@@ -6,67 +6,55 @@ import path from "path";
 export default defineConfig({
   integrations: [tailwind()],
   vite: {
-    server: {
-      headers: {
-        "Cross-Origin-Opener-Policy": "same-origin",
-        "Cross-Origin-Embedder-Policy": "require-corp",
-      },
-      fs: {
-        allow: [".."],
-      },
-    },
-    optimizeDeps: {
-      exclude: ["@wasmer/sdk"],
-    },
     resolve: {
       alias: {
         "@notosans-medium.otf": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-medium.otf",
+          "/fonts/notosans/notosans-medium.otf",
         ),
         "@notosans-medium.woff": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-medium.woff",
+          "/fonts/notosans/notosans-medium.woff",
         ),
         "@notosans-medium.woff2": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-medium.woff2",
+          "/fonts/notosans/notosans-medium.woff2",
         ),
         "@notosans-bold.otf": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-bold.otf",
+          "/fonts/notosans/notosans-bold.otf",
         ),
         "@notosans-bold.woff": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-bold.woff",
+          "/fonts/notosans/notosans-bold.woff",
         ),
         "@notosans-bold.woff2": path.join(
           import.meta.dirname,
-          "/design/fonts/notosans/notosans-bold.woff2",
+          "/fonts/notosans/notosans-bold.woff2",
         ),
         "@playfair-regular.otf": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-regular.otf",
+          "/fonts/playfair/playfairdisplay-regular.otf",
         ),
         "@playfair-regular.woff": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-regular.woff",
+          "/fonts/playfair/playfairdisplay-regular.woff",
         ),
         "@playfair-regular.woff2": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-regular.woff2",
+          "/fonts/playfair/playfairdisplay-regular.woff2",
         ),
         "@playfair-bold.otf": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-bold.otf",
+          "/fonts/playfair/playfairdisplay-bold.otf",
         ),
         "@playfair-bold.woff": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-bold.woff",
+          "/fonts/playfair/playfairdisplay-bold.woff",
         ),
         "@playfair-bold.woff2": path.join(
           import.meta.dirname,
-          "/design/fonts/playfair/playfairdisplay-bold.woff2",
+          "/fonts/playfair/playfairdisplay-bold.woff2",
         ),
       },
     },

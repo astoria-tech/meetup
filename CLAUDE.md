@@ -11,23 +11,19 @@ Astro-based static site for the Astoria Tech Meetup community, deployed at `asto
 - **Typography**: Noto Sans + Playfair Display fonts
 - **Content Source**: Meetup API (`meetup-api.astoria.app`) — no static content collections
 - **Build Optimization**: Jampack for post-build optimization
-- **Package Management**: npm with workspaces
+- **Package Management**: npm
 
 ## Project Structure
 
 ```
 ├── src/
 │   ├── components/         # Reusable Astro components
-│   ├── content/            # Archived content collections (unused, all data from API)
-│   │   └── _archive/       # Old static events, speakers, presentations, feed
 │   ├── layouts/            # Page layouts (Layout.astro, MainLayout.astro)
 │   ├── pages/              # Route pages
 │   ├── styles/             # CSS styling system
 │   └── utils/              # Meetup API client, event formatting helpers
 ├── public/                 # Static assets (images, fonts, etc.)
-├── design/                 # Design files and fonts
-├── packages/               # Workspace packages (image-generator)
-└── script/                 # Build and utility scripts
+└── archive/                # Archived assets (old content, photos, design files)
 ```
 
 ## Data Architecture
@@ -68,7 +64,6 @@ Three event categories with distinct visual styling:
 - **Footer.astro**: Site footer
 - **Link.astro**: URL handling with base path support (`getLink()` helper)
 - **ThemeToggle.astro**: Dark/light mode switcher
-- **InteractiveTerminal.astro**: Legacy terminal animation (replaced by ImageCarousel)
 
 ## Pages
 
@@ -77,7 +72,8 @@ Three event categories with distinct visual styling:
 - **`/events/[type]`** — Paginated event listing by type
 - **`/sponsors`** — Sponsor information
 - **`/links`** — Community links
-- **`/donate`** — Donation page
+- **`/donate`** — Redirect to Zeffy donation form
+- **`/donations`** — Donation info, progress, and donor acknowledgments
 - **`/discord`** — Discord redirect
 - **`/project-project`** — Project: Project program details
 - **`/intake`** — Speaker/talk intake form

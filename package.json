@@ -3,16 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "astro": "astro",
     "build": "npm run check && astro build && npx @divriots/jampack ./dist",
     "check": "npm run lintpkg && npm run style && astro check",
     "dev": "astro dev",
-    "fix": "npm run lintpkg:fix && npm run style:fix && ./script/lintyamlall",
-    "genimage": "npm -C ./packages/image-generator run cli --",
+    "fix": "npm run lintpkg:fix && npm run style:fix",
     "lintpkg": "sort-package-json --check",
     "lintpkg:fix": "sort-package-json",
     "preview": "astro preview",
@@ -22,33 +18,22 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
-    "@astrojs/rss": "^4.0.5",
     "@astrojs/tailwind": "^5.1.0",
     "@types/markdown-it": "^13.0.7",
     "@types/node": "^20.11.24",
-    "@wasmer/sdk": "^0.9.0",
-    "@xterm/addon-fit": "^0.10.0",
-    "@xterm/xterm": "^5.5.0",
     "astro": "^4.7.0",
-    "cheerio": "^1.0.0-rc.12",
     "lucide-astro": "^0.542.0",
     "markdown-it": "^14.0.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3",
-    "yaml": "^2.4.1"
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@divriots/jampack": "^0.24.0",
     "@github/prettier-config": "^0.0.6",
     "autoprefixer": "^10.4.19",
-    "change-case": "^5.4.4",
-    "deep-cleaner": "^2.0.0-alpha.3",
-    "deepmerge": "^4.3.1",
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
-    "sort-package-json": "^2.10.0",
-    "type-flag": "^3.0.0",
-    "zx": "^8.0.2"
+    "sort-package-json": "^2.10.0"
   }
 }
