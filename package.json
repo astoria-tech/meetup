@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "astro": "astro",
-    "build": "npm run check && astro build && npx @divriots/jampack ./dist",
+    "build": "npm run optimize-photos && npm run check && astro build && npx @divriots/jampack ./dist",
     "check": "npm run lintpkg && npm run style && astro check",
-    "dev": "astro dev",
+    "dev": "npm run optimize-photos && astro dev",
+    "optimize-photos": "node script/optimize-photos.mjs",
     "fix": "npm run lintpkg:fix && npm run style:fix",
     "lintpkg": "sort-package-json --check",
     "lintpkg:fix": "sort-package-json",
@@ -34,6 +35,7 @@
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
+    "sharp": "^0.34.5",
     "sort-package-json": "^2.10.0"
   }
 }

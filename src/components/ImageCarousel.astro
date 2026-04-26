@@ -2,21 +2,21 @@
 import fs from "node:fs";
 import path from "node:path";
 
-// Get all carousel images at build time
+// Read pre-optimized carousel images. Originals live in src/photos/events/
+// grouped by event; `npm run optimize-photos` resizes them to webp here.
 const carouselDir = path.join(process.cwd(), "public/images/carousel");
 const allImages = fs
   .readdirSync(carouselDir)
   .filter((file) => /\.(jpg|jpeg|png|webp)$/i.test(file))
   .map((file) => `/images/carousel/${file}`);
 
-// Shuffle images at build time (Fisher-Yates)
+// Fisher-Yates shuffle at build time
 const images = [...allImages];
 for (let i = images.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
   [images[i], images[j]] = [images[j], images[i]];
 }
 
-// No duplication needed - we'll have bounds
 const displayImages = images.slice(0, 16);
 ---
 
@@ -27,7 +27,7 @@ const displayImages = images.slice(0, 16);
         <div class="film-frame">
           <img
             src={src}
-            alt={`Astoria Tech Meetup community photo`}
+            alt="Astoria Tech Meetup community photo"
             loading={i < 6 ? "eager" : "lazy"}
             decoding="async"
             draggable="false"
