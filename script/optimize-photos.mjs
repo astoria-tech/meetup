@@ -31,7 +31,9 @@ async function main() {
 
   const sources = await walk(SRC_DIR);
   const expectedNames = new Set(
-    sources.map((s) => path.basename(s).replace(/\.(jpe?g|png|webp)$/i, ".webp")),
+    sources.map((s) =>
+      path.basename(s).replace(/\.(jpe?g|png|webp)$/i, ".webp"),
+    ),
   );
 
   let processed = 0;
