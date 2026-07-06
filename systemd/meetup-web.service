@@ -1,0 +1,25 @@
+[Unit]
+Description=meetup-web — static server for meetup.astoria.app (Astro dist/)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=peter
+# Serves the built site on loopback; http-routing (Caddy) terminates TLS and
+# routes meetup.astoria.app here. Rebuild with:
+#   ASTRO_CONFIG_SITE=https://meetup.astoria.app NODE_ENV=production npm run build
+# Static files are read live, so a rebuild needs no restart of this unit.
+WorkingDirectory=/home/peter/projects/personal/meetup/dist
+ExecStart=/usr/bin/python3 -m http.server 8782 --bind 127.0.0.1
+Restart=on-failure
+RestartSec=5
+
+# Hardening — read-only static file server.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

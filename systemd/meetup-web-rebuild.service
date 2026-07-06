@@ -1,0 +1,29 @@
+[Unit]
+# Rebuilds the static site so it picks up fresh events from meetup-api (events
+# are baked at BUILD time — see CLAUDE.md). Oneshot; meetup-web.service serves
+# dist/ live, so no restart is needed after a successful rebuild. A failed build
+# leaves the previous dist/ in place (fails safe).
+Description=meetup.astoria.app — rebuild static site (bake fresh events from meetup-api)
+After=network-online.target meetup-api.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=peter
+WorkingDirectory=/home/peter/projects/personal/meetup
+Environment=HOME=/home/peter
+Environment=NODE_ENV=production
+Environment=ASTRO_CONFIG_SITE=https://meetup.astoria.app
+# node/npm come from nvm — systemd has no nvm shims, so pin the version's bin dir.
+# If node is upgraded via nvm, update this path to match.
+Environment=PATH=/home/peter/.nvm/versions/node/v24.16.0/bin:/usr/local/bin:/usr/bin:/bin
+# Lean content rebuild: optimize photos -> astro build -> jampack. Deliberately
+# SKIPS `npm run check` (prettier/lint/astro-check) — that's a CI gate for the
+# GitHub Pages path, and a formatting nit in a doc file must never stop the live
+# site from getting fresh events. Fails safe: a bad build leaves dist/ untouched.
+ExecStart=/bin/bash -c 'npm run optimize-photos && npx astro build && npx @divriots/jampack ./dist'
+TimeoutStartSec=1200
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=Rebuild meetup.astoria.app every 4h (re-bake events from meetup-api)
+
+[Timer]
+# Every 4 hours at :20. Persistent=true catches up after the Pi was off;
+# RandomizedDelaySec staggers it off other fleet timers.
+OnCalendar=*-*-* 00/4:20:00
+Persistent=true
+RandomizedDelaySec=180
+
+[Install]
+WantedBy=timers.target

@@ -113,9 +113,34 @@ npm run fix       # Auto-fix formatting
 
 ## Deployment
 
-- Static site hosted at `astoria.app`
-- GitHub Actions CI/CD pipeline
-- Build: TypeScript check → Astro build → Jampack optimization
+Two independent deployments of the same `dist/`:
+
+- **`astoria.app`** — GitHub Pages via GitHub Actions CI/CD (`.github/workflows/deploy.yml`).
+- **`meetup.astoria.app`** — self-hosted on the Pi (fleet at `~/projects/personal`),
+  fronted by the `http-routing` Caddy + cloudflared tunnel. Served by a systemd
+  unit (`systemd/meetup-web.service`) running `python3 -m http.server 8782
+--bind 127.0.0.1` from `dist/`; Caddy reverse-proxies `meetup.astoria.app` →
+  `127.0.0.1:8782`. Events come from `meetup-api.astoria.app` (also Pi-hosted;
+  see the `meetup-api` repo).
+  - **Content is baked at build time.** `src/pages/*.astro` call
+    `getUpcomingEvents()`/`getPastEvents()` in frontmatter, so the API is hit
+    during `astro build`, not in the browser. The live site is a snapshot —
+    **refresh it by rebuilding**, no restart of `meetup-web` needed (files read live):
+    ```bash
+    ASTRO_CONFIG_SITE=https://meetup.astoria.app NODE_ENV=production npm run build
+    ```
+  - **Auto-refresh:** `systemd/meetup-web-rebuild.{service,timer}` rebuild the
+    site every 4h so events stay current. The timer runs a **lean** build
+    (`optimize-photos → astro build → jampack`) that deliberately **skips
+    `npm run check`** — a lint/format nit in a doc must never block a content
+    refresh. `astro build` clears `dist/` first, so there's a ~1–2 min window per
+    rebuild where the site may 404 (acceptable for this low-traffic site; a
+    build-to-staging + swap would remove it).
+  - Install/enable the units (one-time, sudo): `sudo bash /tmp/install-meetup-units.sh`,
+    or manually `sudo cp systemd/meetup-web.service /etc/systemd/system/ &&
+sudo systemctl enable --now meetup-web.service` (plus the `-rebuild.timer`).
+
+- Build pipeline (both targets): photo optimize → TypeScript check → Astro build → Jampack.
 
 ## Git Conventions
 
