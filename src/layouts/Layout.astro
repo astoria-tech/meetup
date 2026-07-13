@@ -54,6 +54,14 @@ const applyWavyBackground = useWavyBackground ? ["wavy-background"] : [];
       href="../design/symbol-white-logo.png"
       media="(prefers-color-scheme: dark)"
     />
+    {
+      /* PWA install: manifest + apple-touch-icon pin the installed / home-screen
+        icon to the black logo (on white), independent of the theme-aware tab
+        favicons above — otherwise a dark-mode install grabs the white symbol. */
+    }
+    <link rel="manifest" href={getLink("manifest.webmanifest")} />
+    <link rel="apple-touch-icon" href={getLink("apple-touch-icon.png")} />
+    <meta name="apple-mobile-web-app-title" content="Astoria Tech Meetup" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={copy.siteDescription} />
