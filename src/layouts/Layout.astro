@@ -2,6 +2,7 @@
 import "../style.css";
 import copy from "../copy";
 import { getCssUrl, getLink } from "../components/Link.astro";
+import { iconVersion } from "../utils/assetVersion";
 
 type Props = {
   title?: string;
@@ -57,10 +58,18 @@ const applyWavyBackground = useWavyBackground ? ["wavy-background"] : [];
     {
       /* PWA install: manifest + apple-touch-icon pin the installed / home-screen
         icon to the black logo (on white), independent of the theme-aware tab
-        favicons above — otherwise a dark-mode install grabs the white symbol. */
+        favicons above — otherwise a dark-mode install grabs the white symbol.
+        The ?v=<hash> (build-time icon content hash) busts the Cloudflare / browser
+        / OS icon caches whenever the icon changes — see utils/assetVersion. */
     }
-    <link rel="manifest" href={getLink("manifest.webmanifest")} />
-    <link rel="apple-touch-icon" href={getLink("apple-touch-icon.png")} />
+    <link
+      rel="manifest"
+      href={getLink(`manifest.webmanifest?v=${iconVersion}`)}
+    />
+    <link
+      rel="apple-touch-icon"
+      href={getLink(`apple-touch-icon.png?v=${iconVersion}`)}
+    />
     <meta name="apple-mobile-web-app-title" content="Astoria Tech Meetup" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
