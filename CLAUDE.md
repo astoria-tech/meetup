@@ -113,9 +113,13 @@ npm run fix       # Auto-fix formatting
 
 ## Deployment
 
-Two independent deployments of the same `dist/`:
+**`meetup.astoria.app` is the live home of this site.** The `astoria.app` apex now
+issues a temporary 302 redirect to `meetup.astoria.app` (done in `http-routing`:
+Caddy `redir`, apex DNS moved off GitHub Pages onto the Pi tunnel), freeing the apex
+to become its own community resource later. The GitHub Pages build
+(`.github/workflows/deploy.yml`, `CNAME` = astoria.app) still runs but no longer
+serves the apex — it's effectively orphaned until repurposed or removed.
 
-- **`astoria.app`** — GitHub Pages via GitHub Actions CI/CD (`.github/workflows/deploy.yml`).
 - **`meetup.astoria.app`** — self-hosted on the Pi (fleet at `~/projects/personal`),
   fronted by the `http-routing` Caddy + cloudflared tunnel. Served by a systemd
   unit (`systemd/meetup-web.service`) running `python3 -m http.server 8782

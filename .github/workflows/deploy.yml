@@ -1,17 +1,14 @@
 name: Deploy
 
 # responsbile for deploying the site to GitHub Pages
+#
+# NOTE: the live site is now self-hosted on the Pi at meetup.astoria.app, and the
+# astoria.app apex issues a temporary 302 there (see the http-routing project).
+# GitHub Pages no longer serves the apex, so automatic deploys are disabled — this
+# runs only by hand (workflow_dispatch) or when called by another workflow. Re-add a
+# `push:` trigger here to resume auto-publishing to GitHub Pages.
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - ".github/**"
-      - "packages/**"
-      - "script/**"
-      - "design/**"
-      - ".vscode/**"
   workflow_dispatch:
   workflow_call:
 

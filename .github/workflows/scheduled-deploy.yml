@@ -1,11 +1,13 @@
 name: Scheduled Deploy
 
-# Runs the deploy workflow every 2 hours to keep the site updated with latest Meetup API data
+# Kept the GitHub Pages site fresh with latest Meetup API data every 2 hours.
+#
+# DISABLED: the live site now lives on the Pi (meetup.astoria.app), where a systemd
+# timer rebuilds it every 4h; the astoria.app apex 302s there. GitHub Pages no longer
+# serves the apex, so the schedule is off. Restore the `schedule:` cron below to
+# resume periodic GitHub Pages redeploys.
 
 on:
-  schedule:
-    # Run every 2 hours
-    - cron: "0 */2 * * *"
   workflow_dispatch:
 
 permissions:
