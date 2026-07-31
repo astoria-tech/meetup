@@ -73,7 +73,11 @@ Three event categories with distinct visual styling:
 - **`/sponsors`** — Sponsor information
 - **`/links`** — Community links
 - **`/donate`** — Redirect to Zeffy donation form
-- **`/donations`** — Donation info, progress, and donor acknowledgments
+- **`/donations`** — Donation info and donor acknowledgments. Donors are a hardcoded
+  `donors` array in the page frontmatter, alphabetized at render. **No fundraising
+  total or progress bar** — the old "Raised: $485 / $3,257" figure went stale and was
+  removed 2026-07-31; don't re-add a number until the books have actually been
+  reconciled.
 - **`/discord`** — Discord redirect
 - **`/project-project`** — Project: Project program details
 - **`/intake`** — Speaker/talk intake form
