@@ -21,7 +21,10 @@ Environment=PATH=/home/peter/.nvm/versions/node/v24.16.0/bin:/usr/local/bin:/usr
 # SKIPS `npm run check` (prettier/lint/astro-check) — that's a CI gate for the
 # GitHub Pages path, and a formatting nit in a doc file must never stop the live
 # site from getting fresh events. Fails safe: a bad build leaves dist/ untouched.
-ExecStart=/bin/bash -c 'npm run optimize-photos && npx astro build && npx @divriots/jampack ./dist'
+# preserve-hashed-assets runs LAST: astro build wipes dist/ and re-hashes assets,
+# so it copies the previous build's _astro files back in. Without it, HTML already
+# cached in a browser/Cloudflare points at deleted stylesheets and renders unstyled.
+ExecStart=/bin/bash -c 'npm run optimize-photos && npx astro build && npx @divriots/jampack ./dist && node script/preserve-hashed-assets.mjs'
 TimeoutStartSec=1200
 Nice=10
 

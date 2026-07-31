@@ -23,3 +23,6 @@ pnpm-debug.log*
 .jampack
 # SpecStory explanation file
 .specstory/.what-is-this.md
+
+# Previous builds hashed assets, kept alive across rebuilds (script/preserve-hashed-assets.mjs)
+.asset-cache/

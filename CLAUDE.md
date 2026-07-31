@@ -148,7 +148,36 @@ serves the apex — it's effectively orphaned until repurposed or removed.
     or manually `sudo cp systemd/meetup-web.service /etc/systemd/system/ &&
 sudo systemctl enable --now meetup-web.service` (plus the `-rebuild.timer`).
 
-- Build pipeline (both targets): photo optimize → TypeScript check → Astro build → Jampack.
+- Build pipeline (both targets): photo optimize → TypeScript check → Astro build →
+  Jampack → **preserve-hashed-assets**.
+
+### Caching: why rebuilds used to break the site
+
+`astro build` wipes `dist/` and emits **content-hashed** assets
+(`_astro/donations.<hash>.css`). The backend is `python3 -m http.server`, which
+sends **no `Cache-Control` at all** — so browsers applied _heuristic_ caching to
+the HTML and Cloudflare edge-cached it too. Any rebuild that changed the CSS left
+those cached pages pointing at a stylesheet that no longer existed: 404, and the
+site rendered with **zero styling** (bare serif text, blue links). This bit on
+2026-07-31 and would have recurred on any 4h auto-rebuild that changed CSS.
+
+Two independent defenses, both required:
+
+1. **Cache headers** (in `http-routing`'s Caddyfile, not here): HTML is
+   `no-cache` (always revalidate), `/_astro/*` is `immutable` for a year — but
+   **only on 2xx**. See that repo's CLAUDE.md for the handle_response gotcha.
+2. **`script/preserve-hashed-assets.mjs`** (this repo, runs LAST in the build):
+   copies each build's `_astro` files into a gitignored `.asset-cache/`, and
+   restores any still-cached-elsewhere older hashes back into `dist/` for a
+   **30-day** grace period, pruning beyond that. So HTML cached anywhere keeps
+   finding its stylesheet even across several rebuilds.
+
+   It must run **after** jampack — restored files were already optimized by the
+   build that produced them. If you add a build path, add this step to it too.
+
+To recover a hash that predates `.asset-cache` (i.e. already deleted), build the
+old commit in a throwaway worktree and copy its `_astro/*.css` into
+`.asset-cache/` — Astro reproduces the same hashes from the same source.
 
 ## Git Conventions
 
