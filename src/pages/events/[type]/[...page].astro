@@ -8,23 +8,18 @@ import {
   type CategorizedEvent,
 } from "../../../utils/meetupApi";
 import EventCard from "../../../components/EventCard.astro";
+import {
+  EVENTS_PER_PAGE,
+  eventJsonLd,
+  eventTypePageCounts,
+} from "../../../utils/seo";
 
 export async function getStaticPaths() {
-  const eventTypes: EventType[] = ["mornings", "evenings", "hackathons"];
   const paths = [];
 
-  // Fetch all events to determine pagination
-  for (const type of eventTypes) {
-    const events = await getEventsByType(type);
-    const now = new Date();
-    const pastEvents = events.filter((event) => new Date(event.dateTime) < now);
-
-    const EVENTS_PER_PAGE = 10;
-    const totalPages = Math.max(
-      1,
-      Math.ceil(pastEvents.length / EVENTS_PER_PAGE),
-    );
-
+  // Past-event page counts per type (shared with the sitemap)
+  const pageCounts = await eventTypePageCounts();
+  for (const [type, totalPages] of Object.entries(pageCounts)) {
     // Generate a path for each page
     for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
       paths.push({
@@ -69,7 +64,6 @@ const upcomingEvents = events
 const pastEvents = events.filter((event) => new Date(event.dateTime) < now);
 
 // Pagination for past events
-const EVENTS_PER_PAGE = 10;
 const currentPage = page ? parseInt(page) : 1;
 const totalPastPages = Math.ceil(pastEvents.length / EVENTS_PER_PAGE);
 const paginatedPastEvents = pastEvents.slice(
@@ -92,9 +86,36 @@ function getPageUrl(pageNum: number): string {
 }
 
 const pastDateRange = getDateRange(paginatedPastEvents);
+
+// Per-page SEO: each type (and each page of its archive) gets its own title
+// and description. Upcoming events are marked up as schema.org Events on
+// page 1 only, so the same event isn't listed from several URLs.
+const plainLabel = label.replace(/^[^\s]+\s/, "");
+const seoDescriptions: Record<EventType, string> = {
+  mornings:
+    "Morning Coffee: weekly morning chats over breakfast in Astoria about careers, tech, local events and side projects. Upcoming dates and past meetups.",
+  evenings:
+    "Monthly evening meetups in Astoria, Queens: technical talks, live demos and open discussion. Upcoming dates, venues and every past meetup.",
+  hackathons:
+    "Astoria Tech hackathons: focused 5-hour building sessions at local Astoria venues. Bring an idea or join a team on the spot.",
+};
+const pageTitle =
+  currentPage > 1
+    ? `${plainLabel}: Past Events, Page ${currentPage}`
+    : plainLabel;
+const pageDescription =
+  currentPage > 1
+    ? `Past ${plainLabel} events from Astoria Tech Meetup, page ${currentPage} of ${totalPastPages}.`
+    : seoDescriptions[type];
+const pageJsonLd =
+  currentPage === 1
+    ? upcomingEvents
+        .map((event) => eventJsonLd(event, Astro.site))
+        .filter((node) => node !== null)
+    : [];
 ---
 
-<MainLayout title={`${label} - Astoria Tech Meetup`}>
+<MainLayout title={pageTitle} description={pageDescription} jsonLd={pageJsonLd}>
   <!-- Page Header -->
   <section class="mb-12">
     <div class="max-w-3xl mx-auto">

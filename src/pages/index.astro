@@ -3,12 +3,16 @@ import MainLayout from "../layouts/MainLayout.astro";
 import { getUpcomingEvents, getPastEvents } from "../utils/meetupApi";
 import EventCard from "../components/EventCard.astro";
 import ImageCarousel from "../components/ImageCarousel.astro";
+import { eventJsonLd } from "../utils/seo";
 
 const upcomingEvents = await getUpcomingEvents();
 const recentPastEvents = await getPastEvents(3);
+const eventsJsonLd = upcomingEvents
+  .map((event) => eventJsonLd(event, Astro.site))
+  .filter((node) => node !== null);
 ---
 
-<MainLayout>
+<MainLayout jsonLd={eventsJsonLd}>
   <!-- Hero Section -->
   <section class="mb-16">
     <div class="max-w-4xl mx-auto">

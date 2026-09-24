@@ -5,14 +5,27 @@ import Footer from "../components/Footer.astro";
 
 type Props = {
   title?: string;
+  description?: string;
+  noindex?: boolean;
+  jsonLd?: object[];
   bodyClass?: string[];
   wide?: boolean;
 };
-const { title, bodyClass = [], wide = false } = Astro.props;
+const {
+  title,
+  description,
+  noindex,
+  jsonLd,
+  bodyClass = [],
+  wide = false,
+} = Astro.props;
 ---
 
 <Layout
   title={title}
+  description={description}
+  noindex={noindex}
+  jsonLd={jsonLd}
   bodyClass={[
     "bg-gradient-to-br",
     "from-green-50",
