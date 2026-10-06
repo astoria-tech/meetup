@@ -1,0 +1,21 @@
+[Unit]
+# Checks the next few upcoming events' RSVP ("going") counts against the last
+# seen snapshot; triggers meetup-web-rebuild.service only when a tracked
+# count (or the tracked event set) actually changed. Otherwise a no-op.
+Description=meetup.astoria.app — check RSVP counts, rebuild on change
+After=network-online.target meetup-api.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=peter
+WorkingDirectory=/home/peter/projects/personal/meetup
+Environment=HOME=/home/peter
+# node comes from nvm — systemd has no nvm shims, so pin the version's bin dir.
+# If node is upgraded via nvm, update this path to match.
+Environment=PATH=/home/peter/.nvm/versions/node/v24.16.0/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/peter/.nvm/versions/node/v24.16.0/bin/node script/check-rsvp-changes.mjs
+TimeoutStartSec=1260
+
+[Install]
+WantedBy=multi-user.target

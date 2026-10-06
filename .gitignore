@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # Previous builds hashed assets, kept alive across rebuilds (script/preserve-hashed-assets.mjs)
 .asset-cache/
+
+# runtime state for script/check-rsvp-changes.mjs (last-seen RSVP counts)
+.data/

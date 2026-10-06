@@ -144,9 +144,25 @@ serves the apex — it's effectively orphaned until repurposed or removed.
     refresh. `astro build` clears `dist/` first, so there's a ~1–2 min window per
     rebuild where the site may 404 (acceptable for this low-traffic site; a
     build-to-staging + swap would remove it).
+  - **RSVP-triggered refresh (added 2026-09-20):** the 4h timer alone means an
+    RSVP count can be up to 4h stale. `systemd/meetup-rsvp-check.{service,timer}`
+    run every 15m and check `script/check-rsvp-changes.mjs`, which GETs
+    meetup-api's `/api/upcoming` over loopback (`127.0.0.1:3000`, not the public
+    host), takes the next 5 upcoming events, and diffs their `going` (RSVP) count
+    against the last snapshot in gitignored `.data/rsvp-counts.json` (atomic
+    tmp+rename write). If anything in that window changed — a count, or which
+    events are in it — it saves the new snapshot and runs
+    `sudo systemctl start meetup-web-rebuild.service` (passwordless sudo for
+    `peter`) rather than duplicating the build chain. No prior snapshot (first
+    run) only seeds the file — it never rebuilds on its own first tick. A
+    no-op run is silent besides a log line; a Kuma push heartbeat
+    (`[timer] meetup rsvp-check (15m)`, monitor id 40 in
+    [[uptime-kuma-project]]) fires on every successful run regardless of
+    whether it triggered a rebuild.
   - Install/enable the units (one-time, sudo): `sudo bash /tmp/install-meetup-units.sh`,
     or manually `sudo cp systemd/meetup-web.service /etc/systemd/system/ &&
-sudo systemctl enable --now meetup-web.service` (plus the `-rebuild.timer`).
+sudo systemctl enable --now meetup-web.service` (plus both timers:
+`meetup-web-rebuild.timer` and `meetup-rsvp-check.timer`).
 
 - Build pipeline (both targets): photo optimize → TypeScript check → Astro build →
   Jampack → **preserve-hashed-assets**.
