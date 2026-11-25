@@ -78,8 +78,7 @@ const eventColors = getEventColors(event.eventType);
         <div
           class="text-sm font-bold text-slate-900 uppercase whitespace-nowrap"
         >
-          {weekday}, {month}
-          {day}
+          {weekday}, {month}{" "}{day}
         </div>
         <div class="text-sm font-semibold text-slate-700">
           {formatTime(event.dateTime)}
@@ -108,8 +107,7 @@ const eventColors = getEventColors(event.eventType);
         class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-center w-[155px]"
       >
         <div class="text-sm font-bold text-slate-900 uppercase">
-          {weekday}, {month}
-          {day}
+          {weekday}, {month}{" "}{day}
         </div>
         <div class="text-sm font-semibold text-slate-700 mt-0.5">
           {formatTime(event.dateTime)}
